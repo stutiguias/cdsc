@@ -4,6 +4,7 @@
  */
 package me.stutiguias.cdsc.model;
 
+import me.stutiguias.cdsc.init.Cdsc;
 import org.bukkit.Location;
 
 /**
@@ -21,9 +22,11 @@ public class Area {
         this.name = name;
         this.clanTag = clanTag;
         this.flags = flag; 
+        this.CoreLife = Cdsc.config.CoreLife;
     }
     
-    private Location Core;
+    private Location CoreLocation;
+    private int CoreLife;
     private Location FirstSpot;
     private Location SecondSpot;
     private String name;
@@ -102,14 +105,28 @@ public class Area {
     /**
      * @return the Core
      */
-    public Location getCore() {
-        return Core;
+    public Location getCoreLocation() {
+        return CoreLocation;
     }
 
     /**
-     * @param Core the Core to set
+     * @param CoreLocation the Core to set
      */
-    public void setCore(Location Core) {
-        this.Core = Core;
+    public void setCoreLocation(Location CoreLocation) {
+        this.CoreLocation = CoreLocation;
+    }
+
+    /**
+     * @return the CoreLife
+     */
+    public int getCoreLife() {
+        return CoreLife;
+    }
+
+    /**
+     * @param CoreLife the CoreLife to set
+     */
+    public void setCoreLife(int CoreLife) {
+        this.CoreLife = CoreLife;
     }
 }

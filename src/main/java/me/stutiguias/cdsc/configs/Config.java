@@ -23,6 +23,7 @@ public class Config {
         
     public boolean UpdaterNotify;
     public boolean ClanOwnerCanBreakArea;
+    public int CoreLife;
     
     public Config(Cdsc plugin) {
         this.plugin = plugin;
@@ -35,12 +36,13 @@ public class Config {
             if(!fc.isSet("configversion") || fc.getInt("configversion") != 1){ 
                 config.MakeOld();
                 config.setupConfig();
-                fc = config.getConfig();
-                
-                UpdaterNotify = fc.getBoolean("UpdaterNotify");
-                ClanOwnerCanBreakArea = fc.getBoolean("DefaultFlags.ClanOwnerCanBreakArea");
+                fc = config.getConfig();  
             }
-             
+                             
+            UpdaterNotify = fc.getBoolean("UpdaterNotify");
+            ClanOwnerCanBreakArea = fc.getBoolean("DefaultFlags.ClanOwnerCanBreakArea");
+            CoreLife = fc.getInt("CoreLife");
+            
         }catch(IOException ex){
             ex.printStackTrace();
             plugin.getLogger().log(Level.WARNING, "Erro Loading Config");

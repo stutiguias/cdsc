@@ -8,13 +8,10 @@ import me.stutiguias.cdsc.init.Cdsc;
 import me.stutiguias.cdsc.model.Area;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -103,8 +100,8 @@ public class CdscCommands implements CommandExecutor {
         }
         int index = plugin.getAreaIndex(location);
         
-        Cdsc.Areas.get(index).setCore(location);
-
+        Cdsc.Areas.get(index).setCoreLocation(location);
+        
         SendFormatMessage("&4 Core set !!");
         
         return true;

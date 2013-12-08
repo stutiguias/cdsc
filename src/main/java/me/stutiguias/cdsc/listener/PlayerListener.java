@@ -33,7 +33,7 @@ public class PlayerListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
  
-        if(plugin.config.UpdaterNotify && plugin.hasPermission(player,"cdsc.update") && Cdsc.update)
+        if(Cdsc.config.UpdaterNotify && plugin.hasPermission(player,"cdsc.update") && Cdsc.update)
         {
           player.sendMessage(plugin.parseColor("&6An update is available: " + Cdsc.name + ", a " + Cdsc.type + " for " + Cdsc.version + " available at " + Cdsc.link));
           player.sendMessage(plugin.parseColor("&6Type /cd update if you would like to automatically update."));
@@ -103,12 +103,11 @@ public class PlayerListener implements Listener {
     }
     
     public boolean isValidEvent(Player player,Location location,String event) {
+
+        Area area = plugin.getArea(location);
+        if(area == null) return true;
         
         ClanPlayer clanPlayer = plugin.getSimpleClan().getClanManager().getClanPlayer(player);
-        
-        Area area = plugin.getArea(location);
-        
-        if(area == null) return true;
         
         switch (event) {
             case "break":
@@ -122,20 +121,45 @@ public class PlayerListener implements Listener {
     
     public boolean isValidBreak(Area area,Player player,Location location,ClanPlayer clanPlayer) {
                 
-        if(area.getCore().distance(location) == 0) {
-            player.sendMessage(plugin.parseColor("&4 You hit the core"));
-            // TODO : Logic hit the core
-            return false;
+        if(area.getCoreLocation() != null && area.getCoreLocation().distance(location) == 0) {
+            return HitCore(location, clanPlayer, player);
         }
         
-        if(clanPlayer == null || area.getFlags().contains("denyclanbreak") ) {
-            return false;
-        }
+        if(area.getFlags().contains("denyclanbreak") ) return false;
+        
+        if(clanPlayer == null || clanPlayer.getClan() == null) return false;
         
         return area.getClanTag().equalsIgnoreCase(clanPlayer.getClan().getTag());
     }
     
     public boolean isValidMove(Area area,ClanPlayer clanPlayer) {
+        
+        if(clanPlayer == null || clanPlayer.getClan() == null) return false;
+        
         return area.getClanTag().equalsIgnoreCase(clanPlayer.getClan().getTag());
+    }
+    
+    public boolean HitCore(Location location,ClanPlayer clanPlayer,Player player) {
+        
+        int index = plugin.getAreaIndex(location);
+
+        if(clanPlayer.getClan().getTag().equals(Cdsc.Areas.get(index).getClanTag())) { 
+            player.sendMessage(plugin.parseColor("&6Your Clan Own the castle and not allow to hit the core!"));
+            return false;
+        }
+
+        int coreLife = Cdsc.Areas.get(index).getCoreLife();
+        coreLife -= 1;
+
+        if(coreLife == 0) {
+            Cdsc.Areas.get(index).setClanTag(clanPlayer.getClan().getTag());
+            player.sendMessage(plugin.parseColor("&6You Break the core ! Your Clan win the castle !"));
+        }else{   
+            Cdsc.Areas.get(index).setCoreLife(coreLife);
+            player.sendMessage(plugin.parseColor("&6You hit the core - Core life is " + coreLife ));
+        }
+        
+        return false;
+        
     }
 }

@@ -2,6 +2,8 @@
 configversion: 1
 # Enable update
 UpdaterNotify: true
+# How Many Life For Each Core
+CoreLife: 20
 # Defaults flags set to area
 DefaultFlags:
     ClanOwnerCanBreakArea: false

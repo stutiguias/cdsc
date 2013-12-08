@@ -44,7 +44,7 @@ public class Cdsc extends JavaPlugin {
     public Permission permission = null;
     public Economy economy = null;
 
-    public Config config;
+    public static Config config;
     
     public static boolean update = false;
     public static String name = "";
@@ -63,8 +63,9 @@ public class Cdsc extends JavaPlugin {
         AreaCreating = new HashMap<>();
         PlayerProfiles = new HashMap<>();
         Areas = new ArrayList<>();
+        config = new Config(this);
         
-        getCommand("cd").setExecutor(new CdscCommands(this));
+        
         
         PluginManager pm = getServer().getPluginManager();
         
@@ -74,7 +75,7 @@ public class Cdsc extends JavaPlugin {
         setupPermissions();
         setupEconomy();
         
-        config = new Config(this);
+        
         
         // Metrics 
         try {
@@ -94,6 +95,8 @@ public class Cdsc extends JavaPlugin {
             type = updater.getLatestType(); // Get the latest game version
             link = updater.getLatestFileLink(); // Get the latest link
         }
+        
+        getCommand("cd").setExecutor(new CdscCommands(this));
     }
 
     @Override
