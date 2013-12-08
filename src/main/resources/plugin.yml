@@ -1,0 +1,39 @@
+name: "Castle Defence por Simple Clan"
+version: ${project.version}
+author: "Stutiguias"
+main: "me.stutiguias.cdsc.init.Cdsc"
+commands:
+  cd:
+    description: "§bcommands"
+permissions:
+     cdsc.update:
+        description: Allow update
+        default: op
+     cdsc.define:
+        description: Allow setspawn
+        default: op
+     cdsc.delete:
+        description: Allow delspawn
+        default: op       
+     cdsc.reload:
+        description: Allow reload
+        default: op     
+     cdsc.wand:
+        description: Allow wand
+        default: op            
+     cdsc.sign:
+        description: Allow create and break sign
+        default: op
+     cdsc.tp:
+        description: Teleport player to spawn name
+        default: op 
+     cdsc.admin:
+      description: Gives access to all TimeSpawner commands
+      children:
+        cdsc.update: true
+        cdsc.define: true
+        cdsc.delete: true
+        cdsc.reload: true
+        cdsc.wand: true
+        cdsc.sign: true
+        cdsc.tp: true

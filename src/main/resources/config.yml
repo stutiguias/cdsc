@@ -1,0 +1,4 @@
+# don't change this
+configversion: 1
+# Enable update
+UpdaterNotify: true
