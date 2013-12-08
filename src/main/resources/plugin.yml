@@ -1,4 +1,4 @@
-name: "Castle Defence por Simple Clan"
+name: "CDSC"
 version: ${project.version}
 author: "Stutiguias"
 main: "me.stutiguias.cdsc.init.Cdsc"
@@ -27,6 +27,15 @@ permissions:
      cdsc.tp:
         description: Teleport player to spawn name
         default: op 
+     cdsc.start:
+        description: Teleport player to spawn name
+        default: op 
+     cdsc.end:
+        description: Teleport player to spawn name
+        default: op         
+     cdsc.sc:
+        description: Teleport player to spawn name
+        default: op          
      cdsc.admin:
       description: Gives access to all TimeSpawner commands
       children:
@@ -37,3 +46,6 @@ permissions:
         cdsc.wand: true
         cdsc.sign: true
         cdsc.tp: true
+        cdsc.start: true
+        cdsc.end: true
+        cdsc.sc: true

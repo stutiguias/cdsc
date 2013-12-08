@@ -8,10 +8,13 @@ import me.stutiguias.cdsc.init.Cdsc;
 import me.stutiguias.cdsc.model.Area;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -58,10 +61,27 @@ public class CdscCommands implements CommandExecutor {
             case "define" :
                 if(!plugin.hasPermission(sender.getName(),"cdsc.define")) return false;
                 return Define();
+            case "dl":
+            case "delete":
+                if(!plugin.hasPermission(sender.getName(),"cdsc.delete")) return false;
+                SendFormatMessage("&4Not Implement yet");
+                return true;
             case "tp":
             case "teleport":
                 if(!plugin.hasPermission(sender.getName(),"cdsc.tp")) return false;
                 return teleportToArea();
+            case "s":
+            case "start":
+                if(!plugin.hasPermission(sender.getName(),"cdsc.start")) return false;
+                return StartEvent();
+            case "e":
+            case "end":
+                if(!plugin.hasPermission(sender.getName(),"cdsc.end")) return false;
+                return StopEvent();
+            case "sc":
+            case "setcore":
+                if(!plugin.hasPermission(sender.getName(),"cdsc.sc")) return false;
+                return SetCore();
                 
             case "?":
             case "help":
@@ -70,6 +90,36 @@ public class CdscCommands implements CommandExecutor {
         }       
     } 
         
+    private boolean SetCore() {
+        Player player = (Player)sender;
+
+        Location location = player.getTargetBlock(null,2).getLocation();
+        
+        Area area = plugin.getArea(location);
+        
+        if(area == null) {
+            SendFormatMessage("&4 Not inside any area");
+            return true;
+        }
+        int index = plugin.getAreaIndex(location);
+        
+        Cdsc.Areas.get(index).setCore(location);
+
+        SendFormatMessage("&4 Core set !!");
+        
+        return true;
+    }
+    
+    private boolean StartEvent() {
+        Cdsc.EventOccurring = true;
+        return true;
+    }
+    
+    private boolean StopEvent() {
+        Cdsc.EventOccurring = false;
+        return true;
+    }
+    
     public boolean Update() {
         plugin.Update();
         return true;
@@ -102,7 +152,7 @@ public class CdscCommands implements CommandExecutor {
         SendFormatMessage(MsgHr);
         
         if(plugin.hasPermission(sender.getName(),"cdsc.define")){
-            SendFormatMessage("&6/cd <d|define> <name>");
+            SendFormatMessage("&6/cd <d|define> <areaName> <clanTag>");
         }
         
         if(plugin.hasPermission(sender.getName(),"cdsc.wand")){
@@ -110,12 +160,19 @@ public class CdscCommands implements CommandExecutor {
         }
         
         if(plugin.hasPermission(sender.getName(),"cdsc.delete")){
-            SendFormatMessage("&6/cd <d|delete> <spawnerName>");
+            SendFormatMessage("&6/cd <d|delete> <areaName>");
+        }
+                    
+        if(plugin.hasPermission(sender.getName(),"cdsc.start")){
+            SendFormatMessage("&6/cd <s|start>");
+        }    
+        
+        if(plugin.hasPermission(sender.getName(),"cdsc.end")){
+            SendFormatMessage("&6/cd <e|end>");
         }
         
-                
         if(plugin.hasPermission(sender.getName(),"cdsc.tp")){
-            SendFormatMessage("&6/cd <tp|teleport> <name>");
+            SendFormatMessage("&6/cd <tp|teleport> <areaName>");
         }
   
         if(plugin.hasPermission(sender.getName(),"cdsc.update")){
@@ -141,40 +198,47 @@ public class CdscCommands implements CommandExecutor {
         
         String name = args[1];
         
+        for(Area area:Cdsc.Areas) {
+            if(area.getName().equalsIgnoreCase(name)) {
+                player.teleport(area.getFirstSpot());
+            }
+        }
+        
         return true;
     }
     
     public boolean Define() {
-
-        if (args.length < 1) {
-            SendFormatMessage("&4Wrong arguments on command setspawn");
+           
+        if(!Cdsc.AreaCreating.containsKey((Player)sender)
+        || Cdsc.AreaCreating.get((Player)sender).getFirstSpot() == null
+        || Cdsc.AreaCreating.get((Player)sender).getSecondSpot() == null) {
+            SendFormatMessage("&4Need to set all points");
+            return false;
+        }
+        
+        if (args.length < 2) {
+            SendFormatMessage("&4Wrong arguments on command define");
             return true;
         }
         
         String name = args[1];
         
         //SendFormatMessage("&4this name is already in use.");
-    
-        if(Cdsc.AreaCreating.containsKey((Player)sender)){
-            
-            if(Cdsc.AreaCreating.get((Player)sender).FirstSpot == null
-            || Cdsc.AreaCreating.get((Player)sender).SecondSpot == null) {
-                SendFormatMessage("&4Need to set all points");
-                return false;
-            }
-            
-            Location FirstSpot = Cdsc.AreaCreating.get((Player)sender).FirstSpot;
-            Location SecondSpot = Cdsc.AreaCreating.get((Player)sender).SecondSpot;
         
-            Cdsc.AreaCreating.remove((Player)sender);
-            Cdsc.Areas.add(new Area(FirstSpot,SecondSpot));
-            
-            SendFormatMessage("&6Area successfully added.");
-            return true;
-        }
-                        
-        SendFormatMessage("&4Need to set all points");
-        return false;
+        String clanTag = args[2];
+        String flag = "";
+        
+        if(!plugin.config.ClanOwnerCanBreakArea) flag += ",denyclanbreak";
+
+        Location FirstSpot = Cdsc.AreaCreating.get((Player)sender).getFirstSpot();
+        Location SecondSpot = Cdsc.AreaCreating.get((Player)sender).getSecondSpot();
+
+        Cdsc.AreaCreating.remove((Player)sender);
+        Cdsc.Areas.add(new Area(FirstSpot,SecondSpot,name,clanTag,flag));
+
+        SendFormatMessage("&6Area successfully define ( from top to bottom ).");
+        return true;
+      
     }
     
     public void SendFormatMessage(String msg) {

@@ -1,10 +1,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>me.stutiguias</groupId>
-  <artifactId>Spawnner</artifactId>
-  <version>0.3</version>
+  <artifactId>CDSC</artifactId>
+  <version>0.1</version>
   <name>CDSC</name>
-  <description>TimeSpawnner</description>
+  <description>CDSC</description>
   
   <repositories>
     <!-- Bukkit -->
@@ -46,7 +46,7 @@
   <build>
     <finalName>${project.name}</finalName>
     <sourceDirectory>${basedir}/src/main/java/</sourceDirectory>
-    
+
     <resources>
       <resource>
         <targetPath>.</targetPath>
@@ -55,9 +55,6 @@
         <includes>
           <include>plugin.yml</include>
           <include>config.yml</include>
-          <include>dragon.yml</include>
-          <include>zombie.yml</include>
-          <include>skeleton.yml</include>
         </includes>
       </resource>
 

@@ -2,3 +2,6 @@
 configversion: 1
 # Enable update
 UpdaterNotify: true
+# Defaults flags set to area
+DefaultFlags:
+    ClanOwnerCanBreakArea: false

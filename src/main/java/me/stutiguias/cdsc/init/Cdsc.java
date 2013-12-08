@@ -1,5 +1,6 @@
 package me.stutiguias.cdsc.init;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,6 +8,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import me.stutiguias.cdsc.commands.CdscCommands;
+import me.stutiguias.cdsc.configs.Config;
 import me.stutiguias.cdsc.listener.PlayerListener;
 import me.stutiguias.cdsc.listener.SignListener;
 import me.stutiguias.cdsc.metrics.Metrics;
@@ -18,7 +20,7 @@ import net.milkbowl.vault.permission.Permission;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import static org.bukkit.Bukkit.getServer;
 import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
@@ -37,13 +39,12 @@ public class Cdsc extends JavaPlugin {
     public static HashMap<String,CDSCPlayer> PlayerProfiles;
     
     public static List<Area> Areas;
+    public static boolean EventOccurring;
     
     public Permission permission = null;
     public Economy economy = null;
 
-    private ConfigAccessor config;
-
-    public boolean UpdaterNotify;
+    public Config config;
     
     public static boolean update = false;
     public static String name = "";
@@ -53,11 +54,15 @@ public class Cdsc extends JavaPlugin {
 
     @Override
     public void onEnable() {
+               
+        File dir = getDataFolder();
+        if (!dir.exists()) {
+          dir.mkdirs();
+        }
         
         AreaCreating = new HashMap<>();
         PlayerProfiles = new HashMap<>();
         Areas = new ArrayList<>();
-        Load();
         
         getCommand("cd").setExecutor(new CdscCommands(this));
         
@@ -69,6 +74,8 @@ public class Cdsc extends JavaPlugin {
         setupPermissions();
         setupEconomy();
         
+        config = new Config(this);
+        
         // Metrics 
         try {
          logger.log(Level.INFO, "{0} {1} - Sending Metrics, Thank You!", new Object[]{prefix, "[Metrics]"});
@@ -78,7 +85,7 @@ public class Cdsc extends JavaPlugin {
          logger.log(Level.WARNING, "{0} {1} !! Failed to submit the stats !! ", new Object[]{prefix, "[Metrics]"});
         }
        
-        if(UpdaterNotify){
+        if(config.UpdaterNotify){
             Updater updater = new Updater(this, 49809, this.getFile(), Updater.UpdateType.NO_DOWNLOAD, false); // Start Updater but just do a version check
             
             update = updater.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE; // Determine if there is an update ready for us
@@ -98,27 +105,6 @@ public class Cdsc extends JavaPlugin {
         config.reloadConfig();
         getServer().getPluginManager().disablePlugin(this);
         getServer().getPluginManager().enablePlugin(this);
-    }
-    
-    private void Load(){
-
-        try {
-            config = new ConfigAccessor(this, "config.yml");
-            config.setupConfig();
-            FileConfiguration fc = config.getConfig();   
-                        
-            if(!fc.isSet("configversion") || fc.getInt("configversion") != 1){ 
-                config.MakeOld();
-                config.setupConfig();
-                fc = config.getConfig();
-                
-                UpdaterNotify = fc.getBoolean("UpdaterNotify");
-            }
-             
-        }catch(IOException ex){
-            getLogger().log(Level.WARNING, "Erro Loading Config");
-        }
-         
     }
     
     private boolean setupPermissions() {
@@ -162,12 +148,57 @@ public class Cdsc extends JavaPlugin {
         
         Plugin plugin = getServer().getPluginManager().getPlugin("SimpleClans");
 
-        // WorldGuard may not be loaded
+        // may not be loaded
         if (plugin == null || !(plugin instanceof SimpleClans)) {
-            return null; // Maybe you want throw an exception instead
+            return null;
         }
 
         return (SimpleClans) plugin;
     }
     
+    public int getAreaIndex(Location location) {
+        for (int i = 0; i < Cdsc.Areas.size(); i++) {
+            
+            Area area = Cdsc.Areas.get(i);
+            
+            double fx = area.getFirstSpot().getX();
+            double fz = area.getFirstSpot().getZ();
+            
+            double sx = area.getSecondSpot().getX();
+            double sz = area.getSecondSpot().getZ();
+
+            double x,x2,z,z2;
+
+            if(fx > sx) {
+                 x = fx;
+                 x2 = sx;
+            } else {
+                 x = sx;
+                 x2 = fx;    
+            }
+
+            if(sz > fz) {
+               z = sz;
+               z2 = fz;
+            } else {
+               z = fz; 
+               z2 = sz;
+            }
+
+            if(isInsideProtection(x, x2, z, z2, location)) {
+                return i;
+            }                
+        }
+        return 9999;
+    }
+
+    public Area getArea(Location location) {
+         int index = getAreaIndex(location);
+         if(index == 9999) return null;
+         return Areas.get(index);
+    }
+    
+    public boolean isInsideProtection(double x,double x2,double z,double z2,Location location) {
+       return location.getX() <= x && location.getX() >= x2 && location.getZ() <= z && location.getZ() >= z2;
+    }
 }
