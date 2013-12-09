@@ -61,8 +61,7 @@ public class CdscCommands implements CommandExecutor {
             case "dl":
             case "delete":
                 if(!plugin.hasPermission(sender.getName(),"cdsc.delete")) return false;
-                SendFormatMessage("&4Not Implement yet");
-                return true;
+                return Delete();
             case "tp":
             case "teleport":
                 if(!plugin.hasPermission(sender.getName(),"cdsc.tp")) return false;
@@ -87,6 +86,27 @@ public class CdscCommands implements CommandExecutor {
         }       
     } 
         
+    private boolean Delete() {
+                     
+        if (args.length < 1) {
+            SendFormatMessage("&4Wrong arguments");
+            return true;
+        }   
+        
+        String name = args[1];
+        
+        Area area = plugin.getArea(name);
+        
+        if(area == null) {
+         SendFormatMessage("&4Area name not found.");
+         return true;
+        }
+        
+        Cdsc.Areas.remove(area);
+        Cdsc.db.Delete(area);
+        return true;
+    }
+    
     private boolean SetCore() {
         Player player = (Player)sender;
 
@@ -100,6 +120,7 @@ public class CdscCommands implements CommandExecutor {
         }
 
         Cdsc.Areas.get(index).setCoreLocation(location);
+        Cdsc.db.SetCore(Cdsc.Areas.get(index));
         
         SendFormatMessage("&6 Core set !!");
         

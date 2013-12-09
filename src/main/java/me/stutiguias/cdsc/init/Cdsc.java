@@ -68,9 +68,7 @@ public class Cdsc extends JavaPlugin {
         AreaCreating = new HashMap<>();
         PlayerProfiles = new HashMap<>();
         config = new Config(this);
-        
-        
-        
+
         PluginManager pm = getServer().getPluginManager();
         
         pm.registerEvents(playerListener, this);

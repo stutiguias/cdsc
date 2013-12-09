@@ -19,4 +19,7 @@ public interface IDataQueries {
         
         boolean InsertArea(Area area);
         List<Area> getAreas();
+        boolean SetCore(Area area);
+        boolean Delete(Area area);
+        boolean UpdateArea(Area area);
 }

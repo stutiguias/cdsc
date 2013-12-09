@@ -152,8 +152,11 @@ public class PlayerListener implements Listener {
         coreLife -= 1;
 
         if(coreLife == 0) {
+            
             Cdsc.Areas.get(index).setClanTag(clanPlayer.getClan().getTag());
             Cdsc.Areas.get(index).setCoreLife(Cdsc.config.CoreLife);
+            Cdsc.db.UpdateArea(Cdsc.Areas.get(index));
+            
             BrcstMsg(String.format("&6The core broke ! &1%s&6 Clan win the castle !",new Object[] { clanPlayer.getClan().getTag() }));
             Cdsc.EventOccurring = false;
         }else{   

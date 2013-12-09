@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import me.stutiguias.cdsc.init.Cdsc;
+import me.stutiguias.cdsc.init.Util;
 import me.stutiguias.cdsc.model.Area;
 
 /**
@@ -97,14 +98,72 @@ public class Queries implements IDataQueries {
 
     @Override
     public boolean InsertArea(Area area) {
+        WALConnection conn = getConnection();
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
+        try {
+                st = conn.prepareStatement("INSERT INTO CDSC_Areas (name, first, second, core, corelife, clantag, flags) VALUES (?,?,?,?,?,?,?)");
+                st.setString(1, area.getName());
+                st.setString(2, Util.toString(area.getFirstSpot()));
+                st.setString(3, Util.toString(area.getSecondSpot()));
+                st.setString(4, Util.toString(area.getCoreLocation()));
+                st.setInt(5, area.getCoreLife());
+                st.setString(6, area.getClanTag());
+                st.setString(7, area.getFlags());
+                st.executeUpdate();
+        } catch (SQLException e) {
+                Cdsc.logger.log(Level.WARNING, "{0} Unable to alert item", plugin.prefix);
+                Cdsc.logger.warning(e.getMessage());
+        } finally {
+                closeResources(conn, st, rs);
+        }
         return true;
     }
 
     @Override
     public List<Area> getAreas() {
         List<Area> areas = new ArrayList<>();
-        
+                
+        WALConnection conn = getConnection();
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        try {
+                st = conn.prepareStatement("SELECT * FROM CDSC_Areas");
+                rs = st.executeQuery();
+                while (rs.next()) {
+                        Area area = new Area();
+                        area.setName(rs.getString("name"));
+                        area.setCoreLife(rs.getInt("corelife"));
+                        area.setCoreLocation(Util.toLocation(rs.getString("core")));
+                        area.setFirstSpot(Util.toLocation(rs.getString("first")));
+                        area.setSecondSpot(Util.toLocation(rs.getString("second")));
+                        area.setFlags(rs.getString("flags"));
+                        area.setClanTag(rs.getString("clantag"));
+                        areas.add(area);
+                }
+        } catch (SQLException e) {
+                Cdsc.logger.log(Level.WARNING, "{0} Unable to get areas", new Object[]{plugin.prefix});
+                Cdsc.logger.warning(e.getMessage());
+        } finally {
+                closeResources(conn, st, rs);
+        }
         return areas;
+    }
+
+    @Override
+    public boolean SetCore(Area area) {
+        return true;
+    }
+
+    @Override
+    public boolean Delete(Area area) {
+        return true;
+    }
+
+    @Override
+    public boolean UpdateArea(Area area) {
+        return true;
     }
     
 }
