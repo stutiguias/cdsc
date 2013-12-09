@@ -69,11 +69,11 @@ public class SqliteDataQueries extends Queries {
                 }
                 if (!tableExists("CDSC_Players")) {
 			Cdsc.logger.log(Level.INFO, "{0} Creating table CDSC_Players", plugin.prefix);
-			executeRawSQL("CREATE TABLE CDSC_Players (id INTEGER PRIMARY KEY, name VARCHAR(255), pass VARCHAR(255), money DOUBLE, itemsSold INTEGER, itemsBought INTEGER, earnt DOUBLE, spent DOUBLE, canBuy INTEGER, canSell INTEGER, isAdmin INTEGER);");
+			executeRawSQL("CREATE TABLE CDSC_Players (id INTEGER PRIMARY KEY, name VARCHAR(255), banned INTEGER);");
 		}
 		if (!tableExists("CDSC_Areas")) {
 			Cdsc.logger.log(Level.INFO, "{0} Creating table CDSC_Areas", plugin.prefix);
-			executeRawSQL("CREATE TABLE CDSC_Areas (id INTEGER PRIMARY KEY, name INTEGER, damage INTEGER, player VARCHAR(255), quantity INTEGER, price DOUBLE, created INTEGER, ench VARCHAR(45), tableid INTEGER(1));");
+			executeRawSQL("CREATE TABLE CDSC_Areas (id INTEGER PRIMARY KEY, name VARCHAR(255), first VARCHAR(255), second VARCHAR(255), core VARCHAR(255), corelife INTEGER, clantag VARCHAR(255), flags VARCHAR(255));");
 		}
                 if (!tableExists("CDSC_DbVersion")) {
                         Cdsc.logger.log(Level.INFO, "{0} Creating table CDSC_DbVersion", plugin.prefix);

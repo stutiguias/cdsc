@@ -57,11 +57,11 @@ public class MySQLDataQueries extends Queries {
 	public void initTables() {
 		if (!tableExists("CDSC_Players")) {
 			Cdsc.logger.log(Level.INFO, "{0} Creating table CDSC_Players", plugin.prefix);
-			executeRawSQL("CREATE TABLE CDSC_Players (id INT NOT NULL AUTO_INCREMENT, PRIMARY KEY(id), name VARCHAR(255), pass VARCHAR(255), money DOUBLE, itemsSold INT, itemsBought INT, earnt DOUBLE, spent DOUBLE, canBuy INT, canSell INT, isAdmin INT);");
+			executeRawSQL("CREATE TABLE CDSC_Players (id INT NOT NULL AUTO_INCREMENT, PRIMARY KEY(id), name VARCHAR(255), banned INT);");
 		}
 		if (!tableExists("CDSC_Areas")) {
 			Cdsc.logger.log(Level.INFO, "{0} Creating table CDSC_Areas", plugin.prefix);
-			executeRawSQL("CREATE TABLE CDSC_Areas (id INT NOT NULL AUTO_INCREMENT, PRIMARY KEY(id), name INT, damage INT, player VARCHAR(255), quantity INT, price DOUBLE, created INT, allowBids BOOLEAN Default '0', currentBid DOUBLE, currentWinner VARCHAR(255), ench VARCHAR(45), tableid INT(1));");
+			executeRawSQL("CREATE TABLE CDSC_Areas (id INT NOT NULL AUTO_INCREMENT, PRIMARY KEY(id), name VARCHAR(255), first VARCHAR(255), second VARCHAR(255), core VARCHAR(255), corelife INT, clantag VARCHAR(255), flags VARCHAR(255) );");
 		}
                 if (!tableExists("CDSC_DbVersion")) {
                         Cdsc.logger.log(Level.INFO, "{0} Creating table CDSC_DbVersion", plugin.prefix);

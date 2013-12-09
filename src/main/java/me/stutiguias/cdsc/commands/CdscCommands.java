@@ -92,28 +92,29 @@ public class CdscCommands implements CommandExecutor {
 
         Location location = player.getTargetBlock(null,2).getLocation();
         
-        Area area = plugin.getArea(location);
+        int index = plugin.getAreaIndex(location);
         
-        if(area == null) {
+        if(index == -1) {
             SendFormatMessage("&4 Not inside any area");
             return true;
         }
-        int index = plugin.getAreaIndex(location);
-        
+
         Cdsc.Areas.get(index).setCoreLocation(location);
         
-        SendFormatMessage("&4 Core set !!");
+        SendFormatMessage("&6 Core set !!");
         
         return true;
     }
     
     private boolean StartEvent() {
         Cdsc.EventOccurring = true;
+        plugin.BroadcastEventStart();
         return true;
     }
     
     private boolean StopEvent() {
         Cdsc.EventOccurring = false;
+        plugin.BroadcastEventEnd();
         return true;
     }
     
@@ -220,12 +221,17 @@ public class CdscCommands implements CommandExecutor {
         
         String name = args[1];
         
-        //SendFormatMessage("&4this name is already in use.");
+        Area area = plugin.getArea(name);
+        
+        if(area != null) {
+         SendFormatMessage("&4This name is already in use.");
+         return true;
+        }
         
         String clanTag = args[2];
         String flag = "";
         
-        if(!plugin.config.ClanOwnerCanBreakArea) flag += ",denyclanbreak";
+        if(!Cdsc.config.ClanOwnerCanBreakArea) flag += ",denyclanbreak";
 
         Location FirstSpot = Cdsc.AreaCreating.get((Player)sender).getFirstSpot();
         Location SecondSpot = Cdsc.AreaCreating.get((Player)sender).getSecondSpot();
@@ -233,7 +239,7 @@ public class CdscCommands implements CommandExecutor {
         Cdsc.AreaCreating.remove((Player)sender);
         Cdsc.Areas.add(new Area(FirstSpot,SecondSpot,name,clanTag,flag));
 
-        SendFormatMessage("&6Area successfully define ( from top to bottom ).");
+        SendFormatMessage(String.format("&6Area %s successfully define to clan %s",new Object[]{ name,clanTag }));
         return true;
       
     }

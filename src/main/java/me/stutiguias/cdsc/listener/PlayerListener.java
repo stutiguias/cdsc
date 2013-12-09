@@ -35,8 +35,8 @@ public class PlayerListener implements Listener {
  
         if(Cdsc.config.UpdaterNotify && plugin.hasPermission(player,"cdsc.update") && Cdsc.update)
         {
-          player.sendMessage(plugin.parseColor("&6An update is available: " + Cdsc.name + ", a " + Cdsc.type + " for " + Cdsc.version + " available at " + Cdsc.link));
-          player.sendMessage(plugin.parseColor("&6Type /cd update if you would like to automatically update."));
+          SendMsg(player,"&6An update is available: " + Cdsc.name + ", a " + Cdsc.type + " for " + Cdsc.version + " available at " + Cdsc.link);
+          SendMsg(player,"&6Type /cd update if you would like to automatically update.");
         }
 
     }
@@ -59,9 +59,7 @@ public class PlayerListener implements Listener {
         
         if(Cdsc.EventOccurring) return;
         
-        if(!isValidEvent(player, location,"move")) {
-            event.setCancelled(true);
-        }
+        if(!isValidEvent(player, location,"move")) event.setCancelled(true);
     }
     
     
@@ -88,7 +86,7 @@ public class PlayerListener implements Listener {
             Cdsc.AreaCreating.get(player).setFirstSpot(location);
             
             String msg = String.format("&6First Spot Set on %s",new Object[] { setOn } );
-            player.sendMessage(plugin.parseColor(msg));
+            SendMsg(player,msg);
             event.setCancelled(true);
         }
         
@@ -96,7 +94,7 @@ public class PlayerListener implements Listener {
             Cdsc.AreaCreating.get(player).setSecondSpot(location);
             
             String msg = String.format("&6Second Spot Set on %s",new Object[] { setOn } );
-            player.sendMessage(plugin.parseColor(msg));
+            SendMsg(player,msg);
             event.setCancelled(true);            
         }
         
@@ -127,24 +125,26 @@ public class PlayerListener implements Listener {
         
         if(area.getFlags().contains("denyclanbreak") ) return false;
         
-        if(clanPlayer == null || clanPlayer.getClan() == null) return false;
-        
-        return area.getClanTag().equalsIgnoreCase(clanPlayer.getClan().getTag());
+        return isAllowedClan(area.getClanTag(), clanPlayer);
     }
     
     public boolean isValidMove(Area area,ClanPlayer clanPlayer) {
-        
+        return isAllowedClan(area.getClanTag(), clanPlayer);
+    }
+    
+    public boolean isAllowedClan(String clanTag,ClanPlayer clanPlayer) {
         if(clanPlayer == null || clanPlayer.getClan() == null) return false;
-        
-        return area.getClanTag().equalsIgnoreCase(clanPlayer.getClan().getTag());
+        return clanTag.equalsIgnoreCase(clanPlayer.getClan().getTag());
     }
     
     public boolean HitCore(Location location,ClanPlayer clanPlayer,Player player) {
         
+        if(clanPlayer == null || clanPlayer.getClan() == null) return false;
+        
         int index = plugin.getAreaIndex(location);
-
+       
         if(clanPlayer.getClan().getTag().equals(Cdsc.Areas.get(index).getClanTag())) { 
-            player.sendMessage(plugin.parseColor("&6Your Clan Own the castle and not allow to hit the core!"));
+            SendMsg(player,"&6Your Clan Own the castle and not allow to hit the core!");
             return false;
         }
 
@@ -153,13 +153,23 @@ public class PlayerListener implements Listener {
 
         if(coreLife == 0) {
             Cdsc.Areas.get(index).setClanTag(clanPlayer.getClan().getTag());
-            player.sendMessage(plugin.parseColor("&6You Break the core ! Your Clan win the castle !"));
+            Cdsc.Areas.get(index).setCoreLife(Cdsc.config.CoreLife);
+            BrcstMsg(String.format("&6The core broke ! &1%s&6 Clan win the castle !",new Object[] { clanPlayer.getClan().getTag() }));
+            Cdsc.EventOccurring = false;
         }else{   
             Cdsc.Areas.get(index).setCoreLife(coreLife);
-            player.sendMessage(plugin.parseColor("&6You hit the core - Core life is " + coreLife ));
+            SendMsg(player,"&6You hit the core - Core life is " + coreLife );
         }
         
         return false;
         
+    }
+    
+    public void SendMsg(Player player,String msg) {
+        player.sendMessage(plugin.parseColor(msg));
+    }
+    
+    public void BrcstMsg(String msg) {
+        plugin.getServer().broadcastMessage(plugin.parseColor(msg));
     }
 }

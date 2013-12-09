@@ -192,16 +192,34 @@ public class Cdsc extends JavaPlugin {
                 return i;
             }                
         }
-        return 9999;
+        return -1;
     }
 
     public Area getArea(Location location) {
          int index = getAreaIndex(location);
-         if(index == 9999) return null;
+         if(index == -1) return null;
          return Areas.get(index);
+    }
+    
+    public Area getArea(String name) {
+        for(Area area:Areas) {
+            if(area.getName().equalsIgnoreCase(name))
+                return area;
+        }
+        return null;
     }
     
     public boolean isInsideProtection(double x,double x2,double z,double z2,Location location) {
        return location.getX() <= x && location.getX() >= x2 && location.getZ() <= z && location.getZ() >= z2;
+    }
+    
+    public void BroadcastEventStart() {
+       getServer().broadcastMessage("Event Defence Castle Started!!!");
+       getServer().broadcastMessage("All clans may enter the areas");
+    }
+    
+    public void BroadcastEventEnd() {
+       getServer().broadcastMessage("Event Defence Castle Ended!!!");
+       getServer().broadcastMessage("All areas is now Protected");
     }
 }

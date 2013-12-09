@@ -1,5 +1,16 @@
 # don't change this
-configversion: 1
+configversion: 2
+#DataBase
+DataBase:
+  # You need to choose if you will use SQLite or Mysql ( default is SQLite )
+  Type: SQLite
+#MySQL config if you will use mysql ( set type to mysql )
+MySQL:
+  Host: localhost
+  Username: root
+  Password: change_this
+  Port: '3306'
+  Database: minecraft
 # Enable update
 UpdaterNotify: true
 # How Many Life For Each Core

@@ -33,7 +33,7 @@ public class Config {
             config.setupConfig();
             FileConfiguration fc = config.getConfig();   
                         
-            if(!fc.isSet("configversion") || fc.getInt("configversion") != 1){ 
+            if(!fc.isSet("configversion") || fc.getInt("configversion") != 2){ 
                 config.MakeOld();
                 config.setupConfig();
                 fc = config.getConfig();  
