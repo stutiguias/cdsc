@@ -8,8 +8,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import me.stutiguias.cdsc.init.Cdsc;
+import me.stutiguias.cdsc.model.Area;
 
 /**
  *
@@ -90,6 +93,18 @@ public class Queries implements IDataQueries {
         } finally {
             closeResources(conn, st, rs);
         }
+    }
+
+    @Override
+    public boolean InsertArea(Area area) {
+        return true;
+    }
+
+    @Override
+    public List<Area> getAreas() {
+        List<Area> areas = new ArrayList<>();
+        
+        return areas;
     }
     
 }

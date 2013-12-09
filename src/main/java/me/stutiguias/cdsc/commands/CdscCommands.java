@@ -237,11 +237,16 @@ public class CdscCommands implements CommandExecutor {
         Location SecondSpot = Cdsc.AreaCreating.get((Player)sender).getSecondSpot();
 
         Cdsc.AreaCreating.remove((Player)sender);
-        Cdsc.Areas.add(new Area(FirstSpot,SecondSpot,name,clanTag,flag));
-
-        SendFormatMessage(String.format("&6Area %s successfully define to clan %s",new Object[]{ name,clanTag }));
-        return true;
-      
+        area = new Area(FirstSpot,SecondSpot,name,clanTag,flag);
+        
+        if(Cdsc.db.InsertArea(area)){
+            Cdsc.Areas.add(area);
+            SendFormatMessage(String.format("&6Area %s successfully define to clan %s",new Object[]{ name,clanTag }));
+            return true;
+        }
+        
+        SendFormatMessage(String.format("&4Erro on Insert to DB!"));
+        return true;                
     }
     
     public void SendFormatMessage(String msg) {

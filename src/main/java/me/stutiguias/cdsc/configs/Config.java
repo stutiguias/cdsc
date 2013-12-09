@@ -25,6 +25,13 @@ public class Config {
     public boolean ClanOwnerCanBreakArea;
     public int CoreLife;
     
+    public String DataBaseType;
+    public String Host;
+    public String Username;
+    public String Password;
+    public String Port;
+    public String Database;
+    
     public Config(Cdsc plugin) {
         this.plugin = plugin;
         
@@ -38,7 +45,14 @@ public class Config {
                 config.setupConfig();
                 fc = config.getConfig();  
             }
-                             
+            
+            DataBaseType = fc.getString("DataBase.Type");
+            Host  = fc.getString("MySQL.Host");
+            Username = fc.getString("MySQL.Username");
+            Password = fc.getString("MySQL.Password");
+            Port = fc.getString("MySQL.Port");
+            Database = fc.getString("MySQL.Database");
+            
             UpdaterNotify = fc.getBoolean("UpdaterNotify");
             ClanOwnerCanBreakArea = fc.getBoolean("DefaultFlags.ClanOwnerCanBreakArea");
             CoreLife = fc.getInt("CoreLife");

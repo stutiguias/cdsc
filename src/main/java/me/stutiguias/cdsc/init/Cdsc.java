@@ -9,6 +9,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import me.stutiguias.cdsc.commands.CdscCommands;
 import me.stutiguias.cdsc.configs.Config;
+import me.stutiguias.cdsc.db.IDataQueries;
+import me.stutiguias.cdsc.db.MySQLDataQueries;
+import me.stutiguias.cdsc.db.SqliteDataQueries;
 import me.stutiguias.cdsc.listener.PlayerListener;
 import me.stutiguias.cdsc.listener.SignListener;
 import me.stutiguias.cdsc.metrics.Metrics;
@@ -46,6 +49,8 @@ public class Cdsc extends JavaPlugin {
 
     public static Config config;
     
+    public static IDataQueries db;
+    
     public static boolean update = false;
     public static String name = "";
     public static String type = "";
@@ -62,7 +67,6 @@ public class Cdsc extends JavaPlugin {
         
         AreaCreating = new HashMap<>();
         PlayerProfiles = new HashMap<>();
-        Areas = new ArrayList<>();
         config = new Config(this);
         
         
@@ -75,7 +79,14 @@ public class Cdsc extends JavaPlugin {
         setupPermissions();
         setupEconomy();
         
+        if(config.DataBaseType.equalsIgnoreCase("mysql")) {
+            db = new MySQLDataQueries(this,config.Host , config.Port, config.Username,config.Password,config.Database);
+        }else{
+            db = new SqliteDataQueries(this);
+        }
+        db.initTables();
         
+        Areas = db.getAreas();
         
         // Metrics 
         try {
