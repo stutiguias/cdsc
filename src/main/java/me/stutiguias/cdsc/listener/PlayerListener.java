@@ -4,7 +4,6 @@
  */
 package me.stutiguias.cdsc.listener;
 
-import fr.neatmonster.nocheatplus.hooks.NCPExemptionManager;
 import me.stutiguias.cdsc.init.Cdsc;
 import me.stutiguias.cdsc.model.Area;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
