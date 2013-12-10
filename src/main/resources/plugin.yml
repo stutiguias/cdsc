@@ -36,6 +36,12 @@ permissions:
      cdsc.sc:
         description: Teleport player to spawn name
         default: op          
+     cdsc.info:
+        description: Teleport player to spawn name
+        default: op               
+     cdsc.list:
+        description: Teleport player to spawn name
+        default: op    
      cdsc.admin:
       description: Gives access to all TimeSpawner commands
       children:
@@ -49,3 +55,5 @@ permissions:
         cdsc.start: true
         cdsc.end: true
         cdsc.sc: true
+        cdsc.info: true
+        cdsc.list: true

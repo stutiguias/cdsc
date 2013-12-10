@@ -78,6 +78,14 @@ public class CdscCommands implements CommandExecutor {
             case "setcore":
                 if(!plugin.hasPermission(sender.getName(),"cdsc.sc")) return false;
                 return SetCore();
+            case "i":
+            case "info":
+                if(!plugin.hasPermission(sender.getName(),"cdsc.info")) return false;
+                return Info();
+            case "l":
+            case "list":
+                if(!plugin.hasPermission(sender.getName(),"cdsc.list")) return false;
+                return List();
                 
             case "?":
             case "help":
@@ -86,10 +94,45 @@ public class CdscCommands implements CommandExecutor {
         }       
     } 
         
+    public boolean List() {
+        if(Cdsc.Areas.isEmpty()) {
+            SendMessage("&4 Areas empty");
+            return true;
+        }
+        SendMessage(MsgHr);
+        for(Area area:Cdsc.Areas){
+            SendMessage("&3Name: &6%s", new Object[]{ area.getName() });
+        }
+        SendMessage(MsgHr);
+        return true;
+    }
+    
+    public boolean Info(){
+        Player player = (Player)sender;
+
+        Location location = player.getLocation();
+        
+        int index = plugin.getAreaIndex(location);
+        
+        if(index == -1) {
+            SendMessage("&4 Not inside any area");
+            return true;
+        }
+        Area area = Cdsc.Areas.get(index);
+        
+        SendMessage(MsgHr);
+        SendMessage("&3Name: &6%s", new Object[]{ area.getName() });
+        SendMessage("&3Clan: &6%s", new Object[]{ area.getClanTag() });
+        SendMessage("&3Flags: &6%s", new Object[]{ area.getFlags() });
+        SendMessage(MsgHr);
+        
+        return true;
+    }
+    
     private boolean Delete() {
                      
         if (args.length < 1) {
-            SendFormatMessage("&4Wrong arguments");
+            SendMessage("&4Wrong arguments");
             return true;
         }   
         
@@ -98,7 +141,7 @@ public class CdscCommands implements CommandExecutor {
         Area area = plugin.getArea(name);
         
         if(area == null) {
-         SendFormatMessage("&4Area name not found.");
+         SendMessage("&4Area name not found.");
          return true;
         }
         
@@ -115,14 +158,14 @@ public class CdscCommands implements CommandExecutor {
         int index = plugin.getAreaIndex(location);
         
         if(index == -1) {
-            SendFormatMessage("&4 Not inside any area");
+            SendMessage("&4 Not inside any area");
             return true;
         }
 
         Cdsc.Areas.get(index).setCoreLocation(location);
         Cdsc.db.SetCore(Cdsc.Areas.get(index));
         
-        SendFormatMessage("&6 Core set !!");
+        SendMessage("&6 Core set !!");
         
         return true;
     }
@@ -157,52 +200,64 @@ public class CdscCommands implements CommandExecutor {
     }
         
     public boolean Reload() {
-        SendFormatMessage("&6Reloading!");
+        SendMessage("&6Reloading!");
         plugin.OnReload();
-        SendFormatMessage("&6Reload Done!");    
+        SendMessage("&6Reload Done!");    
         return true;
     }
     
     public boolean Help() {
         
-        SendFormatMessage(MsgHr);
-        SendFormatMessage(" &7Castle Defence for Simple Clans ");
+        SendMessage(MsgHr);
+        SendMessage(" &7Castle Defence for Simple Clans ");
         
-        SendFormatMessage(MsgHr);
+        SendMessage(MsgHr);
         
         if(plugin.hasPermission(sender.getName(),"cdsc.define")){
-            SendFormatMessage("&6/cd <d|define> <areaName> <clanTag>");
+            SendMessage("&6/cd <d or define> <areaName> <clanTag> &e| &7Save Select area");
         }
         
         if(plugin.hasPermission(sender.getName(),"cdsc.wand")){
-            SendFormatMessage("&6/cd <w|wand>");
+            SendMessage("&6/cd <w or wand>  &e| &7Get Special Wand to make area");
         }
+                
+        if(plugin.hasPermission(sender.getName(),"cdsc.update")){
+            SendMessage("&6/cd <sc or setcore> &e| &7SetCore of an existing area");
+        }
+                
+        if(plugin.hasPermission(sender.getName(),"cdsc.list")){
+            SendMessage("&6/cd <l or list> &e| &7List all areas");
+        }   
+                
+        if(plugin.hasPermission(sender.getName(),"cdsc.info")){
+            SendMessage("&6/cd <i or info> &e| &7info about area you are");
+        }   
         
         if(plugin.hasPermission(sender.getName(),"cdsc.delete")){
-            SendFormatMessage("&6/cd <dl|delete> <areaName>");
+            SendMessage("&6/cd <dl or delete> <areaName> &e| &7Delete an area");
         }
                     
         if(plugin.hasPermission(sender.getName(),"cdsc.start")){
-            SendFormatMessage("&6/cd <s|start>");
+            SendMessage("&6/cd <s or start> &e| &7Start Event");
         }    
         
         if(plugin.hasPermission(sender.getName(),"cdsc.end")){
-            SendFormatMessage("&6/cd <e|end>");
+            SendMessage("&6/cd <e or end> &e| &7End event");
         }
         
         if(plugin.hasPermission(sender.getName(),"cdsc.tp")){
-            SendFormatMessage("&6/cd <tp|teleport> <areaName>");
+            SendMessage("&6/cd <tp or teleport> <areaName> &e| &7Teleport to an area");
         }
   
         if(plugin.hasPermission(sender.getName(),"cdsc.update")){
-            SendFormatMessage("&6/cd update");
+            SendMessage("&6/cd update &e| &7 Update the plugin");
         }
         
         if(plugin.hasPermission(sender.getName(),"cdsc.reload")){
-            SendFormatMessage("&6/cd reload");
+            SendMessage("&6/cd reload &e| &7Reload the plugin");
         }
         
-        SendFormatMessage(MsgHr);
+        SendMessage(MsgHr);
         
         return true;
     }
@@ -211,7 +266,7 @@ public class CdscCommands implements CommandExecutor {
         Player player = (Player)sender;
                
         if (args.length < 1) {
-            SendFormatMessage("&4Wrong arguments on command tp");
+            SendMessage("&4Wrong arguments on command tp");
             return true;
         }
         
@@ -231,12 +286,12 @@ public class CdscCommands implements CommandExecutor {
         if(!Cdsc.AreaCreating.containsKey((Player)sender)
         || Cdsc.AreaCreating.get((Player)sender).getFirstSpot() == null
         || Cdsc.AreaCreating.get((Player)sender).getSecondSpot() == null) {
-            SendFormatMessage("&4Need to set all points");
+            SendMessage("&4Need to set all points");
             return false;
         }
         
         if (args.length < 2) {
-            SendFormatMessage("&4Wrong arguments on command define");
+            SendMessage("&4Wrong arguments on command define");
             return true;
         }
         
@@ -245,7 +300,7 @@ public class CdscCommands implements CommandExecutor {
         Area area = plugin.getArea(name);
         
         if(area != null) {
-         SendFormatMessage("&4This name is already in use.");
+         SendMessage("&4This name is already in use.");
          return true;
         }
         
@@ -262,16 +317,19 @@ public class CdscCommands implements CommandExecutor {
         
         if(Cdsc.db.InsertArea(area)){
             Cdsc.Areas.add(area);
-            SendFormatMessage(String.format("&6Area %s successfully define to clan %s",new Object[]{ name,clanTag }));
+            SendMessage("&6Area %s successfully define to clan %s",new Object[]{ name,clanTag });
             return true;
         }
         
-        SendFormatMessage(String.format("&4Erro on Insert to DB!"));
+        SendMessage("&4Erro on Insert to DB!");
         return true;                
     }
     
-    public void SendFormatMessage(String msg) {
+    public void SendMessage(String msg) {
         sender.sendMessage(plugin.parseColor(msg));
     }
-    
+        
+    public void SendMessage(String msg,Object[] args) {
+        sender.sendMessage(plugin.parseColor(String.format(msg,args)));
+    }
 }
