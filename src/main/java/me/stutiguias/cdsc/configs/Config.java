@@ -24,6 +24,8 @@ public class Config {
     public boolean UpdaterNotify;
     public boolean ClanOwnerCanBreakArea;
     public boolean ClanOwnerCanPlaceArea;
+    public boolean Dontdropduringevent;
+    
     public int CoreLife;
     
     public String DataBaseType;
@@ -41,7 +43,7 @@ public class Config {
             config.setupConfig();
             FileConfiguration fc = config.getConfig();   
                         
-            if(!fc.isSet("configversion") || fc.getInt("configversion") != 3){ 
+            if(!fc.isSet("configversion") || fc.getInt("configversion") != 4){ 
                 config.MakeOld();
                 config.setupConfig();
                 fc = config.getConfig();  
@@ -57,6 +59,8 @@ public class Config {
             UpdaterNotify = fc.getBoolean("UpdaterNotify");
             ClanOwnerCanBreakArea = fc.getBoolean("DefaultFlags.ClanOwnerCanBreakArea");
             ClanOwnerCanPlaceArea = fc.getBoolean("DefaultFlags.ClanOwnerCanPlaceArea");
+            Dontdropduringevent = fc.getBoolean("Dontdropduringevent");
+            
             CoreLife = fc.getInt("CoreLife");
             
         }catch(IOException ex){

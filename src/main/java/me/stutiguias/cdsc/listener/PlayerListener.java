@@ -4,10 +4,13 @@
  */
 package me.stutiguias.cdsc.listener;
 
+import java.util.ArrayList;
+import java.util.List;
 import me.stutiguias.cdsc.init.Cdsc;
 import me.stutiguias.cdsc.model.Area;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import org.bukkit.Location;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -15,9 +18,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.inventory.ItemStack;
 /**
  *
  * @author Daniel
@@ -83,7 +90,7 @@ public class PlayerListener implements Listener {
     
     }
     
-    @EventHandler
+    @EventHandler(priority = EventPriority.NORMAL)
     public void PlayerInteract(PlayerInteractEvent event){
         if( !event.hasItem() 
          || !event.getItem().hasItemMeta() 
@@ -116,6 +123,41 @@ public class PlayerListener implements Listener {
         
     }
     
+    @EventHandler(priority = EventPriority.NORMAL)
+    public void onItemDrop(EntityDeathEvent event) {
+        if(Cdsc.Areas.isEmpty()) return;
+        if(!Cdsc.config.Dontdropduringevent) return;
+        
+        Location location = event.getEntity().getLocation();       
+        if(event.getEntityType() != EntityType.PLAYER) return;
+        Player player = (Player)event.getEntity();
+        
+        if(!isValidEvent(player, location,"drop")) {
+            event.setDroppedExp(0);
+            if(event.getDrops().isEmpty())return;
+            List<ItemStack> tmpDrops = new ArrayList<>(event.getDrops());
+            Cdsc.InventorySave.put(player,tmpDrops);
+            for(ItemStack isDrop : tmpDrops)
+            {
+               event.getDrops().remove(isDrop);
+            }
+        }
+    }
+    
+    @EventHandler()
+    public void onPlayerReSpawn(PlayerRespawnEvent event) {
+         if(Cdsc.Areas.isEmpty()) return;
+         if(!Cdsc.EventOccurring) return;
+         if(Cdsc.InventorySave.isEmpty()) return;
+         
+         Player player = (Player)event.getPlayer();
+         
+         if(Cdsc.InventorySave.get(player).isEmpty()) return;
+         
+         for(ItemStack item:Cdsc.InventorySave.get(player)){
+             player.getInventory().addItem(item);
+         }
+    }
     public boolean isValidEvent(Player player,Location location,String event) {
 
         Area area = plugin.getArea(location);
@@ -125,17 +167,23 @@ public class PlayerListener implements Listener {
         
         switch (event) {
             case "place":
-                return isValidPlace(area, player, location, clanPlayer);
+                return isValidPlace(area, clanPlayer);
             case "break":
                 return isValidBreak(area, player, location, clanPlayer);
             case "move":
                 return isValidMove(area, clanPlayer);
+            case "drop":
+                return isValidDrop();
             default:
                 return true;
         }
     }
     
-    public boolean isValidPlace(Area area,Player player,Location location,ClanPlayer clanPlayer) {
+    public boolean isValidDrop() {
+        return !Cdsc.EventOccurring;
+    }
+    
+    public boolean isValidPlace(Area area,ClanPlayer clanPlayer) {
 
         if(area.getFlags().contains("denyclanplace") ) return false;
         

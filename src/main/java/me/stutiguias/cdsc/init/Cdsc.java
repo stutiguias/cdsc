@@ -24,6 +24,7 @@ import static org.bukkit.Bukkit.getServer;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -41,6 +42,8 @@ public class Cdsc extends JavaPlugin {
     public static HashMap<String,CDSCPlayer> PlayerProfiles;
     
     public static List<Area> Areas;
+    
+    public static HashMap<Player,List<ItemStack>> InventorySave;
     public static boolean EventOccurring;
     
     public Permission permission = null;
@@ -67,7 +70,9 @@ public class Cdsc extends JavaPlugin {
         AreaCreating = new HashMap<>();
         PlayerProfiles = new HashMap<>();
         config = new Config(this);
-
+        
+        InventorySave = new HashMap<>();
+        
         PluginManager pm = getServer().getPluginManager();
         
         pm.registerEvents(playerListener, this);
