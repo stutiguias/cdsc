@@ -179,7 +179,7 @@ public class CdscCommands implements CommandExecutor {
         }
         
         if(plugin.hasPermission(sender.getName(),"cdsc.delete")){
-            SendFormatMessage("&6/cd <d|delete> <areaName>");
+            SendFormatMessage("&6/cd <dl|delete> <areaName>");
         }
                     
         if(plugin.hasPermission(sender.getName(),"cdsc.start")){

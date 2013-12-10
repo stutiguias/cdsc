@@ -113,7 +113,7 @@ public class Queries implements IDataQueries {
                 st.setString(7, area.getFlags());
                 st.executeUpdate();
         } catch (SQLException e) {
-                Cdsc.logger.log(Level.WARNING, "{0} Unable to alert item", plugin.prefix);
+                Cdsc.logger.log(Level.WARNING, "{0} Unable to insert area", plugin.prefix);
                 Cdsc.logger.warning(e.getMessage());
         } finally {
                 closeResources(conn, st, rs);
@@ -153,12 +153,41 @@ public class Queries implements IDataQueries {
 
     @Override
     public boolean SetCore(Area area) {
+        WALConnection conn = getConnection();
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
+        try {
+                st = conn.prepareStatement("UPDATE CDSC_Areas SET core = ? WHERE name = ?");
+                st.setString(1, Util.toString(area.getCoreLocation()));
+                st.setString(2, area.getName() );
+                st.executeUpdate();
+        } catch (SQLException e) {
+                Cdsc.logger.log(Level.WARNING, "{0} Unable to update DB", plugin.prefix);
+                Cdsc.logger.warning(e.getMessage());
+        } finally {
+                closeResources(conn, st, rs);
+        }
         return true;
     }
 
     @Override
     public boolean Delete(Area area) {
-        return true;
+        WALConnection conn = getConnection();
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        int result = 0;
+        
+        try {
+                st = conn.prepareStatement("DELETE FROM CDSC_Areas WHERE name = ?");
+                st.setString(1, area.getName());
+                result = st.executeUpdate();
+        } catch (SQLException e) {
+                Cdsc.logger.log(Level.WARNING, "{0} Unable to delete", new Object[]{plugin.prefix});
+        } finally {
+                closeResources(conn, st, rs);
+        }
+        return result != 0;
     }
 
     @Override
