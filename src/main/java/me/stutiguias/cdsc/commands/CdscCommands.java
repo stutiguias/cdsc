@@ -311,7 +311,8 @@ public class CdscCommands implements CommandExecutor {
         String flag = "";
         
         if(!Cdsc.config.ClanOwnerCanBreakArea) flag += ",denyclanbreak";
-
+        if(!Cdsc.config.ClanOwnerCanPlaceArea) flag += ",denyclanplace";
+        
         Location FirstSpot = Cdsc.AreaCreating.get((Player)sender).getFirstSpot();
         Location SecondSpot = Cdsc.AreaCreating.get((Player)sender).getSecondSpot();
 

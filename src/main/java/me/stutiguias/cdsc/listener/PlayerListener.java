@@ -14,6 +14,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -42,13 +43,24 @@ public class PlayerListener implements Listener {
     }
     
     @EventHandler(priority = EventPriority.NORMAL)
+    public void onBlockPlace(BlockPlaceEvent event) {
+        if(Cdsc.Areas.isEmpty()) return;
+                
+        Location location = event.getBlock().getLocation();       
+        Player player = (Player)event.getPlayer();
+        
+        if(!isValidEvent(player, location,"place")) {
+            if(plugin.hasPermission(player,"cdsc.bypass")) return;
+            event.setCancelled(true);
+        }
+    }
+    
+    @EventHandler(priority = EventPriority.NORMAL)
     public void onBlockBreak(BlockBreakEvent event) {
         if(Cdsc.Areas.isEmpty()) return;
         
         Location location = event.getBlock().getLocation();       
         Player player = (Player)event.getPlayer();
-        
-        
         
         if(!isValidEvent(player, location,"break")) {
             if(plugin.hasPermission(player,"cdsc.bypass")) return;
@@ -65,14 +77,10 @@ public class PlayerListener implements Listener {
         if(Cdsc.EventOccurring) return;
         
         if(!isValidEvent(player, location,"move")) {
+            if(plugin.hasPermission(player,"cdsc.bypass")) return;
             player.teleport(event.getFrom());
         }
     
-    }
-    
-    
-    public boolean isInsideProtection(double x,double x2,double z,double z2,Location location) {
-       return location.getX() <= x && location.getX() >= x2 && location.getZ() <= z && location.getZ() >= z2;
     }
     
     @EventHandler
@@ -116,6 +124,8 @@ public class PlayerListener implements Listener {
         ClanPlayer clanPlayer = plugin.getSimpleClan().getClanManager().getClanPlayer(player);
         
         switch (event) {
+            case "place":
+                return isValidPlace(area, player, location, clanPlayer);
             case "break":
                 return isValidBreak(area, player, location, clanPlayer);
             case "move":
@@ -124,6 +134,13 @@ public class PlayerListener implements Listener {
                 return true;
         }
     }
+    
+    public boolean isValidPlace(Area area,Player player,Location location,ClanPlayer clanPlayer) {
+
+        if(area.getFlags().contains("denyclanplace") ) return false;
+        
+        return isAllowedClan(area.getClanTag(), clanPlayer);
+    }    
     
     public boolean isValidBreak(Area area,Player player,Location location,ClanPlayer clanPlayer) {
                 

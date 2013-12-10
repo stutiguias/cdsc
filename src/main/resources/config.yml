@@ -1,5 +1,5 @@
 # don't change this
-configversion: 2
+configversion: 3
 #DataBase
 DataBase:
   # You need to choose if you will use SQLite or Mysql ( default is SQLite )
@@ -18,3 +18,4 @@ CoreLife: 20
 # Defaults flags set to area
 DefaultFlags:
     ClanOwnerCanBreakArea: false
+    ClanOwnerCanPlaceArea: false
