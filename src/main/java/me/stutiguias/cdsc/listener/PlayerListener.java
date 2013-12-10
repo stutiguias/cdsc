@@ -4,6 +4,7 @@
  */
 package me.stutiguias.cdsc.listener;
 
+import fr.neatmonster.nocheatplus.hooks.NCPExemptionManager;
 import me.stutiguias.cdsc.init.Cdsc;
 import me.stutiguias.cdsc.model.Area;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
@@ -59,7 +60,10 @@ public class PlayerListener implements Listener {
         
         if(Cdsc.EventOccurring) return;
         
-        if(!isValidEvent(player, location,"move")) event.setCancelled(true);
+        if(!isValidEvent(player, location,"move")) {
+            player.teleport(event.getFrom());
+        }
+    
     }
     
     
@@ -144,7 +148,7 @@ public class PlayerListener implements Listener {
         int index = plugin.getAreaIndex(location);
        
         if(clanPlayer.getClan().getTag().equals(Cdsc.Areas.get(index).getClanTag())) { 
-            SendMsg(player,"&6Your Clan Own the castle and not allow to hit the core!");
+            SendMsg(player,"&6Your Clan Own this area and not allow to hit the core!");
             return false;
         }
 
@@ -157,7 +161,7 @@ public class PlayerListener implements Listener {
             Cdsc.Areas.get(index).setCoreLife(Cdsc.config.CoreLife);
             Cdsc.db.UpdateArea(Cdsc.Areas.get(index));
             
-            BrcstMsg(String.format("&6The core broke ! &1%s&6 Clan win the castle !",new Object[] { clanPlayer.getClan().getTag() }));
+            BrcstMsg(String.format("&6The core broke ! &1%s&6 Clan win the area !",new Object[] { clanPlayer.getClan().getTag() }));
             Cdsc.EventOccurring = false;
         }else{   
             Cdsc.Areas.get(index).setCoreLife(coreLife);

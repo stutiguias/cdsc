@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>me.stutiguias</groupId>
   <artifactId>CDSC</artifactId>
-  <version>0.1</version>
+  <version>0.1.1</version>
   <name>CDSC</name>
   <description>CDSC</description>
   
@@ -32,7 +32,7 @@
               <scope>system</scope>
           <systemPath>${project.basedir}/lib/Vault.jar</systemPath>
         </dependency>
-        
+
         <dependency>
           <groupId>net.sacredlabyrinth.Phaed</groupId>
           <artifactId>SimpleClans</artifactId>

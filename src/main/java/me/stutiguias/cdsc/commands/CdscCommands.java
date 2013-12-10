@@ -172,6 +172,9 @@ public class CdscCommands implements CommandExecutor {
     
     private boolean StartEvent() {
         Cdsc.EventOccurring = true;
+        for(Area area:Cdsc.Areas) {
+            area.setCoreLife(Cdsc.config.CoreLife);
+        }
         plugin.BroadcastEventStart();
         return true;
     }
