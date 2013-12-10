@@ -49,7 +49,12 @@ public class PlayerListener implements Listener {
         Location location = event.getBlock().getLocation();       
         Player player = (Player)event.getPlayer();
         
-        if(!isValidEvent(player, location,"break")) event.setCancelled(true);
+        
+        
+        if(!isValidEvent(player, location,"break")) {
+            if(plugin.hasPermission(player,"cdsc.bypass")) return;
+            event.setCancelled(true);
+        }
         
     }
     
