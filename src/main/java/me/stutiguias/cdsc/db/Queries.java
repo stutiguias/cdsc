@@ -19,13 +19,14 @@ import me.stutiguias.cdsc.model.Area;
  *
  * @author Daniel
  */
-public class Queries implements IDataQueries {
+public class Queries extends Util implements IDataQueries {
         
     protected Cdsc plugin;
     protected WALConnection connection;
     protected Integer found;
     
     public Queries(Cdsc plugin) {
+        super(plugin);
         this.plugin = plugin;
     }
 
@@ -105,9 +106,9 @@ public class Queries implements IDataQueries {
         try {
                 st = conn.prepareStatement("INSERT INTO CDSC_Areas (name, first, second, core, corelife, clantag, flags) VALUES (?,?,?,?,?,?,?)");
                 st.setString(1, area.getName());
-                st.setString(2, Util.toString(area.getFirstSpot()));
-                st.setString(3, Util.toString(area.getSecondSpot()));
-                st.setString(4, Util.toString(area.getCoreLocation()));
+                st.setString(2, ToString(area.getFirstSpot()));
+                st.setString(3, ToString(area.getSecondSpot()));
+                st.setString(4, ToString(area.getCoreLocation()));
                 st.setInt(5, area.getCoreLife());
                 st.setString(6, area.getClanTag());
                 st.setString(7, area.getFlags());
@@ -135,9 +136,9 @@ public class Queries implements IDataQueries {
                         Area area = new Area();
                         area.setName(rs.getString("name"));
                         area.setCoreLife(rs.getInt("corelife"));
-                        area.setCoreLocation(Util.toLocation(rs.getString("core")));
-                        area.setFirstSpot(Util.toLocation(rs.getString("first")));
-                        area.setSecondSpot(Util.toLocation(rs.getString("second")));
+                        area.setCoreLocation(toLocation(rs.getString("core")));
+                        area.setFirstSpot(toLocation(rs.getString("first")));
+                        area.setSecondSpot(toLocation(rs.getString("second")));
                         area.setFlags(rs.getString("flags"));
                         area.setClanTag(rs.getString("clantag"));
                         areas.add(area);
@@ -159,7 +160,7 @@ public class Queries implements IDataQueries {
 
         try {
                 st = conn.prepareStatement("UPDATE CDSC_Areas SET core = ? WHERE name = ?");
-                st.setString(1, Util.toString(area.getCoreLocation()));
+                st.setString(1, ToString(area.getCoreLocation()));
                 st.setString(2, area.getName() );
                 st.executeUpdate();
         } catch (SQLException e) {
@@ -192,7 +193,27 @@ public class Queries implements IDataQueries {
 
     @Override
     public boolean UpdateArea(Area area) {
-        return true;
+        WALConnection conn = getConnection();
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        int result = 0;
+        try {
+                st = conn.prepareStatement("UPDATE CDSC_Areas SET first = ?, second = ?, core = ?, corelife = ?, clantag = ?, flags = ? WHERE name = ?");
+                st.setString(1, ToString(area.getFirstSpot()) );
+                st.setString(2, ToString(area.getSecondSpot()) );
+                st.setString(3, ToString(area.getCoreLocation()) );
+                st.setInt(4, area.getCoreLife() );
+                st.setString(5, area.getClanTag() );
+                st.setString(6, area.getFlags() );
+                st.setString(7, area.getName() );
+                result = st.executeUpdate();
+        } catch (SQLException e) {
+                Cdsc.logger.log(Level.WARNING, "{0} Unable to update DB", plugin.prefix);
+                Cdsc.logger.warning(e.getMessage());
+        } finally {
+                closeResources(conn, st, rs);
+        }
+        return result != 0;
     }
     
 }

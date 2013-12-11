@@ -5,6 +5,7 @@
 package me.stutiguias.cdsc.commands;
 
 import me.stutiguias.cdsc.init.Cdsc;
+import me.stutiguias.cdsc.init.Util;
 import me.stutiguias.cdsc.model.Area;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -19,15 +20,13 @@ import org.bukkit.inventory.meta.ItemMeta;
  *
  * @author Daniel
  */
-public class CdscCommands implements CommandExecutor {
+public class CdscCommands extends Util implements CommandExecutor {
      
-    private final Cdsc plugin;
-    private CommandSender sender;
     private String[] args;
     private final String MsgHr = "&e-----------------------------------------------------";
     
     public CdscCommands(Cdsc plugin) {
-        this.plugin = plugin;
+        super(plugin);
     }
 
     @Override
@@ -175,13 +174,15 @@ public class CdscCommands implements CommandExecutor {
         for(Area area:Cdsc.Areas) {
             area.setCoreLife(Cdsc.config.CoreLife);
         }
-        plugin.BroadcastEventStart();
+        BrcstMsg("&6Event Defence Castle Started!!!");
+        BrcstMsg("&6All clans may enter the areas");
         return true;
     }
     
     private boolean StopEvent() {
         Cdsc.EventOccurring = false;
-        plugin.BroadcastEventEnd();
+        BrcstMsg("&6Event Defence Castle Ended!!!");
+        BrcstMsg("&6All areas is now Protected");
         return true;
     }
     
@@ -199,6 +200,7 @@ public class CdscCommands implements CommandExecutor {
         itemStack.setItemMeta(itemMeta);
         
         player.setItemInHand(itemStack);
+        SendMessage("&6Use Right and left click to set an area");
         return true;
     }
         
@@ -328,12 +330,5 @@ public class CdscCommands implements CommandExecutor {
         SendMessage("&4Erro on Insert to DB!");
         return true;                
     }
-    
-    public void SendMessage(String msg) {
-        sender.sendMessage(plugin.parseColor(msg));
-    }
-        
-    public void SendMessage(String msg,Object[] args) {
-        sender.sendMessage(plugin.parseColor(String.format(msg,args)));
-    }
+
 }

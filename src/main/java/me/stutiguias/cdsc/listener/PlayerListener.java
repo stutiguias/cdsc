@@ -7,6 +7,7 @@ package me.stutiguias.cdsc.listener;
 import java.util.ArrayList;
 import java.util.List;
 import me.stutiguias.cdsc.init.Cdsc;
+import me.stutiguias.cdsc.init.Util;
 import me.stutiguias.cdsc.model.Area;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import org.bukkit.Location;
@@ -19,7 +20,6 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -29,12 +29,10 @@ import org.bukkit.inventory.ItemStack;
  *
  * @author Daniel
  */
-public class PlayerListener implements Listener {
-    
-    private final Cdsc plugin;
+public class PlayerListener extends Util implements Listener {
     
     public PlayerListener(Cdsc plugin) {
-        this.plugin = plugin;
+        super(plugin);
     }
         
     @EventHandler(priority= EventPriority.NORMAL)
@@ -43,8 +41,8 @@ public class PlayerListener implements Listener {
  
         if(Cdsc.config.UpdaterNotify && plugin.hasPermission(player,"cdsc.update") && Cdsc.update)
         {
-          SendMsg(player,"&6An update is available: " + Cdsc.name + ", a " + Cdsc.type + " for " + Cdsc.version + " available at " + Cdsc.link);
-          SendMsg(player,"&6Type /cd update if you would like to automatically update.");
+          SendMessage(player,"&6An update is available: " + Cdsc.name + ", a " + Cdsc.type + " for " + Cdsc.version + " available at " + Cdsc.link);
+          SendMessage(player,"&6Type /cd update if you would like to automatically update.");
         }
 
     }
@@ -107,17 +105,15 @@ public class PlayerListener implements Listener {
         
         if(event.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
             Cdsc.AreaCreating.get(player).setFirstSpot(location);
-            
-            String msg = String.format("&6First Spot Set on %s",new Object[] { setOn } );
-            SendMsg(player,msg);
+
+            SendMessage(player,"&6First Spot Set on %s",new Object[] { setOn });
             event.setCancelled(true);
         }
         
         if(event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
             Cdsc.AreaCreating.get(player).setSecondSpot(location);
             
-            String msg = String.format("&6Second Spot Set on %s",new Object[] { setOn } );
-            SendMsg(player,msg);
+            SendMessage(player,"&6Second Spot Set on %s",new Object[] { setOn });
             event.setCancelled(true);            
         }
         
@@ -157,6 +153,9 @@ public class PlayerListener implements Listener {
          for(ItemStack item:Cdsc.InventorySave.get(player)){
              player.getInventory().addItem(item);
          }
+         
+         Cdsc.InventorySave.remove(player);
+         
     }
     public boolean isValidEvent(Player player,Location location,String event) {
 
@@ -217,7 +216,7 @@ public class PlayerListener implements Listener {
         int index = plugin.getAreaIndex(location);
        
         if(clanPlayer.getClan().getTag().equals(Cdsc.Areas.get(index).getClanTag())) { 
-            SendMsg(player,"&6Your Clan Own this area and not allow to hit the core!");
+            SendMessage(player,"&6Your Clan Own this area and not allow to hit the core!");
             return false;
         }
 
@@ -230,22 +229,15 @@ public class PlayerListener implements Listener {
             Cdsc.Areas.get(index).setCoreLife(Cdsc.config.CoreLife);
             Cdsc.db.UpdateArea(Cdsc.Areas.get(index));
             
-            BrcstMsg(String.format("&6The core broke ! &1%s&6 Clan win the area !",new Object[] { clanPlayer.getClan().getTag() }));
+            BrcstMsg("&6The core broke ! &1%s&6 Clan win the area !",new Object[] { clanPlayer.getClan().getTag() });
             Cdsc.EventOccurring = false;
         }else{   
             Cdsc.Areas.get(index).setCoreLife(coreLife);
-            SendMsg(player,"&6You hit the core - Core life is " + coreLife );
+            SendMessage(player,"&6You hit the core - Core life is %s",new Object[]{ coreLife } );
         }
         
         return false;
         
     }
     
-    public void SendMsg(Player player,String msg) {
-        player.sendMessage(plugin.parseColor(msg));
-    }
-    
-    public void BrcstMsg(String msg) {
-        plugin.getServer().broadcastMessage(plugin.parseColor(msg));
-    }
 }
