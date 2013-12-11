@@ -16,6 +16,10 @@ UpdaterNotify: true
 # How Many Life For Each Core
 CoreLife: 20
 # Don't drop item on kill during event
+# The item will auto-save and 
+# add back after player re-spawn
+# if player inv is full the item will
+# be lost forever
 Dontdropduringevent: true
 # Defaults flags set to area
 DefaultFlags:
