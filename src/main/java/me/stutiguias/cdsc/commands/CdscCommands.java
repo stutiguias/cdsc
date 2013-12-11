@@ -268,7 +268,7 @@ public class CdscCommands implements CommandExecutor {
     public boolean teleportToArea() {
         Player player = (Player)sender;
                
-        if (args.length < 1) {
+        if (args.length < 2) {
             SendMessage("&4Wrong arguments on command tp");
             return true;
         }
