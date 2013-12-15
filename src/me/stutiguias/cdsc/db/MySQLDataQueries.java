@@ -69,6 +69,11 @@ public class MySQLDataQueries extends Queries {
                         Cdsc.logger.log(Level.INFO, "{0} Creating table CDSC_DbVersion", plugin.prefix);
                         executeRawSQL("CREATE TABLE CDSC_DbVersion (id INT NOT NULL AUTO_INCREMENT, PRIMARY KEY(id), dbversion INT);");
                         executeRawSQL("INSERT INTO CDSC_DbVersion (dbversion) VALUES (1)");
+                }                
+                if (tableVersion() == 1) {
+                        Cdsc.logger.log(Level.INFO, "{0} Update DB version to 2", plugin.prefix);
+                        executeRawSQL("ALTER TABLE CDSC_Areas ADD COLUMN `exit` VARCHAR(255) AFTER `flags` ");
+                        executeRawSQL("UPDATE CDSC_DbVersion SET dbversion = 2 where id = 1");
                 }
 	}
     

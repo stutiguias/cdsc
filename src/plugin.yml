@@ -44,7 +44,10 @@ permissions:
         default: op    
      cdsc.bypass:
         description: Teleport player to spawn name
-        default: op   
+        default: op  
+     cdsc.setexit:
+        description: Teleport player to spawn name
+        default: op          
      cdsc.admin:
       description: Gives access to all TimeSpawner commands
       children:

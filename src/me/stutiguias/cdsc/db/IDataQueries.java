@@ -23,4 +23,5 @@ public interface IDataQueries {
         boolean SetCore(Area area);
         boolean Delete(Area area);
         boolean UpdateArea(Area area);
+        boolean SetExit(Area area);
 }

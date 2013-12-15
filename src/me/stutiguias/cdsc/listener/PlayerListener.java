@@ -83,7 +83,14 @@ public class PlayerListener extends Util implements Listener {
         
         if(!isValidEvent(player, location,"move")) {
             if(plugin.hasPermission(player,"cdsc.bypass")) return;
-            player.teleport(event.getFrom());
+            Area area = plugin.getArea(location);
+            if(area == null || area.getExit() == null) {
+                Location tpTo = event.getFrom();
+                tpTo.setY(event.getFrom().getY() - 10);
+                player.teleport(tpTo);
+            }else{
+                player.teleport(area.getExit());
+            }
         }
     
     }

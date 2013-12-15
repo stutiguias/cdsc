@@ -9,7 +9,6 @@ package me.stutiguias.cdsc.configs;
 import java.io.IOException;
 import java.util.logging.Level;
 import me.stutiguias.cdsc.init.Cdsc;
-import me.stutiguias.cdsc.init.ConfigAccessor;
 import org.bukkit.configuration.file.FileConfiguration;
 
 /**
@@ -19,7 +18,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 public class Config {
     
     private ConfigAccessor config;
-    private final Cdsc plugin;
         
     public boolean UpdaterNotify;
     public boolean ClanOwnerCanBreakArea;
@@ -36,8 +34,7 @@ public class Config {
     public String Database;
     
     public Config(Cdsc plugin) {
-        this.plugin = plugin;
-        
+ 
         try {
             config = new ConfigAccessor(plugin,"config.yml");
             config.setupConfig();

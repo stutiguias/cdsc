@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package me.stutiguias.cdsc.init;
+package me.stutiguias.cdsc.configs;
 
 /**
  *
@@ -49,7 +49,7 @@ public class ConfigAccessor {
             }
             out.close();
             input.close();
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

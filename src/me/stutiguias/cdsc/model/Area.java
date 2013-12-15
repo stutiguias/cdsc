@@ -32,6 +32,7 @@ public class Area {
     private String name;
     private String clanTag;
     private String flags;
+    private Location Exit;
     /**
      * @return the FirstSpot
      */
@@ -128,5 +129,19 @@ public class Area {
      */
     public void setCoreLife(int CoreLife) {
         this.CoreLife = CoreLife;
+    }
+
+    /**
+     * @return the Exit
+     */
+    public Location getExit() {
+        return Exit;
+    }
+
+    /**
+     * @param Exit the Exit to set
+     */
+    public void setExit(Location Exit) {
+        this.Exit = Exit;
     }
 }

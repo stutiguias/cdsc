@@ -66,7 +66,7 @@ public class Queries extends Util implements IDataQueries {
         PreparedStatement st = null;
         ResultSet rs = null;
         try {
-                st = conn.prepareStatement("SELECT dbversion FROM WA_DbVersion");
+                st = conn.prepareStatement("SELECT dbversion FROM CDSC_DbVersion");
                 rs = st.executeQuery();
                 while (rs.next()) {
                         version = rs.getInt("dbversion");
@@ -103,7 +103,7 @@ public class Queries extends Util implements IDataQueries {
         ResultSet rs = null;
 
         try {
-                st = conn.prepareStatement("INSERT INTO CDSC_Areas (name, first, second, core, corelife, clantag, flags) VALUES (?,?,?,?,?,?,?)");
+                st = conn.prepareStatement("INSERT INTO CDSC_Areas (name, first, second, core, corelife, clantag, flags, exit) VALUES (?,?,?,?,?,?,?,?)");
                 st.setString(1, area.getName());
                 st.setString(2, ToString(area.getFirstSpot()));
                 st.setString(3, ToString(area.getSecondSpot()));
@@ -111,6 +111,7 @@ public class Queries extends Util implements IDataQueries {
                 st.setInt(5, area.getCoreLife());
                 st.setString(6, area.getClanTag());
                 st.setString(7, area.getFlags());
+                st.setString(8, ToString(area.getExit()));
                 st.executeUpdate();
         } catch (SQLException e) {
                 Cdsc.logger.log(Level.WARNING, "{0} Unable to insert area", plugin.prefix);
@@ -140,6 +141,7 @@ public class Queries extends Util implements IDataQueries {
                         area.setSecondSpot(toLocation(rs.getString("second")));
                         area.setFlags(rs.getString("flags"));
                         area.setClanTag(rs.getString("clantag"));
+                        area.setExit(toLocation(rs.getString("exit")));
                         areas.add(area);
                 }
         } catch (SQLException e) {
@@ -213,6 +215,26 @@ public class Queries extends Util implements IDataQueries {
                 closeResources(conn, st, rs);
         }
         return result != 0;
+    }
+
+    @Override
+    public boolean SetExit(Area area) {
+        WALConnection conn = getConnection();
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
+        try {
+                st = conn.prepareStatement("UPDATE CDSC_Areas SET exit = ? WHERE name = ?");
+                st.setString(1, ToString(area.getCoreLocation()));
+                st.setString(2, area.getName() );
+                st.executeUpdate();
+        } catch (SQLException e) {
+                Cdsc.logger.log(Level.WARNING, "{0} Unable to update DB", plugin.prefix);
+                Cdsc.logger.warning(e.getMessage());
+        } finally {
+                closeResources(conn, st, rs);
+        }
+        return true;
     }
     
 }

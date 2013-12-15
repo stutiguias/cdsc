@@ -85,6 +85,10 @@ public class CdscCommands extends Util implements CommandExecutor {
             case "list":
                 if(!plugin.hasPermission(sender.getName(),"cdsc.list")) return false;
                 return List();
+            case "se":
+            case "setexit":
+                if(!plugin.hasPermission(sender.getName(),"cdsc.setexit")) return false;
+                return SetExit();
                 
             case "?":
             case "help":
@@ -105,7 +109,32 @@ public class CdscCommands extends Util implements CommandExecutor {
         SendMessage(MsgHr);
         return true;
     }
-    
+       
+    public boolean SetExit(){
+        Player player = (Player)sender;
+        
+        Location location = player.getTargetBlock(null,2).getLocation();
+        
+        if (args.length < 1) {
+            SendMessage("&4Wrong arguments");
+            return true;
+        }   
+ 
+        Area area = plugin.getArea(args[1]);
+        
+        if(area == null) {
+         SendMessage("&4Area name not found.");
+         return true;
+        }
+        
+        int index = plugin.getAreaIndex(area.getCoreLocation());
+
+        Cdsc.Areas.get(index).setExit(location);
+        Cdsc.db.SetExit(Cdsc.Areas.get(index));
+        SendMessage("&6Exit Point for Area %s setup successful.", new Object[] { area.getName() });
+        return true;
+    }
+       
     public boolean Info(){
         Player player = (Player)sender;
 
