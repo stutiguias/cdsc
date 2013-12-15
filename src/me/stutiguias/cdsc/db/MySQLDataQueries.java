@@ -1,5 +1,7 @@
 package me.stutiguias.cdsc.db;
 
+import me.stutiguias.cdsc.db.connection.WALConnectionPool;
+import me.stutiguias.cdsc.db.connection.WALConnection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;

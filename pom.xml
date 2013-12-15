@@ -45,13 +45,13 @@
   
   <build>
     <finalName>${project.name}</finalName>
-    <sourceDirectory>${basedir}/src/main/java/</sourceDirectory>
+    <sourceDirectory>${basedir}/src/</sourceDirectory>
 
     <resources>
       <resource>
         <targetPath>.</targetPath>
         <filtering>true</filtering>
-        <directory>${basedir}/src/main/resources/</directory>
+        <directory>${basedir}/src/</directory>
         <includes>
           <include>plugin.yml</include>
           <include>config.yml</include>
@@ -64,11 +64,11 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>2.3.2</version>
+        <version>3.1</version>
         <configuration>
           <source>1.7</source>
           <target>1.7</target>
-          <showDeprecation>false</showDeprecation>
+          <showDeprecation>true</showDeprecation>
         </configuration>
       </plugin>
       

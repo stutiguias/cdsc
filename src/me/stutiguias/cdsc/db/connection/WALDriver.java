@@ -1,4 +1,4 @@
-package me.stutiguias.cdsc.db;
+package me.stutiguias.cdsc.db.connection;
 
 import java.sql.*;
 import java.util.Properties;

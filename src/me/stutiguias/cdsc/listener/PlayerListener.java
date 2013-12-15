@@ -231,9 +231,12 @@ public class PlayerListener extends Util implements Listener {
             
             BrcstMsg("&6The core broke ! &1%s&6 Clan win the area !",new Object[] { clanPlayer.getClan().getTag() });
             Cdsc.EventOccurring = false;
-        }else{   
+            
+        }else{ 
+            
             Cdsc.Areas.get(index).setCoreLife(coreLife);
             SendMessage(player,"&6You hit the core - Core life is %s",new Object[]{ coreLife } );
+            
         }
         
         return false;

@@ -4,6 +4,7 @@
  */
 package me.stutiguias.cdsc.db;
 
+import me.stutiguias.cdsc.db.connection.WALConnection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,13 +22,11 @@ import me.stutiguias.cdsc.model.Area;
  */
 public class Queries extends Util implements IDataQueries {
         
-    protected Cdsc plugin;
     protected WALConnection connection;
     protected Integer found;
     
     public Queries(Cdsc plugin) {
         super(plugin);
-        this.plugin = plugin;
     }
 
     @Override

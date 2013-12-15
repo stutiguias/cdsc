@@ -20,7 +20,6 @@ import me.stutiguias.cdsc.updater.Updater;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
-import static org.bukkit.Bukkit.getServer;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -225,14 +224,5 @@ public class Cdsc extends JavaPlugin {
     public boolean isInsideProtection(double x,double x2,double z,double z2,Location location) {
        return location.getX() <= x && location.getX() >= x2 && location.getZ() <= z && location.getZ() >= z2;
     }
-    
-    public void BroadcastEventStart() {
-       getServer().broadcastMessage("Event Defence Castle Started!!!");
-       getServer().broadcastMessage("All clans may enter the areas");
-    }
-    
-    public void BroadcastEventEnd() {
-       getServer().broadcastMessage("Event Defence Castle Ended!!!");
-       getServer().broadcastMessage("All areas is now Protected");
-    }
+
 }

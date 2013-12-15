@@ -4,6 +4,8 @@
  */
 package me.stutiguias.cdsc.db;
 
+import me.stutiguias.cdsc.db.connection.WALDriver;
+import me.stutiguias.cdsc.db.connection.WALConnection;
 import java.io.File;
 import java.io.IOException;
 import java.sql.*;

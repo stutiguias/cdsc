@@ -4,6 +4,7 @@
  */
 package me.stutiguias.cdsc.db;
 
+import me.stutiguias.cdsc.db.connection.WALConnection;
 import java.util.List;
 import me.stutiguias.cdsc.model.Area;
 
