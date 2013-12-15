@@ -86,7 +86,7 @@ public class PlayerListener extends Util implements Listener {
             Area area = plugin.getArea(location);
             if(area == null || area.getExit() == null) {
                 Location tpTo = event.getFrom();
-                tpTo.setY(event.getFrom().getY() - 10);
+                tpTo.setZ(event.getFrom().getZ() - 1);
                 player.teleport(tpTo);
             }else{
                 player.teleport(area.getExit());
