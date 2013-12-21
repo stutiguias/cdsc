@@ -20,6 +20,7 @@ public class SqliteDataQueries extends Queries {
 
     public SqliteDataQueries(Cdsc plugin) {
         super(plugin);
+        initTables();
     }
 
     @Override
@@ -60,7 +61,7 @@ public class SqliteDataQueries extends Queries {
     }
 
     @Override
-    public void initTables() {
+    public final void initTables() {
                 File dbFile = new File(plugin.getDataFolder() + File.separator +  "data.db");
                 if(!dbFile.exists()) {
                     try {

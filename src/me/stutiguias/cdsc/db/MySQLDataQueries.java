@@ -21,6 +21,7 @@ public class MySQLDataQueries extends Queries {
                         Cdsc.logger.log(Level.WARNING, "{0} Exception getting mySQL WALConnection", plugin.prefix);
 			Cdsc.logger.warning(e.getMessage());
                 }
+                initTables();
 	}
 
         @Override
@@ -56,7 +57,7 @@ public class MySQLDataQueries extends Queries {
 	}
 
         @Override
-	public void initTables() {
+	public final void initTables() {
 		if (!tableExists("CDSC_Players")) {
 			Cdsc.logger.log(Level.INFO, "{0} Creating table CDSC_Players", plugin.prefix);
 			executeRawSQL("CREATE TABLE CDSC_Players (id INT NOT NULL AUTO_INCREMENT, PRIMARY KEY(id), name VARCHAR(255), banned INT);");
