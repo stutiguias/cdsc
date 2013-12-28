@@ -33,6 +33,8 @@ public class Area {
     private String clanTag;
     private String flags;
     private Location Exit;
+    private boolean Event;
+    
     /**
      * @return the FirstSpot
      */
@@ -143,5 +145,19 @@ public class Area {
      */
     public void setExit(Location Exit) {
         this.Exit = Exit;
+    }
+
+    /**
+     * @return the Event
+     */
+    public boolean isEvent() {
+        return Event;
+    }
+
+    /**
+     * @param Event the Event to set
+     */
+    public void setEvent(boolean Event) {
+        this.Event = Event;
     }
 }

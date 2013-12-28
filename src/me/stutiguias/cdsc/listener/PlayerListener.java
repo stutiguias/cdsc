@@ -179,13 +179,14 @@ public class PlayerListener extends Util implements Listener {
             case "move":
                 return isValidMove(area, clanPlayer);
             case "drop":
-                return isValidDrop();
+                return isValidDrop(area);
             default:
                 return true;
         }
     }
     
-    public boolean isValidDrop() {
+    public boolean isValidDrop(Area area) {
+        if(area.isEvent()) return false;
         return !Cdsc.EventOccurring;
     }
     
@@ -208,6 +209,7 @@ public class PlayerListener extends Util implements Listener {
     }
     
     public boolean isValidMove(Area area,ClanPlayer clanPlayer) {
+        if(area.isEvent()) return true;
         return isAllowedClan(area.getClanTag(), clanPlayer);
     }
     
@@ -232,12 +234,15 @@ public class PlayerListener extends Util implements Listener {
 
         if(coreLife == 0) {
             
-            Cdsc.Areas.get(index).setClanTag(clanPlayer.getClan().getTag());
-            Cdsc.Areas.get(index).setCoreLife(Cdsc.config.CoreLife);
-            Cdsc.db.UpdateArea(Cdsc.Areas.get(index));
+            Area area = Cdsc.Areas.get(index);
+            area.setClanTag(clanPlayer.getClan().getTag());
+            area.setCoreLife(Cdsc.config.CoreLife);
+            Cdsc.db.UpdateArea(area);
             
-            BrcstMsg("&6The core broke ! &1%s&6 Clan win the area !",new Object[] { clanPlayer.getClan().getTag() });
+            BrcstMsg("&6The core broke on %s !\n &1%s&6 Clan win the area !\nThe event is ended!",new Object[] { area.getName() , clanPlayer.getClan().getTag() });
+            
             Cdsc.EventOccurring = false;
+            area.setEvent(false);
             
         }else{ 
             

@@ -126,9 +126,12 @@ public class CdscCommands extends Util implements CommandExecutor {
          SendMessage("&4Area name not found.");
          return true;
         }
-        
+        if(area.getCoreLocation() == null) {
+            SendMessage("&4You need to set area core first");
+            return true;
+        }
         int index = plugin.getAreaIndex(area.getCoreLocation());
-
+        
         Cdsc.Areas.get(index).setExit(location);
         Cdsc.db.SetExit(Cdsc.Areas.get(index));
         SendMessage("&6Exit Point for Area %s setup successful.", new Object[] { area.getName() });
@@ -199,19 +202,48 @@ public class CdscCommands extends Util implements CommandExecutor {
     }
     
     private boolean StartEvent() {
-        Cdsc.EventOccurring = true;
-        for(Area area:Cdsc.Areas) {
+            
+        if (args.length < 2) {
+            
+            Cdsc.EventOccurring = true;
+                   
+            for(Area area:Cdsc.Areas) {
+                area.setCoreLife(Cdsc.config.CoreLife);
+            }
+            BrcstMsg("&6Event Defence Castle Started for all Castle!!!");    
+            return true;
+        }else{
+            Area area = plugin.getArea(args[1]);
+            if(area == null) {
+                SendMessage("&4Area not found");
+                return true;
+            }
+            area.setEvent(true);
             area.setCoreLife(Cdsc.config.CoreLife);
-        }
-        BrcstMsg("&6Event Defence Castle Started!!!");
-        BrcstMsg("&6All clans may enter the areas");
+            BrcstMsg("&6Event Defence Castle Started for %s!!!", new Object[]{ args[1] });
+        }  
+        BrcstMsg("&6Protect is now &4OFF&6!");
         return true;
     }
     
     private boolean StopEvent() {
-        Cdsc.EventOccurring = false;
-        BrcstMsg("&6Event Defence Castle Ended!!!");
-        BrcstMsg("&6All areas is now Protected");
+            
+        if (args.length < 2) {
+            
+            Cdsc.EventOccurring = false;
+            BrcstMsg("&6Event Defence Castle Ended for all Castle!!!");    
+            return true;
+            
+        }else{
+            Area area = plugin.getArea(args[1]);
+            if(area == null) {
+                SendMessage("&4Area not found");
+                return true;
+            }
+            area.setEvent(false);
+            BrcstMsg("&6Event Defence Castle Ended for %s!!!", new Object[]{ args[1] });
+        }  
+        BrcstMsg("&6Protect is now &4ON&6!");
         return true;
     }
     
@@ -258,7 +290,11 @@ public class CdscCommands extends Util implements CommandExecutor {
         if(plugin.hasPermission(sender.getName(),"cdsc.update")){
             SendMessage("&6/cd <sc or setcore> &e| &7SetCore of an existing area");
         }
-                
+         
+        if(plugin.hasPermission(sender.getName(),"cdsc.setexit")){
+            SendMessage("&6/cd <se or setexit> <areaName> &e| &7SetExit spot for not allowed");
+        }  
+        
         if(plugin.hasPermission(sender.getName(),"cdsc.list")){
             SendMessage("&6/cd <l or list> &e| &7List all areas");
         }   
@@ -272,11 +308,11 @@ public class CdscCommands extends Util implements CommandExecutor {
         }
                     
         if(plugin.hasPermission(sender.getName(),"cdsc.start")){
-            SendMessage("&6/cd <s or start> &e| &7Start Event");
+            SendMessage("&6/cd <s or start> <nothing | areaName> &e| &7Start Event");
         }    
         
         if(plugin.hasPermission(sender.getName(),"cdsc.end")){
-            SendMessage("&6/cd <e or end> &e| &7End event");
+            SendMessage("&6/cd <e or end> <nothing | areaName> &e| &7End event");
         }
         
         if(plugin.hasPermission(sender.getName(),"cdsc.tp")){
