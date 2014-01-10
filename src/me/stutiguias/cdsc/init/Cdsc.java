@@ -171,6 +171,8 @@ public class Cdsc extends JavaPlugin {
     }
     
     public int getAreaIndex(Location location) {
+        if(Cdsc.Areas == null) return -1;
+        if(Cdsc.Areas.isEmpty()) return -1;
         for (int i = 0; i < Cdsc.Areas.size(); i++) {
             
             Area area = Cdsc.Areas.get(i);

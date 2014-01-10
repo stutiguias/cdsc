@@ -42,6 +42,7 @@ public class Util {
     }
     
     public static Location toLocation(String location) {
+        if(location == null) return null;
         if(location.isEmpty()) return null;
         String[] loc = location.split(",");
         Double x = Double.parseDouble(loc[0]);

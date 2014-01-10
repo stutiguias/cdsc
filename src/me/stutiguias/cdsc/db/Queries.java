@@ -224,7 +224,7 @@ public class Queries extends Util implements IDataQueries {
         ResultSet rs = null;
 
         try {
-                st = conn.prepareStatement("UPDATE CDSC_Areas SET exit = ? WHERE name = ?");
+                st = conn.prepareStatement("UPDATE CDSC_Areas SET `exit` = ? WHERE name = ?");
                 st.setString(1, ToString(area.getExit()));
                 st.setString(2, area.getName() );
                 st.executeUpdate();
