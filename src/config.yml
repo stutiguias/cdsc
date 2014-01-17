@@ -1,5 +1,5 @@
 # don't change this
-configversion: 4
+configversion: 5
 #DataBase
 DataBase:
   # You need to choose if you will use SQLite or Mysql ( default is SQLite )
@@ -20,7 +20,13 @@ CoreLife: 20
 # add back after player re-spawn
 # if player inv is full the item will
 # be lost forever
-Dontdropduringevent: true
+Dontdropduringevent: false
+# Don't die during event
+# will don't let player die
+# anytime player will die 
+# he will be teleport to exit
+# point and get full health again
+Dontdieduringevent: true
 # Defaults flags set to area
 DefaultFlags:
     ClanOwnerCanBreakArea: false

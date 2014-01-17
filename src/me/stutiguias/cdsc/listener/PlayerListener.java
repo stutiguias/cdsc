@@ -4,22 +4,31 @@
  */
 package me.stutiguias.cdsc.listener;
 
+import java.sql.Date;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
 import me.stutiguias.cdsc.init.Cdsc;
+import me.stutiguias.cdsc.init.CombatTag;
 import me.stutiguias.cdsc.init.Util;
 import me.stutiguias.cdsc.model.Area;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -30,6 +39,9 @@ import org.bukkit.inventory.ItemStack;
  * @author Daniel
  */
 public class PlayerListener extends Util implements Listener {
+    
+    public HashMap<Player , ItemStack[]> items = new HashMap<>();
+    public CombatTag CombatTag;
     
     public PlayerListener(Cdsc plugin) {
         super(plugin);
@@ -54,7 +66,7 @@ public class PlayerListener extends Util implements Listener {
         Location location = event.getBlock().getLocation();       
         Player player = (Player)event.getPlayer();
         
-        if(!isValidEvent(player, location,"place")) {
+        if(BlockEvent(player, location,"place")) {
             if(plugin.hasPermission(player,"cdsc.bypass")) return;
             event.setCancelled(true);
         }
@@ -67,7 +79,7 @@ public class PlayerListener extends Util implements Listener {
         Location location = event.getBlock().getLocation();       
         Player player = (Player)event.getPlayer();
         
-        if(!isValidEvent(player, location,"break")) {
+        if(BlockEvent(player, location,"break")) {
             if(plugin.hasPermission(player,"cdsc.bypass")) return;
             event.setCancelled(true);
         }
@@ -81,7 +93,7 @@ public class PlayerListener extends Util implements Listener {
         
         if(Cdsc.EventOccurring) return;
         
-        if(!isValidEvent(player, location,"move")) {
+        if(BlockEvent(player, location,"move")) {
             if(plugin.hasPermission(player,"cdsc.bypass")) return;
             Area area = plugin.getArea(location);
             if(area == null || area.getExit() == null) {
@@ -126,107 +138,139 @@ public class PlayerListener extends Util implements Listener {
         
     }
     
-    @EventHandler(priority = EventPriority.NORMAL)
-    public void onItemDrop(EntityDeathEvent event) {
-        if(Cdsc.Areas.isEmpty()) return;
-        if(!Cdsc.config.Dontdropduringevent) return;
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onDamage(EntityDamageByEntityEvent event){
+      if(Cdsc.Areas.isEmpty()) return;
+      if(Cdsc.config.DieDuringEvent()) return;            
+      if(Cdsc.EventNotEnable()) return;
+ 
+        Entity defender;
+
+        defender = event.getEntity();
+        if(defender == null) {
+            return;
+        }
         
-        Location location = event.getEntity().getLocation();       
-        if(event.getEntityType() != EntityType.PLAYER) return;
-        Player player = (Player)event.getEntity();
-        
-        if(!isValidEvent(player, location,"drop")) {
-            event.setDroppedExp(0);
-            if(event.getDrops().isEmpty())return;
-            List<ItemStack> tmpDrops = new ArrayList<>(event.getDrops());
-            Cdsc.InventorySave.put(player,tmpDrops);
-            for(ItemStack isDrop : tmpDrops)
-            {
-               event.getDrops().remove(isDrop);
+        if(defender instanceof Player) {
+            Player df = (Player)defender;
+
+            Area area = plugin.getArea(df.getLocation());
+            if(area == null) return;
+
+            if (df.getHealth() - event.getDamage() <= 0) {
+                event.setCancelled(true);
+                if(plugin.getServer().getPluginManager().getPlugin("CombatTag") != null){
+                    CombatTag = new CombatTag(plugin);
+                }
+                if(CombatTag != null) CombatTag.Get().untagPlayer(df);
+                df.teleport(area.getExit());
+                df.setHealth(20);
             }
         }
+      
     }
-    
-    @EventHandler()
-    public void onPlayerReSpawn(PlayerRespawnEvent event) {
-         if(Cdsc.Areas.isEmpty()) return;
-         if(!Cdsc.EventOccurring) return;
-         if(Cdsc.InventorySave.isEmpty()) return;
-         
-         Player player = (Player)event.getPlayer();
-         
-         if(Cdsc.InventorySave.get(player).isEmpty()) return;
-         
-         for(ItemStack item:Cdsc.InventorySave.get(player)){
-             player.getInventory().addItem(item);
-         }
-         
-         Cdsc.InventorySave.remove(player);
-         
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onRespawn(PlayerRespawnEvent event){
+        if(Cdsc.Areas.isEmpty()) return;
+        if(Cdsc.config.DropDuringEvent()) return;
+        if(Cdsc.EventNotEnable()) return;
+
+        Player player = (Player)event.getPlayer();
+
+       if(items.containsKey(player)){
+           player.getInventory().clear();
+           for(ItemStack stack : items.get(player)){
+               if(stack != null){
+                   player.getInventory().addItem(stack);
+               }
+           }
+           items.remove(player);
+       }
     }
-    public boolean isValidEvent(Player player,Location location,String event) {
+ 
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onDeath(PlayerDeathEvent event){
+        if(Cdsc.EventNotEnable()) return;
+        if(Cdsc.Areas.isEmpty()) return;
+        if(Cdsc.config.DropDuringEvent()) return;
+        if(event.getEntityType() != EntityType.PLAYER) return;
+
+        Player player = (Player)event.getEntity();
+        
+        if(BlockEvent(player, player.getLocation(),"drop")) {
+            event.setDroppedExp(0);
+            if(event.getDrops().isEmpty())return;
+            ItemStack[] content = player.getInventory().getContents();
+            items.put(player, content);
+            player.getInventory().clear();
+            event.getDrops().clear();
+        }
+    }
+
+    public boolean BlockEvent(Player player,Location location,String event) {
 
         Area area = plugin.getArea(location);
-        if(area == null) return true;
+        if(area == null) return false;
         
         ClanPlayer clanPlayer = plugin.getSimpleClan().getClanManager().getClanPlayer(player);
         
         switch (event) {
             case "place":
-                return isValidPlace(area, clanPlayer);
+                return BlockPlace(area, clanPlayer);
             case "break":
-                return isValidBreak(area, player, location, clanPlayer);
+                return BlockBreak(area, player, location, clanPlayer);
             case "move":
-                return isValidMove(area, clanPlayer);
+                return BlockMove(area, clanPlayer);
             case "drop":
-                return isValidDrop(area);
+                return BlockDrop(area);
             default:
-                return true;
+                return false;
         }
     }
     
-    public boolean isValidDrop(Area area) {
-        if(area.isEvent()) return false;
-        return !Cdsc.EventOccurring;
+    public boolean BlockDrop(Area area) {
+        if(area.isEvent()) return true;
+        return Cdsc.EventOccurring;
     }
     
-    public boolean isValidPlace(Area area,ClanPlayer clanPlayer) {
+    public boolean BlockPlace(Area area,ClanPlayer clanPlayer) {
 
-        if(area.getFlags().contains("denyclanplace") ) return false;
+        if(area.getFlags().contains("denyclanplace") ) return true;
         
-        return isAllowedClan(area.getClanTag(), clanPlayer);
+        return BlockClan(area.getClanTag(), clanPlayer);
     }    
     
-    public boolean isValidBreak(Area area,Player player,Location location,ClanPlayer clanPlayer) {
+    public boolean BlockBreak(Area area,Player player,Location location,ClanPlayer clanPlayer) {
                 
         if(area.getCoreLocation() != null && area.getCoreLocation().distance(location) == 0) {
             return HitCore(location, clanPlayer, player);
         }
         
-        if(area.getFlags().contains("denyclanbreak") ) return false;
+        if(area.getFlags().contains("denyclanbreak") ) return true;
         
-        return isAllowedClan(area.getClanTag(), clanPlayer);
+        return BlockClan(area.getClanTag(), clanPlayer);
     }
     
-    public boolean isValidMove(Area area,ClanPlayer clanPlayer) {
+    public boolean BlockMove(Area area,ClanPlayer clanPlayer) {
         if(area.isEvent()) return true;
-        return isAllowedClan(area.getClanTag(), clanPlayer);
+        return BlockClan(area.getClanTag(), clanPlayer);
     }
     
-    public boolean isAllowedClan(String clanTag,ClanPlayer clanPlayer) {
-        if(clanPlayer == null || clanPlayer.getClan() == null) return false;
-        return clanTag.equalsIgnoreCase(clanPlayer.getClan().getTag());
+    public boolean BlockClan(String clanTag,ClanPlayer clanPlayer) {
+        if(clanPlayer == null || clanPlayer.getClan() == null) return true;
+        return clanTag.equalsIgnoreCase(clanPlayer.getClan().getTag()) == false;
     }
     
     public boolean HitCore(Location location,ClanPlayer clanPlayer,Player player) {
         
-        if(clanPlayer == null || clanPlayer.getClan() == null) return false;
+        if(clanPlayer == null || clanPlayer.getClan() == null) return true;
         
         int index = plugin.getAreaIndex(location);
        
         if(clanPlayer.getClan().getTag().equals(Cdsc.Areas.get(index).getClanTag())) { 
             SendMessage(player,"&6Your Clan Own this area and not allow to hit the core!");
-            return false;
+            return true;
         }
 
         int coreLife = Cdsc.Areas.get(index).getCoreLife();
@@ -251,7 +295,7 @@ public class PlayerListener extends Util implements Listener {
             
         }
         
-        return false;
+        return true;
         
     }
     

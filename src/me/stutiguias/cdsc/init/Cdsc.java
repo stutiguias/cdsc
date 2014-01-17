@@ -42,7 +42,6 @@ public class Cdsc extends JavaPlugin {
     
     public static List<Area> Areas;
     
-    public static HashMap<Player,List<ItemStack>> InventorySave;
     public static boolean EventOccurring;
     
     public Permission permission = null;
@@ -69,8 +68,6 @@ public class Cdsc extends JavaPlugin {
         AreaCreating = new HashMap<>();
         PlayerProfiles = new HashMap<>();
         config = new Config(this);
-        
-        InventorySave = new HashMap<>();
         
         PluginManager pm = getServer().getPluginManager();
         
@@ -224,6 +221,10 @@ public class Cdsc extends JavaPlugin {
     
     public boolean isInsideProtection(double x,double x2,double z,double z2,Location location) {
        return location.getX() <= x && location.getX() >= x2 && location.getZ() <= z && location.getZ() >= z2;
+    }
+    
+    public static boolean EventNotEnable(){
+        return EventOccurring == false;
     }
 
 }

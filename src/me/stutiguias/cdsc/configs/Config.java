@@ -23,6 +23,7 @@ public class Config {
     public boolean ClanOwnerCanBreakArea;
     public boolean ClanOwnerCanPlaceArea;
     public boolean Dontdropduringevent;
+    public boolean Dontdieduringevent;
     
     public int CoreLife;
     
@@ -40,7 +41,7 @@ public class Config {
             config.setupConfig();
             FileConfiguration fc = config.getConfig();   
                         
-            if(!fc.isSet("configversion") || fc.getInt("configversion") != 4){ 
+            if(!fc.isSet("configversion") || fc.getInt("configversion") != 5){ 
                 config.MakeOld();
                 config.setupConfig();
                 fc = config.getConfig();  
@@ -57,6 +58,7 @@ public class Config {
             ClanOwnerCanBreakArea = fc.getBoolean("DefaultFlags.ClanOwnerCanBreakArea");
             ClanOwnerCanPlaceArea = fc.getBoolean("DefaultFlags.ClanOwnerCanPlaceArea");
             Dontdropduringevent = fc.getBoolean("Dontdropduringevent");
+            Dontdieduringevent = fc.getBoolean("Dontdieduringevent");
             
             CoreLife = fc.getInt("CoreLife");
             
@@ -70,4 +72,11 @@ public class Config {
         config.reloadConfig();
     }
     
+    public boolean DropDuringEvent() {
+        return Dontdropduringevent == false;
+    }
+    
+    public boolean DieDuringEvent() {
+        return Dontdieduringevent == false;
+    }
 }

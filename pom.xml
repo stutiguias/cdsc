@@ -40,6 +40,14 @@
               <scope>system</scope>
           <systemPath>${project.basedir}/lib/SimpleClans-Legacy.jar</systemPath>
         </dependency>
+                
+        <dependency>
+          <groupId>com.trc202</groupId>
+          <artifactId>CombatTag</artifactId>
+          <version>6.0.2</version>
+              <scope>system</scope>
+          <systemPath>${project.basedir}/lib/CombatTag.jar</systemPath>
+        </dependency>
         
   </dependencies>
   
