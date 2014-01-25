@@ -95,7 +95,7 @@ public class Cdsc extends JavaPlugin {
         }
        
         if(config.UpdaterNotify){
-            Updater updater = new Updater(this, 49809, this.getFile(), Updater.UpdateType.NO_DOWNLOAD, false); // Start Updater but just do a version check
+            Updater updater = new Updater(this, 70266, this.getFile(), Updater.UpdateType.NO_DOWNLOAD, false); // Start Updater but just do a version check
             
             update = updater.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE; // Determine if there is an update ready for us
             name = updater.getLatestName(); // Get the latest name
