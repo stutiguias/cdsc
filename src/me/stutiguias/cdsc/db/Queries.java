@@ -123,7 +123,7 @@ public class Queries extends Util implements IDataQueries {
     }
 
     @Override
-    public List<Area> getAreas() {
+    public List<Area> GetAreas() {
         List<Area> areas = new ArrayList<>();
                 
         WALConnection conn = getConnection();

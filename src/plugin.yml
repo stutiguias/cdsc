@@ -2,6 +2,7 @@ name: "CDSC"
 version: ${project.version}
 author: "Stutiguias"
 main: "me.stutiguias.cdsc.init.Cdsc"
+depend: [Vault,SimpleClans]
 commands:
   cd:
     description: "§bcommands"

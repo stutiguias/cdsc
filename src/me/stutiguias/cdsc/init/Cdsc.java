@@ -23,7 +23,6 @@ import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -83,7 +82,7 @@ public class Cdsc extends JavaPlugin {
             db = new SqliteDataQueries(this);
         }
 
-        Areas = db.getAreas();
+        Areas = db.GetAreas();
         
         // Metrics 
         try {
@@ -153,18 +152,6 @@ public class Cdsc extends JavaPlugin {
     
     public long getCurrentMilli() {
             return System.currentTimeMillis();
-    }
-    
-    public SimpleClans getSimpleClan() {
-        
-        Plugin plugin = getServer().getPluginManager().getPlugin("SimpleClans");
-
-        // may not be loaded
-        if (plugin == null || !(plugin instanceof SimpleClans)) {
-            return null;
-        }
-
-        return (SimpleClans) plugin;
     }
     
     public int getAreaIndex(Location location) {

@@ -7,7 +7,7 @@ package me.stutiguias.cdsc.listener;
 import java.util.HashMap;
 import me.stutiguias.cdsc.init.Cdsc;
 import me.stutiguias.cdsc.init.CombatTag;
-import me.stutiguias.cdsc.init.Util;
+import me.stutiguias.cdsc.init.SimpleClan;
 import me.stutiguias.cdsc.model.Area;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import org.bukkit.Location;
@@ -16,7 +16,6 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -31,13 +30,15 @@ import org.bukkit.inventory.ItemStack;
  *
  * @author Daniel
  */
-public class PlayerListener extends Util implements Listener {
+public class PlayerListener extends ListenerHandle {
     
     public HashMap<Player , ItemStack[]> items = new HashMap<>();
     public CombatTag CombatTag;
+    public SimpleClan simpleClan;
     
     public PlayerListener(Cdsc plugin) {
         super(plugin);
+        simpleClan = new SimpleClan(plugin);
     }
         
     @EventHandler(priority= EventPriority.NORMAL)
@@ -59,7 +60,7 @@ public class PlayerListener extends Util implements Listener {
         Location location = event.getBlock().getLocation();       
         Player player = (Player)event.getPlayer();
         
-        if(BlockEvent(player, location,"place")) {
+        if(CancelBlockEvent(player, location,"place")) {
             if(plugin.hasPermission(player,"cdsc.bypass")) return;
             event.setCancelled(true);
         }
@@ -72,7 +73,7 @@ public class PlayerListener extends Util implements Listener {
         Location location = event.getBlock().getLocation();       
         Player player = (Player)event.getPlayer();
         
-        if(BlockEvent(player, location,"break")) {
+        if(CancelBlockEvent(player, location,"break")) {
             if(plugin.hasPermission(player,"cdsc.bypass")) return;
             event.setCancelled(true);
         }
@@ -86,7 +87,7 @@ public class PlayerListener extends Util implements Listener {
         
         if(Cdsc.EventOccurring) return;
         
-        if(BlockEvent(player, location,"move")) {
+        if(CancelBlockEvent(player, location,"move")) {
             if(plugin.hasPermission(player,"cdsc.bypass")) return;
             Area area = plugin.getArea(location);
             if(area == null || area.getExit() == null) {
@@ -191,7 +192,7 @@ public class PlayerListener extends Util implements Listener {
 
         Player player = (Player)event.getEntity();
         
-        if(BlockEvent(player, player.getLocation(),"drop")) {
+        if(CancelBlockEvent(player, player.getLocation(),"drop")) {
             event.setDroppedExp(0);
             if(event.getDrops().isEmpty())return;
             ItemStack[] content = player.getInventory().getContents();
@@ -201,12 +202,12 @@ public class PlayerListener extends Util implements Listener {
         }
     }
 
-    public boolean BlockEvent(Player player,Location location,String event) {
+    public boolean CancelBlockEvent(Player player,Location location,String event) {
 
         Area area = plugin.getArea(location);
         if(area == null) return false;
         
-        ClanPlayer clanPlayer = plugin.getSimpleClan().getClanManager().getClanPlayer(player);
+        ClanPlayer clanPlayer = simpleClan.Get().getClanManager().getClanPlayer(player);
         
         switch (event) {
             case "place":

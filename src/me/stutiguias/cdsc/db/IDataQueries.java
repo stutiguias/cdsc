@@ -18,10 +18,11 @@ public interface IDataQueries {
         Integer getFound(); // Found On Last Search
         WALConnection getConnection();
         
-        boolean InsertArea(Area area);
-        List<Area> getAreas();
-        boolean SetCore(Area area);
-        boolean Delete(Area area);
-        boolean UpdateArea(Area area);
-        boolean SetExit(Area area);
+        boolean     InsertArea(Area area);
+        boolean     UpdateArea(Area area);
+        boolean     Delete(Area area);
+        boolean     SetExit(Area area);
+        boolean     SetCore(Area area);
+        List<Area>  GetAreas();
+        
 }
