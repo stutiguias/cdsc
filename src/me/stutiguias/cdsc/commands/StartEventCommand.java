@@ -35,7 +35,9 @@ public class StartEventCommand  extends CommandHandler {
             }
             BrcstMsg("&6Event Defence Castle Started for all Castle!!!");    
             return true;
+            
         }else{
+            
             Area area = plugin.getArea(args[1]);
             if(area == null) {
                 SendMessage("&4Area not found");

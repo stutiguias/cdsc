@@ -210,8 +210,14 @@ public class Cdsc extends JavaPlugin {
        return location.getX() <= x && location.getX() >= x2 && location.getZ() <= z && location.getZ() >= z2;
     }
     
-    public static boolean EventNotEnable(){
-        return EventOccurring == false;
+    public static boolean EventNotEnable(Area area){
+       if(EventOccurring == false) return true;
+       return area.onEvent() == false;
     }
 
+    public static boolean EventEnable(Area area) {
+        if(EventOccurring) return true;
+        return area.onEvent();
+    }
+    
 }

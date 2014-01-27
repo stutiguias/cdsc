@@ -60,7 +60,7 @@ public class PlayerListener extends ListenerHandle {
         Location location = event.getBlock().getLocation();       
         Player player = (Player)event.getPlayer();
         
-        if(CancelBlockEvent(player, location,"place")) {
+        if(CancelEvent(player, location,"place")) {
             if(plugin.hasPermission(player,"cdsc.bypass")) return;
             event.setCancelled(true);
         }
@@ -73,7 +73,7 @@ public class PlayerListener extends ListenerHandle {
         Location location = event.getBlock().getLocation();       
         Player player = (Player)event.getPlayer();
         
-        if(CancelBlockEvent(player, location,"break")) {
+        if(CancelEvent(player, location,"break")) {
             if(plugin.hasPermission(player,"cdsc.bypass")) return;
             event.setCancelled(true);
         }
@@ -84,13 +84,11 @@ public class PlayerListener extends ListenerHandle {
     public void onMoveInside(PlayerMoveEvent event) {
         Player player = event.getPlayer();
         Location location = event.getTo();
-        
-        if(Cdsc.EventOccurring) return;
-        
-        if(CancelBlockEvent(player, location,"move")) {
+
+        if(CancelEvent(player, location,"move")) {
             if(plugin.hasPermission(player,"cdsc.bypass")) return;
             Area area = plugin.getArea(location);
-            if(area == null || area.getExit() == null) {
+            if(area.getExit() == null) {
                 Location tpTo = event.getFrom();
                 tpTo.setZ(event.getFrom().getZ() - 1);
                 player.teleport(tpTo);
@@ -135,8 +133,11 @@ public class PlayerListener extends ListenerHandle {
     @EventHandler(priority = EventPriority.HIGH)
     public void onDamage(EntityDamageByEntityEvent event){
       if(Cdsc.Areas.isEmpty()) return;
-      if(Cdsc.config.DieDuringEvent()) return;            
-      if(Cdsc.EventNotEnable()) return;
+      if(Cdsc.config.DieDuringEvent()) return;   
+      
+      Area area = plugin.getArea(event.getEntity().getLocation());
+      if(area == null) return;
+      if(Cdsc.EventNotEnable(area)) return;
  
         Entity defender;
 
@@ -147,9 +148,6 @@ public class PlayerListener extends ListenerHandle {
         
         if(defender instanceof Player) {
             Player df = (Player)defender;
-
-            Area area = plugin.getArea(df.getLocation());
-            if(area == null) return;
 
             if (df.getHealth() - event.getDamage() <= 0) {
                 event.setCancelled(true);
@@ -168,8 +166,10 @@ public class PlayerListener extends ListenerHandle {
     public void onRespawn(PlayerRespawnEvent event){
         if(Cdsc.Areas.isEmpty()) return;
         if(Cdsc.config.DropDuringEvent()) return;
-        if(Cdsc.EventNotEnable()) return;
-
+        Area area = plugin.getArea(event.getPlayer().getLocation());
+        if(area == null) return;
+        if(Cdsc.EventNotEnable(area)) return;
+        
         Player player = (Player)event.getPlayer();
 
        if(items.containsKey(player)){
@@ -185,14 +185,13 @@ public class PlayerListener extends ListenerHandle {
  
     @EventHandler(priority = EventPriority.HIGH)
     public void onDeath(PlayerDeathEvent event){
-        if(Cdsc.EventNotEnable()) return;
         if(Cdsc.Areas.isEmpty()) return;
         if(Cdsc.config.DropDuringEvent()) return;
         if(event.getEntityType() != EntityType.PLAYER) return;
 
         Player player = (Player)event.getEntity();
         
-        if(CancelBlockEvent(player, player.getLocation(),"drop")) {
+        if(CancelEvent(player, player.getLocation(),"drop")) {
             event.setDroppedExp(0);
             if(event.getDrops().isEmpty())return;
             ItemStack[] content = player.getInventory().getContents();
@@ -202,7 +201,7 @@ public class PlayerListener extends ListenerHandle {
         }
     }
 
-    public boolean CancelBlockEvent(Player player,Location location,String event) {
+    public boolean CancelEvent(Player player,Location location,String event) {
 
         Area area = plugin.getArea(location);
         if(area == null) return false;
@@ -217,22 +216,15 @@ public class PlayerListener extends ListenerHandle {
             case "move":
                 return BlockMove(area, clanPlayer);
             case "drop":
-                return BlockDrop(area);
+                return Cdsc.EventEnable(area);
             default:
                 return false;
         }
     }
     
-    public boolean BlockDrop(Area area) {
-        if(area.isEvent()) return true;
-        return Cdsc.EventOccurring;
-    }
-    
     public boolean BlockPlace(Area area,ClanPlayer clanPlayer) {
-
         if(area.getFlags().contains("denyclanplace") ) return true;
-        
-        return BlockClan(area.getClanTag(), clanPlayer);
+        return !isValidClan(area.getClanTag(), clanPlayer);
     }    
     
     public boolean BlockBreak(Area area,Player player,Location location,ClanPlayer clanPlayer) {
@@ -243,17 +235,17 @@ public class PlayerListener extends ListenerHandle {
         
         if(area.getFlags().contains("denyclanbreak") ) return true;
         
-        return BlockClan(area.getClanTag(), clanPlayer);
+        return !isValidClan(area.getClanTag(), clanPlayer);
     }
     
     public boolean BlockMove(Area area,ClanPlayer clanPlayer) {
-        if(area.isEvent()) return true;
-        return BlockClan(area.getClanTag(), clanPlayer);
+        if(Cdsc.EventEnable(area)) return false;
+        return !isValidClan(area.getClanTag(), clanPlayer);
     }
     
-    public boolean BlockClan(String clanTag,ClanPlayer clanPlayer) {
-        if(clanPlayer == null || clanPlayer.getClan() == null) return true;
-        return clanTag.equalsIgnoreCase(clanPlayer.getClan().getTag()) == false;
+    public boolean isValidClan(String clanTag,ClanPlayer clanPlayer) {
+        if(clanPlayer == null || clanPlayer.getClan() == null) return false;
+        return clanTag.equalsIgnoreCase(clanPlayer.getClan().getTag()) != false;
     }
     
     public boolean HitCore(Location location,ClanPlayer clanPlayer,Player player) {

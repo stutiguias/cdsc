@@ -23,6 +23,7 @@ public class Area {
         this.clanTag = clanTag;
         this.flags = flag; 
         this.CoreLife = Cdsc.config.CoreLife;
+        this.Event = false;
     }
     
     private Location CoreLocation;
@@ -150,7 +151,7 @@ public class Area {
     /**
      * @return the Event
      */
-    public boolean isEvent() {
+    public boolean onEvent() {
         return Event;
     }
 

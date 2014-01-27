@@ -23,19 +23,46 @@ public class CdscCommands extends Util implements CommandExecutor {
     public CdscCommands(Cdsc plugin) {
         super(plugin);
         avaibleCommands = new HashMap<>();
-        avaibleCommands.put("help", new HelpCommand(plugin));
-        avaibleCommands.put("reload", new ReloadCommand(plugin));
-        avaibleCommands.put("update", new UpdateCommand(plugin));
-        avaibleCommands.put("wand", new WandCommand(plugin));
-        avaibleCommands.put("define", new DefineCommand(plugin));
-        avaibleCommands.put("delete",new DeleteCommand(plugin));
-        avaibleCommands.put("teleport", new TeleportCommand(plugin));
-        avaibleCommands.put("start", new StartEventCommand(plugin));
-        avaibleCommands.put("end",new StopEventCommand(plugin));
-        avaibleCommands.put("setcore", new SetCoreCommand(plugin));
-        avaibleCommands.put("info", new InfoCommand(plugin));
-        avaibleCommands.put("list", new ListCommand(plugin));
-        avaibleCommands.put("setexit", new SetExitCommand(plugin));
+        
+        HelpCommand helpCommand = new HelpCommand(plugin);
+        WandCommand wandCommand = new WandCommand(plugin);
+        DefineCommand defineCommand = new DefineCommand(plugin);
+        TeleportCommand teleportCommand = new TeleportCommand(plugin);
+        SetCoreCommand setCoreCommand = new SetCoreCommand(plugin);
+        ListCommand listCommand = new ListCommand(plugin);
+        SetExitCommand setExitCommand = new SetExitCommand(plugin);
+        
+        avaibleCommands.put("help",     helpCommand);
+        avaibleCommands.put("?",        helpCommand);
+        
+        avaibleCommands.put("reload",   new ReloadCommand(plugin));
+        
+        avaibleCommands.put("update",   new UpdateCommand(plugin));
+        
+        avaibleCommands.put("w",        wandCommand);
+        avaibleCommands.put("wand",     wandCommand);
+        
+        avaibleCommands.put("d",        defineCommand);
+        avaibleCommands.put("define",   defineCommand);
+        
+        avaibleCommands.put("delete",   new DeleteCommand(plugin));
+        
+        avaibleCommands.put("tp",       teleportCommand);
+        avaibleCommands.put("teleport", teleportCommand);
+        
+        avaibleCommands.put("start",    new StartEventCommand(plugin));
+        avaibleCommands.put("end",      new StopEventCommand(plugin));
+        
+        avaibleCommands.put("sc",       setCoreCommand);
+        avaibleCommands.put("setcore",  setCoreCommand);
+        
+        avaibleCommands.put("info",     new InfoCommand(plugin));
+
+        avaibleCommands.put("l",        listCommand);
+        avaibleCommands.put("list",     listCommand);
+        
+        avaibleCommands.put("se",       setExitCommand);
+        avaibleCommands.put("setexit",  setExitCommand);
     }
 
     @Override
