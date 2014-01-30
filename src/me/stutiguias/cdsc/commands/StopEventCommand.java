@@ -29,19 +29,20 @@ public class StopEventCommand extends CommandHandler {
         if (args.length < 2) {
             
             Cdsc.EventOccurring = false;
-            BrcstMsg("&6Event Defence Castle Ended for all Castle!!!");    
-            return true;
+            BrcstMsg(Cdsc.msg.StopEventForAll);    
             
         }else{
+            
             Area area = plugin.getArea(args[1]);
             if(area == null) {
                 SendMessage("&4Area not found");
                 return true;
             }
             area.setEvent(false);
-            BrcstMsg("&6Event Defence Castle Ended for %s!!!", new Object[]{ args[1] });
+            BrcstMsg(Cdsc.msg.StopEventForOne, new Object[]{ args[1] });
         }  
-        BrcstMsg("&6Protect is now &4ON&6!");
+        
+        BrcstMsg(Cdsc.msg.ProtectOn);
         return true;
     }
     

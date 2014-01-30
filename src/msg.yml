@@ -1,0 +1,16 @@
+# don't change this
+# don't change %s
+configversion: 1
+StartEvent:
+    ForAll: "&6Event Defence Castle Started for all Castle!!!"
+    ForOne: "&6Event Defence Castle Started for %s!!!"
+ProtectWarning: "&6Protect is now &4OFF&6!"
+ProtectOn: "&6Protect is now &4ON&6!"
+StopEvent:
+    ForAll: "&6Event Defence Castle Ended for all Castle!!!"
+    ForOne: "&6Event Defence Castle Ended for %s!!!"
+ClanOwn : "&6Your Clan Own this area and not allow to hit the core!"
+CoreHit : "Someone Hit the Core - Core life is %s"
+CoreBroke : "&6[!] The core broke on %s !\n [!] &1%s&6 Clan win the area !\n[!] The event is ended!"
+ItemsStore: "Your items have been stored"
+ItemsMagicAppears: "Your Items Magic Appear again"

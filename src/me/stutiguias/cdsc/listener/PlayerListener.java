@@ -166,20 +166,18 @@ public class PlayerListener extends ListenerHandle {
     public void onRespawn(PlayerRespawnEvent event){
         if(Cdsc.Areas.isEmpty()) return;
         if(Cdsc.config.DropDuringEvent()) return;
-        Area area = plugin.getArea(event.getPlayer().getLocation());
-        if(area == null) return;
-        if(Cdsc.EventNotEnable(area)) return;
         
         Player player = (Player)event.getPlayer();
 
        if(items.containsKey(player)){
-           player.getInventory().clear();
            for(ItemStack stack : items.get(player)){
                if(stack != null){
                    player.getInventory().addItem(stack);
                }
            }
            items.remove(player);
+           player.updateInventory();
+           SendMessage(player,Cdsc.msg.ItemsAppears);
        }
     }
  
@@ -196,8 +194,8 @@ public class PlayerListener extends ListenerHandle {
             if(event.getDrops().isEmpty())return;
             ItemStack[] content = player.getInventory().getContents();
             items.put(player, content);
-            player.getInventory().clear();
             event.getDrops().clear();
+            SendMessage(player,Cdsc.msg.ItemsStore);
         }
     }
 
@@ -255,7 +253,7 @@ public class PlayerListener extends ListenerHandle {
         int index = plugin.getAreaIndex(location);
        
         if(clanPlayer.getClan().getTag().equals(Cdsc.Areas.get(index).getClanTag())) { 
-            SendMessage(player,"&6Your Clan Own this area and not allow to hit the core!");
+            SendMessage(player,Cdsc.msg.ClanOwn);
             return true;
         }
 
@@ -267,17 +265,20 @@ public class PlayerListener extends ListenerHandle {
             Area area = Cdsc.Areas.get(index);
             area.setClanTag(clanPlayer.getClan().getTag());
             area.setCoreLife(Cdsc.config.CoreLife);
+            
+            if(area.onEvent())
+                area.setEvent(false);
+            else
+                Cdsc.EventOccurring = false;
+            
             Cdsc.db.UpdateArea(area);
             
-            BrcstMsg("&6The core broke on %s !\n &1%s&6 Clan win the area !\nThe event is ended!",new Object[] { area.getName() , clanPlayer.getClan().getTag() });
-            
-            Cdsc.EventOccurring = false;
-            area.setEvent(false);
+            BrcstMsg(Cdsc.msg.CoreBroke,new Object[] { area.getName() , clanPlayer.getClan().getTag() });
             
         }else{ 
             
             Cdsc.Areas.get(index).setCoreLife(coreLife);
-            SendMessage(player,"&6You hit the core - Core life is %s",new Object[]{ coreLife } );
+            BrcstMsg(Cdsc.msg.CoreHit,new Object[]{ coreLife } );
             
         }
         

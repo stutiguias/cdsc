@@ -33,8 +33,7 @@ public class StartEventCommand  extends CommandHandler {
             for(Area area:Cdsc.Areas) {
                 area.setCoreLife(Cdsc.config.CoreLife);
             }
-            BrcstMsg("&6Event Defence Castle Started for all Castle!!!");    
-            return true;
+            BrcstMsg(Cdsc.msg.StartEventForAll);    
             
         }else{
             
@@ -45,9 +44,9 @@ public class StartEventCommand  extends CommandHandler {
             }
             area.setEvent(true);
             area.setCoreLife(Cdsc.config.CoreLife);
-            BrcstMsg("&6Event Defence Castle Started for %s!!!", new Object[]{ args[1] });
+            BrcstMsg(Cdsc.msg.StartEventForOne, new Object[]{ args[1] });
         }  
-        BrcstMsg("&6Protect is now &4OFF&6!");
+        BrcstMsg(Cdsc.msg.ProtectWarning);
         return true;
         
     }

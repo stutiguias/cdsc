@@ -31,6 +31,7 @@ public class CdscCommands extends Util implements CommandExecutor {
         SetCoreCommand setCoreCommand = new SetCoreCommand(plugin);
         ListCommand listCommand = new ListCommand(plugin);
         SetExitCommand setExitCommand = new SetExitCommand(plugin);
+        InfoCommand infoCommand = new InfoCommand(plugin);
         
         avaibleCommands.put("help",     helpCommand);
         avaibleCommands.put("?",        helpCommand);
@@ -56,7 +57,8 @@ public class CdscCommands extends Util implements CommandExecutor {
         avaibleCommands.put("sc",       setCoreCommand);
         avaibleCommands.put("setcore",  setCoreCommand);
         
-        avaibleCommands.put("info",     new InfoCommand(plugin));
+        avaibleCommands.put("i",        infoCommand);
+        avaibleCommands.put("info",     infoCommand);
 
         avaibleCommands.put("l",        listCommand);
         avaibleCommands.put("list",     listCommand);

@@ -20,13 +20,13 @@ CoreLife: 20
 # add back after player re-spawn
 # if player inv is full the item will
 # be lost forever
-Dontdropduringevent: false
+Dontdropduringevent: true
 # Don't die during event
 # will don't let player die
 # anytime player will die 
 # he will be teleport to exit
 # point and get full health again
-Dontdieduringevent: true
+Dontdieduringevent: false
 # Defaults flags set to area
 DefaultFlags:
     ClanOwnerCanBreakArea: false

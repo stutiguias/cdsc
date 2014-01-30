@@ -36,7 +36,7 @@ public class DefineCommand extends CommandHandler {
             return false;
         }
         
-        if (args.length < 2) {
+        if (args.length < 3) {
             SendMessage("&4Wrong arguments on command define");
             return true;
         }

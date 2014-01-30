@@ -8,6 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import me.stutiguias.cdsc.commands.CdscCommands;
 import me.stutiguias.cdsc.configs.Config;
+import me.stutiguias.cdsc.configs.Translate;
 import me.stutiguias.cdsc.db.IDataQueries;
 import me.stutiguias.cdsc.db.MySQLDataQueries;
 import me.stutiguias.cdsc.db.SqliteDataQueries;
@@ -19,11 +20,9 @@ import me.stutiguias.cdsc.model.CDSCPlayer;
 import me.stutiguias.cdsc.updater.Updater;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
-import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -47,6 +46,7 @@ public class Cdsc extends JavaPlugin {
     public Economy economy = null;
 
     public static Config config;
+    public static Translate msg;
     
     public static IDataQueries db;
     
@@ -67,6 +67,7 @@ public class Cdsc extends JavaPlugin {
         AreaCreating = new HashMap<>();
         PlayerProfiles = new HashMap<>();
         config = new Config(this);
+        msg = new Translate(this);
         
         PluginManager pm = getServer().getPluginManager();
         
