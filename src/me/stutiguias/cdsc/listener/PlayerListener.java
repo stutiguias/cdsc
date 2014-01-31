@@ -33,6 +33,7 @@ import org.bukkit.inventory.ItemStack;
 public class PlayerListener extends ListenerHandle {
     
     public HashMap<Player , ItemStack[]> items = new HashMap<>();
+    public HashMap<Player , Location> RespawnInLocation = new HashMap<>();
     public CombatTag CombatTag;
     public SimpleClan simpleClan;
     
@@ -178,6 +179,8 @@ public class PlayerListener extends ListenerHandle {
            items.remove(player);
            player.updateInventory();
            SendMessage(player,Cdsc.msg.ItemsAppears);
+           event.setRespawnLocation(RespawnInLocation.get(player));
+           RespawnInLocation.remove(player);
        }
     }
  
@@ -214,10 +217,27 @@ public class PlayerListener extends ListenerHandle {
             case "move":
                 return BlockMove(area, clanPlayer);
             case "drop":
-                return Cdsc.EventEnable(area);
+                return Drop(area,clanPlayer,player);
             default:
                 return false;
         }
+    }
+    
+    public boolean Drop(Area area,ClanPlayer clanPlayer,Player player) {
+        if(Cdsc.EventEnable(area)) {
+            SetReSpawnLoc(area, clanPlayer, player);
+            return true;
+        }
+        return false;
+    }
+     
+    public void SetReSpawnLoc(Area area,ClanPlayer clanPlayer,Player player) {
+        if(isValidClan(area.getClanTag(), clanPlayer)) {
+            RespawnInLocation.put(player, area.getSpawn());
+            return;
+        }
+        
+        RespawnInLocation.put(player, area.getExit());
     }
     
     public boolean BlockPlace(Area area,ClanPlayer clanPlayer) {

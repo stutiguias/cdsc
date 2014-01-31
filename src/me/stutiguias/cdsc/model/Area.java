@@ -35,6 +35,7 @@ public class Area {
     private String flags;
     private Location Exit;
     private boolean Event;
+    private Location Spawn;
     
     /**
      * @return the FirstSpot
@@ -160,5 +161,19 @@ public class Area {
      */
     public void setEvent(boolean Event) {
         this.Event = Event;
+    }
+
+    /**
+     * @return the Spawn
+     */
+    public Location getSpawn() {
+        return Spawn;
+    }
+
+    /**
+     * @param Spawn the Spawn to set
+     */
+    public void setSpawn(Location Spawn) {
+        this.Spawn = Spawn;
     }
 }

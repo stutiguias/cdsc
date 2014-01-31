@@ -26,29 +26,32 @@ permissions:
         description: Allow create and break sign
         default: op
      cdsc.tp:
-        description: Teleport player to spawn name
+        description: Teleport player to area
         default: op 
      cdsc.start:
-        description: Teleport player to spawn name
+        description: Start event
         default: op 
      cdsc.end:
-        description: Teleport player to spawn name
+        description: Stop event
         default: op         
      cdsc.sc:
-        description: Teleport player to spawn name
+        description: Set Core of area
         default: op          
      cdsc.info:
-        description: Teleport player to spawn name
+        description: Get Info
         default: op               
      cdsc.list:
-        description: Teleport player to spawn name
+        description: List area
         default: op    
      cdsc.bypass:
-        description: Teleport player to spawn name
+        description: Bypass area
         default: op  
      cdsc.setexit:
-        description: Teleport player to spawn name
-        default: op          
+        description: Set exit point
+        default: op         
+     cdsc.setspawn:
+        description: Set spawn
+        default: op  
      cdsc.admin:
       description: Gives access to all TimeSpawner commands
       children:
@@ -65,3 +68,4 @@ permissions:
         cdsc.info: true
         cdsc.list: true
         cdsc.bypass: true
+        cdsc.setspawn: true

@@ -23,6 +23,7 @@ public interface IDataQueries {
         boolean     Delete(Area area);
         boolean     SetExit(Area area);
         boolean     SetCore(Area area);
+        boolean     SetSpawn(Area area);
         List<Area>  GetAreas();
         
 }

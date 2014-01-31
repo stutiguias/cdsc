@@ -7,7 +7,10 @@
 package me.stutiguias.cdsc.commands;
 
 import me.stutiguias.cdsc.init.Cdsc;
+import me.stutiguias.cdsc.model.Area;
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 /**
  *
@@ -21,12 +24,44 @@ public class SpawnCommand extends CommandHandler {
 
     @Override
     protected Boolean OnCommand(CommandSender sender, String[] args) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.sender =  sender;
+        
+        if(isInvalid(sender, args)) return true;
+                
+        Player player = (Player)sender;
+        
+        Location location = player.getLocation();
+
+        Area area = plugin.getArea(args[1]);
+        
+        if(area == null) {
+         SendMessage("&4Area name not found.");
+         return true;
+        }
+        if(area.getCoreLocation() == null) {
+            SendMessage("&4You need to set area core first");
+            return true;
+        }
+        
+        int index = plugin.getAreaIndex(area.getCoreLocation());
+        
+        Cdsc.Areas.get(index).setSpawn(location);
+        Cdsc.db.SetSpawn(Cdsc.Areas.get(index));
+        SendMessage("&6Spawn for Area %s setup successful.", new Object[] { area.getName() });
+        return true;
     }
 
     @Override
     protected Boolean isInvalid(CommandSender sender, String[] args) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(!plugin.hasPermission(sender.getName(),"cdsc.setspawn")) {
+            SendMessage("&4You don't have permission");
+            return true;
+        }
+        if (args.length < 2) {
+            SendMessage("&4Wrong arguments");
+            return true;
+        } 
+        return false;
     }
     
 }

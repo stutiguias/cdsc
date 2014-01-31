@@ -142,6 +142,7 @@ public class Queries extends Util implements IDataQueries {
                         area.setFlags(rs.getString("flags"));
                         area.setClanTag(rs.getString("clantag"));
                         area.setExit(toLocation(rs.getString("exit")));
+                        area.setSpawn(toLocation(rs.getString("spawn")));
                         areas.add(area);
                 }
         } catch (SQLException e) {
@@ -226,6 +227,26 @@ public class Queries extends Util implements IDataQueries {
         try {
                 st = conn.prepareStatement("UPDATE CDSC_Areas SET `exit` = ? WHERE name = ?");
                 st.setString(1, ToString(area.getExit()));
+                st.setString(2, area.getName() );
+                st.executeUpdate();
+        } catch (SQLException e) {
+                Cdsc.logger.log(Level.WARNING, "{0} Unable to update DB", plugin.prefix);
+                Cdsc.logger.warning(e.getMessage());
+        } finally {
+                closeResources(conn, st, rs);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean SetSpawn(Area area) {
+        WALConnection conn = getConnection();
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
+        try {
+                st = conn.prepareStatement("UPDATE CDSC_Areas SET `spawn` = ? WHERE name = ?");
+                st.setString(1, ToString(area.getSpawn()));
                 st.setString(2, area.getName() );
                 st.executeUpdate();
         } catch (SQLException e) {

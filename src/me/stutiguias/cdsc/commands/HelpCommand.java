@@ -65,6 +65,10 @@ public class HelpCommand extends CommandHandler {
             SendMessage("&6/cd <e or end> <nothing | areaName> &e| &7End event");
         }
         
+        if(plugin.hasPermission(sender.getName(),"cdsc.setspawn")){
+            SendMessage("&6/cd spawn <areaName> &e| &7Set spawn for this area");
+        }
+        
         if(plugin.hasPermission(sender.getName(),"cdsc.tp")){
             SendMessage("&6/cd <tp or teleport> <areaName> &e| &7Teleport to an area");
         }

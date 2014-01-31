@@ -8,6 +8,7 @@ package me.stutiguias.cdsc.commands;
 
 import me.stutiguias.cdsc.init.Cdsc;
 import me.stutiguias.cdsc.model.Area;
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -33,7 +34,12 @@ public class TeleportCommand extends CommandHandler {
         
         for(Area area:Cdsc.Areas) {
             if(area.getName().equalsIgnoreCase(name)) {
-                player.teleport(area.getFirstSpot());
+                if(area.getSpawn() == null) {
+                    Location firstspot = area.getFirstSpot();
+                    firstspot.setY(firstspot.getY() + 1);
+                    player.teleport(firstspot);
+                }
+                player.teleport(area.getSpawn());
             }
         }
         
