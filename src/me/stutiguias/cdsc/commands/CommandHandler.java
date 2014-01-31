@@ -23,4 +23,5 @@ public abstract class CommandHandler extends Util {
     }
     
     protected abstract Boolean OnCommand(CommandSender sender, String[] args);
+    protected abstract Boolean isInvalid(CommandSender sender, String[] args);
 }

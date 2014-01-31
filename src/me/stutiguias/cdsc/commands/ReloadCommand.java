@@ -23,12 +23,21 @@ public class ReloadCommand extends CommandHandler {
     protected Boolean OnCommand(CommandSender sender, String[] args) {
         this.sender =  sender;
         
-        if(!plugin.hasPermission(sender.getName(),"cdsc.reload")) return false;
+        if(isInvalid(sender, args)) return true;
         
         SendMessage("&6Reloading!");
         plugin.OnReload();
         SendMessage("&6Reload Done!");    
         return true;
+    }
+
+    @Override
+    protected Boolean isInvalid(CommandSender sender, String[] args) {
+        if(!plugin.hasPermission(sender.getName(),"cdsc.reload")) {
+            SendMessage("&4You don't have permission");
+            return true;
+        }
+        return false;
     }
     
 }

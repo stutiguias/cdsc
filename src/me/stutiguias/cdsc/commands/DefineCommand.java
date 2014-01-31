@@ -26,20 +26,7 @@ public class DefineCommand extends CommandHandler {
     protected Boolean OnCommand(CommandSender sender, String[] args) {
         this.sender =  sender;
         
-        if(!plugin.hasPermission(sender.getName(),"cdsc.define")) return false;
-        
-                   
-        if(!Cdsc.AreaCreating.containsKey((Player)sender)
-        || Cdsc.AreaCreating.get((Player)sender).getFirstSpot() == null
-        || Cdsc.AreaCreating.get((Player)sender).getSecondSpot() == null) {
-            SendMessage("&4Need to set all points");
-            return false;
-        }
-        
-        if (args.length < 3) {
-            SendMessage("&4Wrong arguments on command define");
-            return true;
-        }
+        if(isInvalid(sender, args)) return true;
         
         String name = args[1];
         
@@ -60,6 +47,7 @@ public class DefineCommand extends CommandHandler {
         Location SecondSpot = Cdsc.AreaCreating.get((Player)sender).getSecondSpot();
 
         Cdsc.AreaCreating.remove((Player)sender);
+        
         area = new Area(FirstSpot,SecondSpot,name,clanTag,flag);
         
         if(Cdsc.db.InsertArea(area)){
@@ -71,5 +59,27 @@ public class DefineCommand extends CommandHandler {
         SendMessage("&4Erro on Insert to DB!");
         return true;  
     }
+
+    @Override
+    protected Boolean isInvalid(CommandSender sender, String[] args) {
+        if(!plugin.hasPermission(sender.getName(),"cdsc.define")){
+            SendMessage("&4You don't have permission");
+            return true;
+        }
+                   
+        if(NotYetDefinePoints()) {
+            SendMessage("&4Need to set all points");
+            return true;
+        }
+        
+        if (args.length < 3) {
+            SendMessage("&4Wrong arguments on command define");
+            return true;
+        }
+        return false;
+    }
     
+    private Boolean NotYetDefinePoints() {
+        return !Cdsc.AreaCreating.containsKey((Player)sender) || Cdsc.AreaCreating.get((Player)sender).getFirstSpot() == null || Cdsc.AreaCreating.get((Player)sender).getSecondSpot() == null;
+    }
 }

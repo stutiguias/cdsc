@@ -27,7 +27,7 @@ public class WandCommand extends CommandHandler {
     protected Boolean OnCommand(CommandSender sender, String[] args) {
         this.sender =  sender;
         
-        if(!plugin.hasPermission(sender.getName(),"cdsc.wand")) return false;
+        if(isInvalid(sender, args)) return true;
                 
         Player player = (Player)sender;
         ItemStack itemStack = new ItemStack(Material.STICK,1);
@@ -39,6 +39,15 @@ public class WandCommand extends CommandHandler {
         player.setItemInHand(itemStack);
         SendMessage("&6Use Right and left click to set an area");
         return true;
+    }
+
+    @Override
+    protected Boolean isInvalid(CommandSender sender, String[] args) {
+        if(!plugin.hasPermission(sender.getName(),"cdsc.wand")) {
+            SendMessage("&4You don't have permission");
+            return true;
+        }
+        return false;
     }
     
 }

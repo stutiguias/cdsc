@@ -24,12 +24,7 @@ public class DeleteCommand extends CommandHandler {
     protected Boolean OnCommand(CommandSender sender, String[] args) {
         this.sender =  sender;
                 
-        if(!plugin.hasPermission(sender.getName(),"cdsc.delete")) return false;
-        
-        if (args.length < 1) {
-            SendMessage("&4Wrong arguments");
-            return true;
-        }   
+        if(isInvalid(sender, args)) return true;
         
         String name = args[1];
         
@@ -43,6 +38,21 @@ public class DeleteCommand extends CommandHandler {
         Cdsc.Areas.remove(area);
         Cdsc.db.Delete(area);
         return true;
+    }
+
+    @Override
+    protected Boolean isInvalid(CommandSender sender, String[] args) {
+        if(!plugin.hasPermission(sender.getName(),"cdsc.delete")){ 
+            SendMessage("&4You don't have permission");
+            return true;
+        }
+        
+        if (args.length < 1) {
+            SendMessage("&4Wrong arguments");
+            return true;
+        }   
+        
+        return false;
     }
     
 }

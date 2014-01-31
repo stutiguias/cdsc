@@ -24,26 +24,47 @@ public class StopEventCommand extends CommandHandler {
     protected Boolean OnCommand(CommandSender sender, String[] args) {
         this.sender =  sender;
         
-        if(!plugin.hasPermission(sender.getName(),"cdsc.end")) return false;
+        if(isInvalid(sender, args)) return true;
         
         if (args.length < 2) {
             
-            Cdsc.EventOccurring = false;
-            BrcstMsg(Cdsc.msg.StopEventForAll);    
+            StopEventForAll();
             
         }else{
             
-            Area area = plugin.getArea(args[1]);
-            if(area == null) {
-                SendMessage("&4Area not found");
-                return true;
-            }
-            area.setEvent(false);
-            BrcstMsg(Cdsc.msg.StopEventForOne, new Object[]{ args[1] });
+            if(!StopEventForOne(args)) return true;
         }  
         
         BrcstMsg(Cdsc.msg.ProtectOn);
         return true;
     }
+
+    @Override
+    protected Boolean isInvalid(CommandSender sender, String[] args) {
+      if(!plugin.hasPermission(sender.getName(),"cdsc.end")){
+          SendMessage("&4You don't have permission");
+          return true;
+      }
+      return false;
+    }
     
+    private Boolean StopEventForAll() {
+        Cdsc.EventOccurring = false;
+        BrcstMsg(Cdsc.msg.StopEventForAll); 
+        for(Area area:Cdsc.Areas) {
+            area.setEvent(false);
+        }
+        return true;
+    }
+    
+    private Boolean StopEventForOne(String[] args) {
+        Area area = plugin.getArea(args[1]);
+        if(area == null) {
+            SendMessage("&4Area not found");
+            return false;
+        }
+        area.setEvent(false);
+        BrcstMsg(Cdsc.msg.StopEventForOne, new Object[]{ args[1] });
+        return true;
+    }
 }

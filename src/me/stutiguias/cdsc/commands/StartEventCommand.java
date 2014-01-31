@@ -24,31 +24,51 @@ public class StartEventCommand  extends CommandHandler {
     protected Boolean OnCommand(CommandSender sender, String[] args) {
         this.sender =  sender;
         
-        if(!plugin.hasPermission(sender.getName(),"cdsc.start")) return false; 
+        if(isInvalid(sender, args)) return true;
         
         if (args.length < 2) {
             
-            Cdsc.EventOccurring = true;
-                   
-            for(Area area:Cdsc.Areas) {
-                area.setCoreLife(Cdsc.config.CoreLife);
-            }
-            BrcstMsg(Cdsc.msg.StartEventForAll);    
+            StartEventForAll();
             
         }else{
             
-            Area area = plugin.getArea(args[1]);
-            if(area == null) {
-                SendMessage("&4Area not found");
-                return true;
-            }
-            area.setEvent(true);
-            area.setCoreLife(Cdsc.config.CoreLife);
-            BrcstMsg(Cdsc.msg.StartEventForOne, new Object[]{ args[1] });
+           if(!StartEventForOne(args)) return true;
+
         }  
+        
         BrcstMsg(Cdsc.msg.ProtectWarning);
         return true;
         
     }
+
+    @Override
+    protected Boolean isInvalid(CommandSender sender, String[] args) {
+       if(!plugin.hasPermission(sender.getName(),"cdsc.start")) {
+           SendMessage("&4You don't have permission");
+           return true;
+       } 
+       return false;
+    }
     
+    private Boolean StartEventForAll() {
+        Cdsc.EventOccurring = true;
+
+        for(Area area:Cdsc.Areas) {
+            area.setCoreLife(Cdsc.config.CoreLife);
+        }
+        BrcstMsg(Cdsc.msg.StartEventForAll);   
+        return true;        
+    }
+    
+    private Boolean StartEventForOne(String[] args) {
+        Area area = plugin.getArea(args[1]);
+        if(area == null) {
+            SendMessage("&4Area not found");
+            return false;
+        }
+        area.setEvent(true);
+        area.setCoreLife(Cdsc.config.CoreLife);
+        BrcstMsg(Cdsc.msg.StartEventForOne, new Object[]{ args[1] });
+        return true;
+    }
 }

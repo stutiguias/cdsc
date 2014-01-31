@@ -65,6 +65,8 @@ public class CdscCommands extends Util implements CommandExecutor {
         
         avaibleCommands.put("se",       setExitCommand);
         avaibleCommands.put("setexit",  setExitCommand);
+        
+        avaibleCommands.put("spawn",    new SpawnCommand(plugin));
     }
 
     @Override

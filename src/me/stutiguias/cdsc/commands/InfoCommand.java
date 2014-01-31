@@ -26,7 +26,7 @@ public class InfoCommand extends CommandHandler {
     protected Boolean OnCommand(CommandSender sender, String[] args) {
         this.sender =  sender;
         
-        if(!plugin.hasPermission(sender.getName(),"cdsc.info")) return false;
+        if(isInvalid(sender, args)) return true;
                 
         Player player = (Player)sender;
 
@@ -47,6 +47,15 @@ public class InfoCommand extends CommandHandler {
         SendMessage(MsgHr);
         
         return true;
+    }
+
+    @Override
+    protected Boolean isInvalid(CommandSender sender, String[] args) {
+        if(plugin.hasPermission(sender.getName(),"cdsc.info")) {
+            SendMessage("&4You don't have permission");
+            return true;
+        }
+        return false;
     }
     
 }

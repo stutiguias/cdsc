@@ -26,17 +26,12 @@ public class SetExitCommand extends CommandHandler {
     protected Boolean OnCommand(CommandSender sender, String[] args) {
         this.sender =  sender;
         
-        if(!plugin.hasPermission(sender.getName(),"cdsc.setexit")) return false;
+        if(isInvalid(sender, args)) return true;
                 
         Player player = (Player)sender;
         
-        Location location = player.getTargetBlock(null,2).getLocation();
-        
-        if (args.length < 2) {
-            SendMessage("&4Wrong arguments");
-            return true;
-        }   
- 
+        Location location = player.getLocation();
+
         Area area = plugin.getArea(args[1]);
         
         if(area == null) {
@@ -47,6 +42,7 @@ public class SetExitCommand extends CommandHandler {
             SendMessage("&4You need to set area core first");
             return true;
         }
+        
         int index = plugin.getAreaIndex(area.getCoreLocation());
         
         Cdsc.Areas.get(index).setExit(location);
@@ -54,6 +50,19 @@ public class SetExitCommand extends CommandHandler {
         SendMessage("&6Exit Point for Area %s setup successful.", new Object[] { area.getName() });
         return true;
         
+    }
+
+    @Override
+    protected Boolean isInvalid(CommandSender sender, String[] args) {
+        if(!plugin.hasPermission(sender.getName(),"cdsc.setexit")) {
+            SendMessage("&4You don't have permission");
+            return true;
+        }
+        if (args.length < 2) {
+            SendMessage("&4Wrong arguments");
+            return true;
+        } 
+        return false;
     }
     
 }

@@ -81,5 +81,10 @@ public class HelpCommand extends CommandHandler {
         
         return true;
     }
+
+    @Override
+    protected Boolean isInvalid(CommandSender sender, String[] args) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

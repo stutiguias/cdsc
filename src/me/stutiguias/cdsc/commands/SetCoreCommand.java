@@ -25,7 +25,7 @@ public class SetCoreCommand extends CommandHandler {
     protected Boolean OnCommand(CommandSender sender, String[] args) {
         this.sender =  sender;
         
-        if(!plugin.hasPermission(sender.getName(),"cdsc.sc")) return false;
+        if(isInvalid(sender, args)) return true;
             
         Player player = (Player)sender;
 
@@ -44,6 +44,15 @@ public class SetCoreCommand extends CommandHandler {
         SendMessage("&6 Core set !!");
         
         return true;
+    }
+
+    @Override
+    protected Boolean isInvalid(CommandSender sender, String[] args) {
+        if(!plugin.hasPermission(sender.getName(),"cdsc.sc")) {
+            SendMessage("&4You don't have permission");
+            return true;
+        }
+        return false;
     }
     
 }

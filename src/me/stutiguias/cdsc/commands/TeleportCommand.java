@@ -25,14 +25,9 @@ public class TeleportCommand extends CommandHandler {
     protected Boolean OnCommand(CommandSender sender, String[] args) {
         this.sender =  sender;
         
-        if(!plugin.hasPermission(sender.getName(),"cdsc.tp")) return false;
-                
+        if(isInvalid(sender, args)) return true;
+        
         Player player = (Player)sender;
-               
-        if (args.length < 2) {
-            SendMessage("&4Wrong arguments on command tp");
-            return true;
-        }
         
         String name = args[1];
         
@@ -44,6 +39,19 @@ public class TeleportCommand extends CommandHandler {
         
         return true;
         
+    }
+
+    @Override
+    protected Boolean isInvalid(CommandSender sender, String[] args) {
+        if(!plugin.hasPermission(sender.getName(),"cdsc.tp")) {
+            SendMessage("&4You don't have permission");
+            return true;
+        }
+        if (args.length < 2) {
+            SendMessage("&4Wrong arguments on command tp");
+            return true;
+        }
+        return false;
     }
     
 }

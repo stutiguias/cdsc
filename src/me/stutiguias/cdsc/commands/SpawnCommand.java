@@ -13,29 +13,20 @@ import org.bukkit.command.CommandSender;
  *
  * @author Daniel
  */
-public class UpdateCommand extends CommandHandler {
+public class SpawnCommand extends CommandHandler {
 
-    public UpdateCommand(Cdsc plugin) {
+    public SpawnCommand(Cdsc plugin) {
         super(plugin);
     }
 
     @Override
     protected Boolean OnCommand(CommandSender sender, String[] args) {
-        this.sender =  sender;
-        
-        if(isInvalid(sender, args)) return true;
-        
-        plugin.Update();
-        return true;
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     protected Boolean isInvalid(CommandSender sender, String[] args) {
-        if(!plugin.hasPermission(sender.getName(),"cdsc.update")) {
-            SendMessage("&4You don't have permission");
-            return true;
-        }
-        return false;
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

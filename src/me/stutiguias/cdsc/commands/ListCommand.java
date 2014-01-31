@@ -24,18 +24,27 @@ public class ListCommand extends CommandHandler {
     protected Boolean OnCommand(CommandSender sender, String[] args) {
         this.sender =  sender;
         
-        if(!plugin.hasPermission(sender.getName(),"cdsc.list")) return false;
-                
-        if(Cdsc.Areas.isEmpty()) {
-            SendMessage("&4 Areas empty");
-            return true;
-        }
+        if(isInvalid(sender, args)) return true;
+ 
         SendMessage(MsgHr);
         for(Area area:Cdsc.Areas){
             SendMessage("&3Name: &6%s", new Object[]{ area.getName() });
         }
         SendMessage(MsgHr);
         return true;
+    }
+
+    @Override
+    protected Boolean isInvalid(CommandSender sender, String[] args) {
+       if(!plugin.hasPermission(sender.getName(),"cdsc.list")) {
+           SendMessage("&4You don't have permission");
+           return true;
+       }
+       if(Cdsc.Areas.isEmpty()) {
+            SendMessage("&4 Areas empty");
+            return true;
+       }
+       return false;
     }
     
 }
