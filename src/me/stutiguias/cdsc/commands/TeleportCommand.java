@@ -38,6 +38,7 @@ public class TeleportCommand extends CommandHandler {
                     Location firstspot = area.getFirstSpot();
                     firstspot.setY(firstspot.getY() + 1);
                     player.teleport(firstspot);
+                    return true;
                 }
                 player.teleport(area.getSpawn());
             }
