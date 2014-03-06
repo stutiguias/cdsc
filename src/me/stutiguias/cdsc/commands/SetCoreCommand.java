@@ -8,6 +8,7 @@ package me.stutiguias.cdsc.commands;
 
 import me.stutiguias.cdsc.init.Cdsc;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -30,6 +31,8 @@ public class SetCoreCommand extends CommandHandler {
         Player player = (Player)sender;
 
         Location location = player.getTargetBlock(null,2).getLocation();
+        
+        player.getWorld().getBlockAt(location).setTypeId(Cdsc.config.CoreBlockId);
         
         int index = plugin.getAreaIndex(location);
         

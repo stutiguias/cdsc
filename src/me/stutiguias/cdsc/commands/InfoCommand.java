@@ -51,7 +51,7 @@ public class InfoCommand extends CommandHandler {
 
     @Override
     protected Boolean isInvalid(CommandSender sender, String[] args) {
-        if(plugin.hasPermission(sender.getName(),"cdsc.info")) {
+        if(!plugin.hasPermission(sender.getName(),"cdsc.info")) {
             SendMessage("&4You don't have permission");
             return true;
         }

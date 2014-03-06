@@ -1,5 +1,5 @@
 # don't change this
-configversion: 5
+configversion: 6
 #DataBase
 DataBase:
   # You need to choose if you will use SQLite or Mysql ( default is SQLite )
@@ -15,6 +15,8 @@ MySQL:
 UpdaterNotify: true
 # How Many Life For Each Core
 CoreLife: 20
+# What id of block 
+CoreBlockId: 49
 # Don't drop item on kill during event
 # The item will auto-save and 
 # add back after player re-spawn
