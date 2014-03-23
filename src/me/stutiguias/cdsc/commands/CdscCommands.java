@@ -19,10 +19,12 @@ import org.bukkit.entity.Player;
 public class CdscCommands extends Util implements CommandExecutor {
        
     private final HashMap<String,CommandHandler> avaibleCommands;
+    private final HashMap<String,CommandHandler> avaibleConsoleCommands;
     
     public CdscCommands(Cdsc plugin) {
         super(plugin);
         avaibleCommands = new HashMap<>();
+        avaibleConsoleCommands = new HashMap<>();
         
         HelpCommand helpCommand = new HelpCommand(plugin);
         WandCommand wandCommand = new WandCommand(plugin);
@@ -32,6 +34,8 @@ public class CdscCommands extends Util implements CommandExecutor {
         ListCommand listCommand = new ListCommand(plugin);
         SetExitCommand setExitCommand = new SetExitCommand(plugin);
         InfoCommand infoCommand = new InfoCommand(plugin);
+        StartEventCommand startEventCommand = new StartEventCommand(plugin);
+        StopEventCommand stopEventCommand = new StopEventCommand(plugin);
         
         avaibleCommands.put("help",     helpCommand);
         avaibleCommands.put("?",        helpCommand);
@@ -67,19 +71,27 @@ public class CdscCommands extends Util implements CommandExecutor {
         avaibleCommands.put("setexit",  setExitCommand);
         
         avaibleCommands.put("spawn",    new SpawnCommand(plugin));
+        
+        avaibleConsoleCommands.put("start", startEventCommand);
+        avaibleConsoleCommands.put("stop", stopEventCommand);
+        
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         this.sender = sender;
-        
-        if (sender.getName().equalsIgnoreCase("CONSOLE")) return true;
-        if (!(sender instanceof Player)) return false;
- 
+        String executedCommand = args[0].toLowerCase();
         if(args.length < 0 || args.length == 0) return CommandNotFound();
         
-        String executedCommand = args[0].toLowerCase();
-
+        if (sender.getName().equalsIgnoreCase("CONSOLE")) {
+            if(avaibleConsoleCommands.containsKey(executedCommand)) {
+                return avaibleConsoleCommands.get(executedCommand).OnCommand(sender, args);
+            }
+            return CommandConsoleHelp();
+        }
+        
+        if (!(sender instanceof Player)) return false;
+ 
         if(avaibleCommands.containsKey(executedCommand))
             return avaibleCommands.get(executedCommand).OnCommand(sender,args);
         else
@@ -88,8 +100,13 @@ public class CdscCommands extends Util implements CommandExecutor {
     } 
     
     private boolean CommandNotFound() {
-        SendMessage("&eCommand not found try /cd help ");
+        SendMessage("&eCommand not found try /cd help");
         return true;
     }
 
+    private boolean CommandConsoleHelp() {
+        SendMessage("&eOnly Start and Stop is avaible by console");
+        return true;
+    }    
+    
 }
