@@ -18,13 +18,13 @@ import org.bukkit.entity.Player;
  */
 public class CdscCommands extends Util implements CommandExecutor {
        
-    private final HashMap<String,CommandHandler> avaibleCommands;
-    private final HashMap<String,CommandHandler> avaibleConsoleCommands;
+    private final HashMap<String,CommandHandler> availableCommands;
+    private final HashMap<String,CommandHandler> availableConsoleCommands;
     
     public CdscCommands(Cdsc plugin) {
         super(plugin);
-        avaibleCommands = new HashMap<>();
-        avaibleConsoleCommands = new HashMap<>();
+        availableCommands = new HashMap<>();
+        availableConsoleCommands = new HashMap<>();
         
         HelpCommand helpCommand = new HelpCommand(plugin);
         WandCommand wandCommand = new WandCommand(plugin);
@@ -37,43 +37,43 @@ public class CdscCommands extends Util implements CommandExecutor {
         StartEventCommand startEventCommand = new StartEventCommand(plugin);
         StopEventCommand stopEventCommand = new StopEventCommand(plugin);
         
-        avaibleCommands.put("help",     helpCommand);
-        avaibleCommands.put("?",        helpCommand);
+        availableCommands.put("help",     helpCommand);
+        availableCommands.put("?",        helpCommand);
         
-        avaibleCommands.put("reload",   new ReloadCommand(plugin));
+        availableCommands.put("reload",   new ReloadCommand(plugin));
         
-        avaibleCommands.put("update",   new UpdateCommand(plugin));
+        availableCommands.put("update",   new UpdateCommand(plugin));
         
-        avaibleCommands.put("w",        wandCommand);
-        avaibleCommands.put("wand",     wandCommand);
+        availableCommands.put("w",        wandCommand);
+        availableCommands.put("wand",     wandCommand);
         
-        avaibleCommands.put("d",        defineCommand);
-        avaibleCommands.put("define",   defineCommand);
+        availableCommands.put("d",        defineCommand);
+        availableCommands.put("define",   defineCommand);
         
-        avaibleCommands.put("delete",   new DeleteCommand(plugin));
+        availableCommands.put("delete",   new DeleteCommand(plugin));
         
-        avaibleCommands.put("tp",       teleportCommand);
-        avaibleCommands.put("teleport", teleportCommand);
+        availableCommands.put("tp",       teleportCommand);
+        availableCommands.put("teleport", teleportCommand);
         
-        avaibleCommands.put("start",    new StartEventCommand(plugin));
-        avaibleCommands.put("end",      new StopEventCommand(plugin));
+        availableCommands.put("start",    new StartEventCommand(plugin));
+        availableCommands.put("end",      new StopEventCommand(plugin));
         
-        avaibleCommands.put("sc",       setCoreCommand);
-        avaibleCommands.put("setcore",  setCoreCommand);
+        availableCommands.put("sc",       setCoreCommand);
+        availableCommands.put("setcore",  setCoreCommand);
         
-        avaibleCommands.put("i",        infoCommand);
-        avaibleCommands.put("info",     infoCommand);
+        availableCommands.put("i",        infoCommand);
+        availableCommands.put("info",     infoCommand);
 
-        avaibleCommands.put("l",        listCommand);
-        avaibleCommands.put("list",     listCommand);
+        availableCommands.put("l",        listCommand);
+        availableCommands.put("list",     listCommand);
         
-        avaibleCommands.put("se",       setExitCommand);
-        avaibleCommands.put("setexit",  setExitCommand);
+        availableCommands.put("se",       setExitCommand);
+        availableCommands.put("setexit",  setExitCommand);
         
-        avaibleCommands.put("spawn",    new SpawnCommand(plugin));
+        availableCommands.put("spawn",    new SpawnCommand(plugin));
         
-        avaibleConsoleCommands.put("start", startEventCommand);
-        avaibleConsoleCommands.put("stop", stopEventCommand);
+        availableConsoleCommands.put("start", startEventCommand);
+        availableConsoleCommands.put("stop", stopEventCommand);
         
     }
 
@@ -84,16 +84,16 @@ public class CdscCommands extends Util implements CommandExecutor {
         if(args.length < 0 || args.length == 0) return CommandNotFound();
         
         if (sender.getName().equalsIgnoreCase("CONSOLE")) {
-            if(avaibleConsoleCommands.containsKey(executedCommand)) {
-                return avaibleConsoleCommands.get(executedCommand).OnCommand(sender, args);
+            if(availableConsoleCommands.containsKey(executedCommand)) {
+                return availableConsoleCommands.get(executedCommand).OnCommand(sender, args);
             }
             return CommandConsoleHelp();
         }
         
         if (!(sender instanceof Player)) return false;
  
-        if(avaibleCommands.containsKey(executedCommand))
-            return avaibleCommands.get(executedCommand).OnCommand(sender,args);
+        if(availableCommands.containsKey(executedCommand))
+            return availableCommands.get(executedCommand).OnCommand(sender,args);
         else
             return CommandNotFound();
         
@@ -105,7 +105,7 @@ public class CdscCommands extends Util implements CommandExecutor {
     }
 
     private boolean CommandConsoleHelp() {
-        SendMessage("&eOnly Start and Stop is avaible by console");
+        SendMessage("&eOnly Start and Stop is available by console");
         return true;
     }    
     
