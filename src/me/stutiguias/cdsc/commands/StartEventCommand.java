@@ -43,6 +43,7 @@ public class StartEventCommand  extends CommandHandler {
 
     @Override
     protected Boolean isInvalid(CommandSender sender, String[] args) {
+       if(sender.getName().equalsIgnoreCase("CONSOLE")) return false;
        if(!plugin.hasPermission(sender.getName(),"cdsc.start")) {
            SendMessage("&4You don't have permission");
            return true;
