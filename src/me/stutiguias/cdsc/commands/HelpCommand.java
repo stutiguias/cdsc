@@ -8,6 +8,7 @@ package me.stutiguias.cdsc.commands;
 
 import me.stutiguias.cdsc.init.Cdsc;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 /**
  *
@@ -29,55 +30,51 @@ public class HelpCommand extends CommandHandler {
         
         SendMessage(MsgHr);
         
-        if(plugin.hasPermission(sender.getName(),"cdsc.define")){
+        if(plugin.hasPermission((Player)sender,"cdsc.define")){
             SendMessage("&6/cd <d or define> <areaName> <clanTag> &e| &7Save Select area");
         }
         
-        if(plugin.hasPermission(sender.getName(),"cdsc.wand")){
+        if(plugin.hasPermission((Player)sender,"cdsc.wand")){
             SendMessage("&6/cd <w or wand>  &e| &7Get Special Wand to make area");
         }
                 
-        if(plugin.hasPermission(sender.getName(),"cdsc.update")){
+        if(plugin.hasPermission((Player)sender,"cdsc.update")){
             SendMessage("&6/cd <sc or setcore> &e| &7SetCore of an existing area");
         }
          
-        if(plugin.hasPermission(sender.getName(),"cdsc.setexit")){
+        if(plugin.hasPermission((Player)sender,"cdsc.setexit")){
             SendMessage("&6/cd <se or setexit> <areaName> &e| &7SetExit spot for not allowed");
         }  
         
-        if(plugin.hasPermission(sender.getName(),"cdsc.list")){
+        if(plugin.hasPermission((Player)sender,"cdsc.list")){
             SendMessage("&6/cd <l or list> &e| &7List all areas");
         }   
                 
-        if(plugin.hasPermission(sender.getName(),"cdsc.info")){
+        if(plugin.hasPermission((Player)sender,"cdsc.info")){
             SendMessage("&6/cd <i or info> &e| &7info about area you are");
         }   
         
-        if(plugin.hasPermission(sender.getName(),"cdsc.delete")){
+        if(plugin.hasPermission((Player)sender,"cdsc.delete")){
             SendMessage("&6/cd <dl or delete> <areaName> &e| &7Delete an area");
         }
                     
-        if(plugin.hasPermission(sender.getName(),"cdsc.start")){
+        if(plugin.hasPermission((Player)sender,"cdsc.start")){
             SendMessage("&6/cd <s or start> <nothing | areaName> &e| &7Start Event");
         }    
         
-        if(plugin.hasPermission(sender.getName(),"cdsc.end")){
+        if(plugin.hasPermission((Player)sender,"cdsc.end")){
             SendMessage("&6/cd <e or end> <nothing | areaName> &e| &7End event");
         }
         
-        if(plugin.hasPermission(sender.getName(),"cdsc.setspawn")){
+        if(plugin.hasPermission((Player)sender,"cdsc.setspawn")){
             SendMessage("&6/cd spawn <areaName> &e| &7Set spawn for this area");
         }
         
-        if(plugin.hasPermission(sender.getName(),"cdsc.tp")){
+        if(plugin.hasPermission((Player)sender,"cdsc.tp")){
             SendMessage("&6/cd <tp or teleport> <areaName> &e| &7Teleport to an area");
         }
-  
-        if(plugin.hasPermission(sender.getName(),"cdsc.update")){
-            SendMessage("&6/cd update &e| &7 Update the plugin");
-        }
         
-        if(plugin.hasPermission(sender.getName(),"cdsc.reload")){
+        if(plugin.hasPermission((Player)sender,"cdsc.reload")){
             SendMessage("&6/cd reload &e| &7Reload the plugin");
         }
         

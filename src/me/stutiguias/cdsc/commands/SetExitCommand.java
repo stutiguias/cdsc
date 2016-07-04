@@ -54,7 +54,7 @@ public class SetExitCommand extends CommandHandler {
 
     @Override
     protected Boolean isInvalid(CommandSender sender, String[] args) {
-        if(!plugin.hasPermission(sender.getName(),"cdsc.setexit")) {
+        if(!plugin.hasPermission((Player)sender,"cdsc.setexit")) {
             SendMessage("&4You don't have permission");
             return true;
         }

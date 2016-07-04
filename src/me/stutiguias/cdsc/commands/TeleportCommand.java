@@ -50,7 +50,7 @@ public class TeleportCommand extends CommandHandler {
 
     @Override
     protected Boolean isInvalid(CommandSender sender, String[] args) {
-        if(!plugin.hasPermission(sender.getName(),"cdsc.tp")) {
+        if(!plugin.hasPermission((Player)sender,"cdsc.tp")) {
             SendMessage("&4You don't have permission");
             return true;
         }

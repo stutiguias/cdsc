@@ -9,6 +9,7 @@ package me.stutiguias.cdsc.commands;
 import me.stutiguias.cdsc.init.Cdsc;
 import me.stutiguias.cdsc.model.Area;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 /**
  *
@@ -44,7 +45,7 @@ public class StartEventCommand  extends CommandHandler {
     @Override
     protected Boolean isInvalid(CommandSender sender, String[] args) {
        if(sender.getName().equalsIgnoreCase("CONSOLE")) return false;
-       if(!plugin.hasPermission(sender.getName(),"cdsc.start")) {
+       if(!plugin.hasPermission((Player)sender,"cdsc.start")) {
            SendMessage("&4You don't have permission");
            return true;
        } 

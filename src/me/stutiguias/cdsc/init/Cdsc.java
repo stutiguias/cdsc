@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import me.stutiguias.cdsc.commands.CdscCommands;
@@ -17,7 +18,6 @@ import me.stutiguias.cdsc.listener.SignListener;
 import me.stutiguias.cdsc.metrics.Metrics;
 import me.stutiguias.cdsc.model.Area;
 import me.stutiguias.cdsc.model.CDSCPlayer;
-import me.stutiguias.cdsc.updater.Updater;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.ChatColor;
@@ -94,16 +94,6 @@ public class Cdsc extends JavaPlugin {
          logger.log(Level.WARNING, "{0} {1} !! Failed to submit the stats !! ", new Object[]{prefix, "[Metrics]"});
         }
        
-        if(config.UpdaterNotify){
-            Updater updater = new Updater(this, 70266, this.getFile(), Updater.UpdateType.NO_DOWNLOAD, false); // Start Updater but just do a version check
-            
-            update = updater.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE; // Determine if there is an update ready for us
-            name = updater.getLatestName(); // Get the latest name
-            version = updater.getLatestGameVersion(); // Get the latest game version
-            type = updater.getLatestType(); // Get the latest game version
-            link = updater.getLatestFileLink(); // Get the latest link
-        }
-        
         getCommand("cd").setExecutor(new CdscCommands(this));
     }
 
@@ -138,13 +128,9 @@ public class Cdsc extends JavaPlugin {
         }
         return message;
     }
-     
-    public void Update() {
-        Updater updater = new Updater(this, 49809, this.getFile(), Updater.UpdateType.NO_VERSION_CHECK, true);
-    }
-    
-    public boolean hasPermission(String PlayerName,String Permission) {
-       return permission.has(getServer().getPlayer(PlayerName).getWorld(),PlayerName,Permission);
+
+    public boolean hasPermission(String PlayerName,UUID PlayerUUID,String Permission) {
+       return permission.has(getServer().getPlayer(PlayerUUID).getWorld(),PlayerName,Permission);
     }
     
     public boolean hasPermission(Player player, String Permission) {

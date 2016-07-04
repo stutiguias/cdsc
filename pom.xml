@@ -2,15 +2,15 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>me.stutiguias</groupId>
   <artifactId>CDSC</artifactId>
-  <version>0.1.6</version>
-  <name>CDSC</name>
+  <version>0.1.8</version>
+  <name>CDSC-${project.version}</name>
   <description>CDSC</description>
   
   <repositories>
     <!-- Bukkit -->
     <repository>
-      <id>bukkit-repo</id>
-      <url>http://repo.bukkit.org/content/groups/public/</url>
+      <id>spigot-repo</id>
+      <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
     </repository>
 
   </repositories>
@@ -20,9 +20,7 @@
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>LATEST</version>
-            <type>jar</type>
-            <scope>compile</scope>
+            <version>1.10.2-R0.1-SNAPSHOT</version>
         </dependency>
         
         <dependency>

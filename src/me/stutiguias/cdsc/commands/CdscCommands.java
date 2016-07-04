@@ -42,8 +42,6 @@ public class CdscCommands extends Util implements CommandExecutor {
         
         availableCommands.put("reload",   new ReloadCommand(plugin));
         
-        availableCommands.put("update",   new UpdateCommand(plugin));
-        
         availableCommands.put("w",        wandCommand);
         availableCommands.put("wand",     wandCommand);
         
@@ -80,7 +78,14 @@ public class CdscCommands extends Util implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         this.sender = sender;
-        String executedCommand = args[0].toLowerCase();
+        
+        String executedCommand;
+        if (args.length < 0 || args.length == 0) {
+                executedCommand = "help";
+        } else {
+                executedCommand = args[0].toLowerCase();
+        }
+        
         if(args.length < 0 || args.length == 0) return CommandNotFound();
         
         if (sender.getName().equalsIgnoreCase("CONSOLE")) {

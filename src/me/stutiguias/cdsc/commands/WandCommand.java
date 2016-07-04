@@ -36,14 +36,14 @@ public class WandCommand extends CommandHandler {
         itemMeta.setDisplayName("CDSC Wand");
         itemStack.setItemMeta(itemMeta);
         
-        player.setItemInHand(itemStack);
+        player.getInventory().setItemInMainHand(itemStack);
         SendMessage("&6Use Right and left click to set an area");
         return true;
     }
 
     @Override
     protected Boolean isInvalid(CommandSender sender, String[] args) {
-        if(!plugin.hasPermission(sender.getName(),"cdsc.wand")) {
+        if(!plugin.hasPermission((Player)sender,"cdsc.wand")) {
             SendMessage("&4You don't have permission");
             return true;
         }

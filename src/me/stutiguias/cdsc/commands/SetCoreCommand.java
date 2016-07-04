@@ -6,6 +6,7 @@
 
 package me.stutiguias.cdsc.commands;
 
+import java.util.Set;
 import me.stutiguias.cdsc.init.Cdsc;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -30,7 +31,7 @@ public class SetCoreCommand extends CommandHandler {
             
         Player player = (Player)sender;
 
-        Location location = player.getTargetBlock(null,2).getLocation();
+        Location location = player.getTargetBlock((Set<Material>)null,2).getLocation();
         
         player.getWorld().getBlockAt(location).setTypeId(Cdsc.config.CoreBlockId);
         
@@ -51,7 +52,7 @@ public class SetCoreCommand extends CommandHandler {
 
     @Override
     protected Boolean isInvalid(CommandSender sender, String[] args) {
-        if(!plugin.hasPermission(sender.getName(),"cdsc.sc")) {
+        if(!plugin.hasPermission((Player)sender,"cdsc.sc")) {
             SendMessage("&4You don't have permission");
             return true;
         }

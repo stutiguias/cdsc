@@ -53,7 +53,7 @@ public class SpawnCommand extends CommandHandler {
 
     @Override
     protected Boolean isInvalid(CommandSender sender, String[] args) {
-        if(!plugin.hasPermission(sender.getName(),"cdsc.setspawn")) {
+        if(!plugin.hasPermission((Player)sender,"cdsc.setspawn")) {
             SendMessage("&4You don't have permission");
             return true;
         }

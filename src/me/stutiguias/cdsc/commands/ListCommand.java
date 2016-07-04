@@ -9,6 +9,7 @@ package me.stutiguias.cdsc.commands;
 import me.stutiguias.cdsc.init.Cdsc;
 import me.stutiguias.cdsc.model.Area;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 /**
  *
@@ -36,7 +37,7 @@ public class ListCommand extends CommandHandler {
 
     @Override
     protected Boolean isInvalid(CommandSender sender, String[] args) {
-       if(!plugin.hasPermission(sender.getName(),"cdsc.list")) {
+       if(!plugin.hasPermission((Player)sender,"cdsc.list")) {
            SendMessage("&4You don't have permission");
            return true;
        }

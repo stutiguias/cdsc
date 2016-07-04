@@ -62,7 +62,7 @@ public class DefineCommand extends CommandHandler {
 
     @Override
     protected Boolean isInvalid(CommandSender sender, String[] args) {
-        if(!plugin.hasPermission(sender.getName(),"cdsc.define")){
+        if(!plugin.hasPermission((Player)sender,"cdsc.define")){
             SendMessage("&4You don't have permission");
             return true;
         }

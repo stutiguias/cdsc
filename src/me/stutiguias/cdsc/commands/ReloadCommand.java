@@ -8,6 +8,7 @@ package me.stutiguias.cdsc.commands;
 
 import me.stutiguias.cdsc.init.Cdsc;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 /**
  *
@@ -33,7 +34,7 @@ public class ReloadCommand extends CommandHandler {
 
     @Override
     protected Boolean isInvalid(CommandSender sender, String[] args) {
-        if(!plugin.hasPermission(sender.getName(),"cdsc.reload")) {
+        if(!plugin.hasPermission((Player)sender,"cdsc.reload")) {
             SendMessage("&4You don't have permission");
             return true;
         }
