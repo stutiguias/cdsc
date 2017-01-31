@@ -9,6 +9,7 @@ artifacts:
 install:
   - ps: |
       # If we run Java6 we install last Java6 compatible Maven
+      $env:MAVEN_VERSION = '3.3.9'
       if ($env:JAVA_HOME.EndsWith('jdk1.6.0')) {
         $env:MAVEN_VERSION = '3.2.5'
         $env:TESTS_OPTS = '-Dtest=AsciidoctorMojoTest,AsciidoctorMojoExtensionsTest,AsciidoctorHttpMojoTest,AsciidoctorZipMojoTest'
