@@ -6,6 +6,7 @@ package me.stutiguias.cdsc.model;
 
 import me.stutiguias.cdsc.init.Cdsc;
 import org.bukkit.Location;
+import org.bukkit.World;
 
 /**
  *
@@ -16,7 +17,8 @@ public class Area {
     public Area(){
     }
     
-    public Area(Location FirstSpot,Location SecondSpot,String name,String clanTag,String flag){
+    public Area(Location FirstSpot,Location SecondSpot,String name,String clanTag,String flag,World world){
+        this.World = world;
         this.FirstSpot = FirstSpot;
         this.SecondSpot = SecondSpot;
         this.name = name;
@@ -26,6 +28,7 @@ public class Area {
         this.Event = false;
     }
     
+    private World World;
     private Location CoreLocation;
     private int CoreLife;
     private Location FirstSpot;
@@ -175,5 +178,13 @@ public class Area {
      */
     public void setSpawn(Location Spawn) {
         this.Spawn = Spawn;
+    }
+
+    public World getWorld() {
+        return World;
+    }
+
+    public void setWorld(World world) {
+        this.World = world;
     }
 }

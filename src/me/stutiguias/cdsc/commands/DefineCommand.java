@@ -9,6 +9,7 @@ package me.stutiguias.cdsc.commands;
 import me.stutiguias.cdsc.init.Cdsc;
 import me.stutiguias.cdsc.model.Area;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -48,7 +49,9 @@ public class DefineCommand extends CommandHandler {
 
         Cdsc.AreaCreating.remove((Player)sender);
         
-        area = new Area(FirstSpot,SecondSpot,name,clanTag,flag);
+        World world = ((Player)sender).getWorld();
+        
+        area = new Area(FirstSpot,SecondSpot,name,clanTag,flag,world);
         
         if(Cdsc.db.InsertArea(area)){
             Cdsc.Areas.add(area);

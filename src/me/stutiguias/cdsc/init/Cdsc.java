@@ -22,6 +22,7 @@ import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -171,7 +172,11 @@ public class Cdsc extends JavaPlugin {
                z = fz; 
                z2 = sz;
             }
-
+           
+            if(!area.getWorld().getUID().equals(location.getWorld().getUID())){
+                return -1;
+            }
+            
             if(isInsideProtection(x, x2, z, z2, location)) {
                 return i;
             }                
