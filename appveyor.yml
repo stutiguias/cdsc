@@ -8,15 +8,24 @@ artifacts:
     name: CDSC
 install:
   - ps: |
+      # If we run Java6 we install last Java6 compatible Maven
+      if ($env:JAVA_HOME.EndsWith('jdk1.6.0')) {
+        $env:MAVEN_VERSION = '3.2.5'
+        $env:TESTS_OPTS = '-Dtest=AsciidoctorMojoTest,AsciidoctorMojoExtensionsTest,AsciidoctorHttpMojoTest,AsciidoctorZipMojoTest'
+      }
       Add-Type -AssemblyName System.IO.Compression.FileSystem
-      if (!(Test-Path -Path "C:\maven\apache-maven-3.3.3" )) {
-        (new-object System.Net.WebClient).DownloadFile(
-          'http://www.us.apache.org/dist/maven/maven-3/3.3.3/binaries/apache-maven-3.3.3-bin.zip',
-          'C:\maven-bin.zip'
-        )
+      if (!(Test-Path -Path "C:\maven" )) {
+        Write-Host "Downloading Maven $env:MAVEN_VERSION"
+        (new-object System.Net.WebClient).DownloadFile("https://repo1.maven.org/maven2/org/apache/maven/apache-maven/$env:MAVEN_VERSION/apache-maven-$env:MAVEN_VERSION-bin.zip", 'C:\maven-bin.zip')
         [System.IO.Compression.ZipFile]::ExtractToDirectory("C:\maven-bin.zip", "C:\maven")
       }
-  - cmd: SET PATH=C:\maven\apache-maven-3.3.3\bin;%JAVA_HOME%\bin;%PATH%
+  - cmd: SET M2_HOME=C:\maven\apache-maven-%MAVEN_VERSION%
+  # Prepend Java entry, remove Ruby entry (C:\Ruby193\bin;) from PATH
+  - cmd: SET PATH=%M2_HOME%\bin;%JAVA_HOME%\bin;%PATH:C:\Ruby193\bin;=%;
+  - cmd: SET MAVEN_OPTS=-XX:MaxPermSize=1g -Xmx2g
+  - cmd: SET JAVA_OPTS=-XX:MaxPermSize=1g -Xmx2g
+  - cmd: mvn --version
+  - cmd: java -version
 build_script:
   - mvn clean package -B -Dmaven.test.skip=true
 test_script:
