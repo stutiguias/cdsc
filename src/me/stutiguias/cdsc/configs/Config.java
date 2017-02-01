@@ -54,8 +54,7 @@ public class Config {
             Password = fc.getString("MySQL.Password");
             Port = fc.getString("MySQL.Port");
             Database = fc.getString("MySQL.Database");
-            
-            UpdaterNotify = fc.getBoolean("UpdaterNotify");
+           
             ClanOwnerCanBreakArea = fc.getBoolean("DefaultFlags.ClanOwnerCanBreakArea");
             ClanOwnerCanPlaceArea = fc.getBoolean("DefaultFlags.ClanOwnerCanPlaceArea");
             Dontdropduringevent = fc.getBoolean("Dontdropduringevent");
