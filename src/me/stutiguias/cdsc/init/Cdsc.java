@@ -1,11 +1,9 @@
 package me.stutiguias.cdsc.init;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import me.stutiguias.cdsc.commands.CdscCommands;
 import me.stutiguias.cdsc.configs.Config;
@@ -15,14 +13,12 @@ import me.stutiguias.cdsc.db.MySQLDataQueries;
 import me.stutiguias.cdsc.db.SqliteDataQueries;
 import me.stutiguias.cdsc.listener.PlayerListener;
 import me.stutiguias.cdsc.listener.SignListener;
-import me.stutiguias.cdsc.metrics.Metrics;
 import me.stutiguias.cdsc.model.Area;
 import me.stutiguias.cdsc.model.CDSCPlayer;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -85,16 +81,7 @@ public class Cdsc extends JavaPlugin {
         }
 
         Areas = db.GetAreas();
-        
-        // Metrics 
-        try {
-         logger.log(Level.INFO, "{0} {1} - Sending Metrics, Thank You!", new Object[]{prefix, "[Metrics]"});
-         Metrics metrics = new Metrics(this);
-         metrics.start();
-        } catch (IOException e) {
-         logger.log(Level.WARNING, "{0} {1} !! Failed to submit the stats !! ", new Object[]{prefix, "[Metrics]"});
-        }
-       
+             
         getCommand("cd").setExecutor(new CdscCommands(this));
     }
 
