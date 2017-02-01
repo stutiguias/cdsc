@@ -1,5 +1,5 @@
 # don't change this
-configversion: 6
+configversion: 7
 #DataBase
 DataBase:
   # You need to choose if you will use SQLite or Mysql ( default is SQLite )
@@ -11,8 +11,6 @@ MySQL:
   Password: change_this
   Port: '3306'
   Database: minecraft
-# Enable update
-UpdaterNotify: true
 # How Many Life For Each Core
 CoreLife: 20
 # What id of block 

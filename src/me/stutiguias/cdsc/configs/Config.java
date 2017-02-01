@@ -42,7 +42,7 @@ public class Config {
             config.setupConfig();
             FileConfiguration fc = config.getConfig();   
                         
-            if(!fc.isSet("configversion") || fc.getInt("configversion") != 6){ 
+            if(!fc.isSet("configversion") || fc.getInt("configversion") != 7){ 
                 config.MakeOld();
                 config.setupConfig();
                 fc = config.getConfig();  

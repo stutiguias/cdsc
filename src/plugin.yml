@@ -7,9 +7,6 @@ commands:
   cd:
     description: "§bcommands"
 permissions:
-     cdsc.update:
-        description: Allow update
-        default: op
      cdsc.define:
         description: Allow setspawn
         default: op
@@ -55,7 +52,6 @@ permissions:
      cdsc.admin:
       description: Gives access to all TimeSpawner commands
       children:
-        cdsc.update: true
         cdsc.define: true
         cdsc.delete: true
         cdsc.reload: true

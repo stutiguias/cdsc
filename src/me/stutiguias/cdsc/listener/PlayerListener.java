@@ -61,7 +61,7 @@ public class PlayerListener extends ListenerHandle {
         Location location = event.getBlock().getLocation();       
         Player player = (Player)event.getPlayer();
         
-        if(CancelEvent(player, location,"place")) {
+        if(NeedCancelEvent(player, location,"place")) {
             if(plugin.hasPermission(player,"cdsc.bypass")) return;
             event.setCancelled(true);
         }
@@ -74,7 +74,7 @@ public class PlayerListener extends ListenerHandle {
         Location location = event.getBlock().getLocation();       
         Player player = (Player)event.getPlayer();
         
-        if(CancelEvent(player, location,"break")) {
+        if(NeedCancelEvent(player, location,"break")) {
             if(plugin.hasPermission(player,"cdsc.bypass")) return;
             event.setCancelled(true);
         }
@@ -86,7 +86,7 @@ public class PlayerListener extends ListenerHandle {
         Player player = event.getPlayer();
         Location location = event.getTo();
 
-        if(CancelEvent(player, location,"move")) {
+        if(NeedCancelEvent(player, location,"move")) {
             if(plugin.hasPermission(player,"cdsc.bypass")) return;
             Area area = plugin.getArea(location);
             if(area.getExit() == null) {
@@ -192,7 +192,7 @@ public class PlayerListener extends ListenerHandle {
 
         Player player = (Player)event.getEntity();
         
-        if(CancelEvent(player, player.getLocation(),"drop")) {
+        if(NeedCancelEvent(player, player.getLocation(),"drop")) {
             event.setDroppedExp(0);
             if(event.getDrops().isEmpty())return;
             ItemStack[] content = player.getInventory().getContents();
@@ -202,7 +202,7 @@ public class PlayerListener extends ListenerHandle {
         }
     }
 
-    public boolean CancelEvent(Player player,Location location,String event) {
+    public boolean NeedCancelEvent(Player player,Location location,String event) {
 
         Area area = plugin.getArea(location);
         if(area == null) return false;
