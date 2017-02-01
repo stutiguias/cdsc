@@ -160,7 +160,7 @@ public class Cdsc extends JavaPlugin {
                z2 = sz;
             }
            
-            if(!area.getWorld().getUID().equals(location.getWorld().getUID())){
+            if(area.getWorld() != null && !area.getWorld().equals(location.getWorld().getUID().toString())){
                 return -1;
             }
             

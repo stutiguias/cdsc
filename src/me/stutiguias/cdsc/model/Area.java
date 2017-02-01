@@ -17,7 +17,7 @@ public class Area {
     public Area(){
     }
     
-    public Area(Location FirstSpot,Location SecondSpot,String name,String clanTag,String flag,World world){
+    public Area(Location FirstSpot,Location SecondSpot,String name,String clanTag,String flag,String world){
         this.World = world;
         this.FirstSpot = FirstSpot;
         this.SecondSpot = SecondSpot;
@@ -28,7 +28,7 @@ public class Area {
         this.Event = false;
     }
     
-    private World World;
+    private String World;
     private Location CoreLocation;
     private int CoreLife;
     private Location FirstSpot;
@@ -180,11 +180,11 @@ public class Area {
         this.Spawn = Spawn;
     }
 
-    public World getWorld() {
+    public String getWorld() {
         return World;
     }
 
-    public void setWorld(World world) {
+    public void setWorld(String world) {
         this.World = world;
     }
 }

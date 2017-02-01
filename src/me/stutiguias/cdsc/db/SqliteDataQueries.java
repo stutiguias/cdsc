@@ -93,6 +93,11 @@ public class SqliteDataQueries extends Queries {
                         executeRawSQL("ALTER TABLE CDSC_Areas ADD COLUMN spawn VARCHAR(255);");
                         executeRawSQL("UPDATE CDSC_DbVersion SET dbversion = 3 where id = 1");
                 }
+                if (tableVersion() == 3) {
+                        Cdsc.logger.log(Level.INFO, "{0} Update DB version to 4", plugin.prefix);
+                        executeRawSQL("ALTER TABLE CDSC_Areas ADD COLUMN world VARCHAR(255);");
+                        executeRawSQL("UPDATE CDSC_DbVersion SET dbversion = 4 where id = 1");
+                }
     }
     
 }

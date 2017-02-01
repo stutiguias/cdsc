@@ -103,7 +103,7 @@ public class Queries extends Util implements IDataQueries {
         ResultSet rs = null;
 
         try {
-                st = conn.prepareStatement("INSERT INTO CDSC_Areas (name, first, second, core, corelife, clantag, flags, exit) VALUES (?,?,?,?,?,?,?,?)");
+                st = conn.prepareStatement("INSERT INTO CDSC_Areas (name, first, second, core, corelife, clantag, flags, exit, world) VALUES (?,?,?,?,?,?,?,?,?)");
                 st.setString(1, area.getName());
                 st.setString(2, ToString(area.getFirstSpot()));
                 st.setString(3, ToString(area.getSecondSpot()));
@@ -112,6 +112,7 @@ public class Queries extends Util implements IDataQueries {
                 st.setString(6, area.getClanTag());
                 st.setString(7, area.getFlags());
                 st.setString(8, ToString(area.getExit()));
+                st.setString(9, area.getWorld());
                 st.executeUpdate();
         } catch (SQLException e) {
                 Cdsc.logger.log(Level.WARNING, "{0} Unable to insert area", plugin.prefix);
@@ -143,6 +144,7 @@ public class Queries extends Util implements IDataQueries {
                         area.setClanTag(rs.getString("clantag"));
                         area.setExit(toLocation(rs.getString("exit")));
                         area.setSpawn(toLocation(rs.getString("spawn")));
+                        area.setWorld(rs.getString("world"));
                         areas.add(area);
                 }
         } catch (SQLException e) {

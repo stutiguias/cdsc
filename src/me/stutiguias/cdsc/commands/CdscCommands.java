@@ -36,6 +36,7 @@ public class CdscCommands extends Util implements CommandExecutor {
         InfoCommand infoCommand = new InfoCommand(plugin);
         StartEventCommand startEventCommand = new StartEventCommand(plugin);
         StopEventCommand stopEventCommand = new StopEventCommand(plugin);
+        SetFlagCommand setFlagCommand = new SetFlagCommand(plugin);
         
         availableCommands.put("help",     helpCommand);
         availableCommands.put("?",        helpCommand);
@@ -48,6 +49,7 @@ public class CdscCommands extends Util implements CommandExecutor {
         availableCommands.put("d",        defineCommand);
         availableCommands.put("define",   defineCommand);
         
+        availableCommands.put("dl",   new DeleteCommand(plugin));
         availableCommands.put("delete",   new DeleteCommand(plugin));
         
         availableCommands.put("tp",       teleportCommand);
@@ -67,6 +69,9 @@ public class CdscCommands extends Util implements CommandExecutor {
         
         availableCommands.put("se",       setExitCommand);
         availableCommands.put("setexit",  setExitCommand);
+        
+        availableCommands.put("setflag",  setFlagCommand);
+        availableCommands.put("sf",  setFlagCommand);
         
         availableCommands.put("spawn",    new SpawnCommand(plugin));
         

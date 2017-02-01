@@ -45,7 +45,10 @@ permissions:
         default: op  
      cdsc.setexit:
         description: Set exit point
-        default: op         
+        default: op  
+     cdsc.setflag:
+        description: Set flag
+        default: op          
      cdsc.setspawn:
         description: Set spawn
         default: op  
@@ -65,3 +68,4 @@ permissions:
         cdsc.list: true
         cdsc.bypass: true
         cdsc.setspawn: true
+        cdsc.setflag: true

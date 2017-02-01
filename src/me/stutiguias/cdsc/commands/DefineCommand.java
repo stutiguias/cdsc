@@ -51,7 +51,7 @@ public class DefineCommand extends CommandHandler {
         
         World world = ((Player)sender).getWorld();
         
-        area = new Area(FirstSpot,SecondSpot,name,clanTag,flag,world);
+        area = new Area(FirstSpot,SecondSpot,name,clanTag,flag,world.getUID().toString());
         
         if(Cdsc.db.InsertArea(area)){
             Cdsc.Areas.add(area);

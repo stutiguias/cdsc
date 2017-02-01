@@ -43,6 +43,7 @@ public class InfoCommand extends CommandHandler {
         SendMessage(MsgHr);
         SendMessage("&3Name: &6%s", new Object[]{ area.getName() });
         SendMessage("&3Clan: &6%s", new Object[]{ area.getClanTag() });
+        SendMessage("&3Mundo: &6%s", new Object[]{ area.getWorld() });
         SendMessage("&3Flags: &6%s", new Object[]{ area.getFlags() });
         SendMessage(MsgHr);
         
