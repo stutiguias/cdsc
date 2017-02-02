@@ -13,9 +13,9 @@ import org.bukkit.entity.Player;
  *
  * @author Daniel
  */
-public class SetFlagCommand extends CommandHandler {
+public class DelFlagCommand extends CommandHandler {
 
-    public SetFlagCommand(Cdsc plugin) {
+    public DelFlagCommand(Cdsc plugin) {
         super(plugin);
     }
 
@@ -28,18 +28,20 @@ public class SetFlagCommand extends CommandHandler {
         String flag = args[1];
         String areaname = args[2];
         String activeflags = plugin.getArea(areaname).getFlags();
-        activeflags += "," + flag;
+        
+        activeflags = activeflags.replace("," + flag,"");
+        
         plugin.getArea(areaname).setFlags(activeflags);
         
         if(Cdsc.db.SetFlag(plugin.getArea(areaname))){
-            SendMessage("&6Flag %s successfully define to area %s",new Object[]{ flag,areaname });
+            SendMessage("&6Flag %s successfully remove to area %s",new Object[]{ flag,areaname });
         }
         return true;
     }
 
     @Override
     protected Boolean isInvalid(CommandSender sender, String[] args) {
-        if(!plugin.hasPermission((Player)sender,"cdsc.setflag")) {
+        if(!plugin.hasPermission((Player)sender,"cdsc.delflag")) {
             SendMessage("&4You don't have permission");
             return true;
         }

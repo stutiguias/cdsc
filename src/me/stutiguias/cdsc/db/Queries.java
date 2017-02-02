@@ -259,5 +259,25 @@ public class Queries extends Util implements IDataQueries {
         }
         return true;
     }
+        
+    @Override
+    public boolean SetFlag(Area area) {
+        WALConnection conn = getConnection();
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
+        try {
+                st = conn.prepareStatement("UPDATE CDSC_Areas SET `flags` = ? WHERE name = ?");
+                st.setString(1, area.getFlags());
+                st.setString(2, area.getName() );
+                st.executeUpdate();
+        } catch (SQLException e) {
+                Cdsc.logger.log(Level.WARNING, "{0} Unable to update DB", plugin.prefix);
+                Cdsc.logger.warning(e.getMessage());
+        } finally {
+                closeResources(conn, st, rs);
+        }
+        return true;
+    }
     
 }

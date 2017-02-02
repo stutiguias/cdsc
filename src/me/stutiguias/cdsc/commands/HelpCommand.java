@@ -69,8 +69,13 @@ public class HelpCommand extends CommandHandler {
         if(plugin.hasPermission((Player)sender,"cdsc.setspawn")){
             SendMessage("&6/cd spawn <areaName> &e| &7Set spawn for this area");
         }
+        
         if(plugin.hasPermission((Player)sender,"cdsc.setflag")){
             SendMessage("&6/cd <setflag or sf> <flag> <areaName> &e| &7Set flag for this area");
+        }
+                
+        if(plugin.hasPermission((Player)sender,"cdsc.dlfflag")){
+            SendMessage("&6/cd <delflag or dlf> <flag> <areaName> &e| &7Delete flag for this area");
         }
         
         if(plugin.hasPermission((Player)sender,"cdsc.tp")){

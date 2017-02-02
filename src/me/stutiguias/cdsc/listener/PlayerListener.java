@@ -241,6 +241,7 @@ public class PlayerListener extends ListenerHandle {
     }
     
     public boolean BlockPlace(Area area,ClanPlayer clanPlayer) {
+        if(area.getFlags().contains("blockplaceduringevent") && Cdsc.EventEnable(area)) return false;
         if(area.getFlags().contains("denyclanplace") ) return true;
         return !isValidClan(area.getClanTag(), clanPlayer);
     }    
@@ -251,6 +252,7 @@ public class PlayerListener extends ListenerHandle {
             return HitCore(location, clanPlayer, player);
         }
         
+        if(area.getFlags().contains("blockbreakduringevent") && Cdsc.EventEnable(area)) return false;
         if(area.getFlags().contains("denyclanbreak") ) return true;
         
         return !isValidClan(area.getClanTag(), clanPlayer);

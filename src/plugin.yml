@@ -48,7 +48,10 @@ permissions:
         default: op  
      cdsc.setflag:
         description: Set flag
-        default: op          
+        default: op 
+     cdsc.delflag:
+        description: Del flag
+        default: op     
      cdsc.setspawn:
         description: Set spawn
         default: op  
