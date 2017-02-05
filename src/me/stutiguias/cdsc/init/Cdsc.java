@@ -3,6 +3,7 @@ package me.stutiguias.cdsc.init;
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Queue;
 import java.util.UUID;
 import java.util.logging.Logger;
 import me.stutiguias.cdsc.commands.CdscCommands;
@@ -15,6 +16,7 @@ import me.stutiguias.cdsc.listener.PlayerListener;
 import me.stutiguias.cdsc.listener.SignListener;
 import me.stutiguias.cdsc.model.Area;
 import me.stutiguias.cdsc.model.CDSCPlayer;
+import me.stutiguias.cdsc.model.SaveInfo;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.ChatColor;
@@ -34,6 +36,7 @@ public class Cdsc extends JavaPlugin {
 
     public static HashMap<Player,Area> AreaCreating;
     public static HashMap<String,CDSCPlayer> PlayerProfiles;
+    public static HashMap<Area,Queue<SaveInfo>> Store = new HashMap<>();
     
     public static List<Area> Areas;
     
@@ -46,12 +49,6 @@ public class Cdsc extends JavaPlugin {
     public static Translate msg;
     
     public static IDataQueries db;
-    
-    public static boolean update = false;
-    public static String name = "";
-    public static String type = "";
-    public static String version = "";
-    public static String link = "";
 
     @Override
     public void onEnable() {
@@ -160,17 +157,16 @@ public class Cdsc extends JavaPlugin {
                z2 = sz;
             }
            
-            if(area.getWorld() != null && !area.getWorld().equals(location.getWorld().getUID().toString())){
-                return -1;
-            }
-            
-            if(isInsideProtection(x, x2, z, z2, location)) {
-                return i;
-            }                
+            if(notSameWorld(area,location)) return -1;
+            if(isInsideProtection(x, x2, z, z2, location)) return i;
         }
         return -1;
     }
 
+    private boolean notSameWorld(Area area,Location location) {
+        return area.getWorld() != null && !area.getWorld().equals(location.getWorld().getUID().toString());
+    }
+    
     public Area getArea(Location location) {
          int index = getAreaIndex(location);
          if(index == -1) return null;

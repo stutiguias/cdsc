@@ -6,6 +6,7 @@
 
 package me.stutiguias.cdsc.commands;
 
+import me.stutiguias.cdsc.init.BlockHandler;
 import me.stutiguias.cdsc.init.Cdsc;
 import me.stutiguias.cdsc.model.Area;
 import org.bukkit.command.CommandSender;
@@ -66,6 +67,7 @@ public class StopEventCommand extends CommandHandler {
             return false;
         }
         area.setEvent(false);
+        new BlockHandler(plugin).ReBuild(area);
         BrcstMsg(Cdsc.msg.StopEventForOne, new Object[]{ args[1] });
         return true;
     }

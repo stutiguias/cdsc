@@ -19,7 +19,6 @@ public class Config {
     
     private ConfigAccessor config;
         
-    public boolean UpdaterNotify;
     public boolean ClanOwnerCanBreakArea;
     public boolean ClanOwnerCanPlaceArea;
     public boolean Dontdropduringevent;
