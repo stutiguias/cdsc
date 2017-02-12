@@ -18,8 +18,11 @@ import org.bukkit.entity.Player;
  */
 public class StopEventCommand extends CommandHandler {
 
+    private BlockHandler blockHandler;
+    
     public StopEventCommand(Cdsc plugin) {
         super(plugin);
+        blockHandler = new BlockHandler(plugin);
     }
 
     @Override
@@ -56,6 +59,7 @@ public class StopEventCommand extends CommandHandler {
         BrcstMsg(Cdsc.msg.StopEventForAll); 
         for(Area area:Cdsc.Areas) {
             area.setEvent(false);
+            blockHandler.ReBuild(area);
         }
         return true;
     }
@@ -67,7 +71,7 @@ public class StopEventCommand extends CommandHandler {
             return false;
         }
         area.setEvent(false);
-        new BlockHandler(plugin).ReBuild(area);
+        blockHandler.ReBuild(area);
         BrcstMsg(Cdsc.msg.StopEventForOne, new Object[]{ args[1] });
         return true;
     }

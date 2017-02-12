@@ -33,6 +33,7 @@ public class BlockHandler extends Util {
     }
     
     public void Protect(Block block,Area area) {
+        if(!area.getFlags().contains("rebuildafterend")) return;
         if(AlreadySaveLocation.contains(block.getLocation())) return;
         AlreadySaveLocation.add(block.getLocation());
         if(Cdsc.Store.containsKey(area)){
@@ -46,6 +47,7 @@ public class BlockHandler extends Util {
     }
     
     public void ReBuild(Area area) {
+        if(!area.getFlags().contains("rebuildafterend")) return;
         if(Cdsc.Store.containsKey(area)) {
             Queue<SaveInfo> storetemp = Cdsc.Store.get(area);
             World world = plugin.getServer().getWorld(UUID.fromString(area.getWorld()));
