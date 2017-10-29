@@ -6,16 +6,13 @@
 package me.stutiguias.cdsc.init;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.UUID;
-import java.util.logging.Level;
 import me.stutiguias.cdsc.model.Area;
 import me.stutiguias.cdsc.model.SaveInfo;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 

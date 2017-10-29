@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import me.stutiguias.cdsc.init.Cdsc;
+import static me.stutiguias.cdsc.init.Util.ToString;
+import me.stutiguias.cdsc.model.Area;
 
 public class MySQLDataQueries extends Queries {
 
@@ -87,5 +89,33 @@ public class MySQLDataQueries extends Queries {
                         executeRawSQL("UPDATE CDSC_DbVersion SET dbversion = 4 where id = 1");
                 }
 	}
-    
+        
+        @Override
+        public boolean InsertArea(Area area) {
+            WALConnection conn = getConnection();
+            PreparedStatement st = null;
+            ResultSet rs = null;
+
+            try {
+                    st = conn.prepareStatement("INSERT INTO CDSC_Areas (name, first, second, core, corelife, clantag, flags, `exit`, world) VALUES (?,?,?,?,?,?,?,?,?)");
+                    st.setString(1, area.getName());
+                    st.setString(2, ToString(area.getFirstSpot()));
+                    st.setString(3, ToString(area.getSecondSpot()));
+                    st.setString(4, ToString(area.getCoreLocation()));
+                    st.setInt(5, area.getCoreLife());
+                    st.setString(6, area.getClanTag());
+                    st.setString(7, area.getFlags());
+                    st.setString(8, ToString(area.getExit()));
+                    st.setString(9, area.getWorld());
+                    st.executeUpdate();
+            } catch (SQLException e) {
+                    Cdsc.logger.log(Level.WARNING, "{0} Unable to insert area", plugin.prefix);
+                    Cdsc.logger.warning(st.toString());
+                    Cdsc.logger.warning(e.getMessage());
+                    return false;
+            } finally {
+                    closeResources(conn, st, rs);
+            }
+            return true;
+    }
 }

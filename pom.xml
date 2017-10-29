@@ -12,7 +12,11 @@
       <id>spigot-repo</id>
       <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
     </repository>
-
+    <!-- vault -->
+    <repository>
+            <id>vault-repo</id>
+            <url>http://nexus.hc.to/content/repositories/pub_releases</url>
+    </repository>
   </repositories>
   
     <dependencies>
@@ -20,15 +24,15 @@
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>1.10.2-R0.1-SNAPSHOT</version>
+            <version>1.12.2-R0.1-SNAPSHOT</version>
         </dependency>
         
         <dependency>
-          <groupId>net.milkbowl.vault</groupId>
-          <artifactId>Vault</artifactId>
-          <version>1.2.27</version>
-              <scope>system</scope>
-          <systemPath>${project.basedir}/lib/Vault.jar</systemPath>
+            <groupId>net.milkbowl.vault</groupId>
+            <artifactId>Vault</artifactId>
+            <version>1.5.6</version>
+            <type>jar</type>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>

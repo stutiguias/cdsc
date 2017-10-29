@@ -116,6 +116,7 @@ public class Queries extends Util implements IDataQueries {
                 st.executeUpdate();
         } catch (SQLException e) {
                 Cdsc.logger.log(Level.WARNING, "{0} Unable to insert area", plugin.prefix);
+                Cdsc.logger.warning(st.toString());
                 Cdsc.logger.warning(e.getMessage());
         } finally {
                 closeResources(conn, st, rs);
