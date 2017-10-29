@@ -57,7 +57,10 @@ public class CdscCommands extends Util implements CommandExecutor {
         availableCommands.put("teleport", teleportCommand);
         
         availableCommands.put("start",    new StartEventCommand(plugin));
+        availableCommands.put("s",    new StartEventCommand(plugin));
+        
         availableCommands.put("end",      new StopEventCommand(plugin));
+        availableCommands.put("e",      new StopEventCommand(plugin));
         
         availableCommands.put("sc",       setCoreCommand);
         availableCommands.put("setcore",  setCoreCommand);
