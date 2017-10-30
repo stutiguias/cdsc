@@ -18,7 +18,7 @@ public class MySQLDataQueries extends Queries {
 		super(plugin);
                 try {
                         Cdsc.logger.log(Level.INFO, "{0} Starting pool....", plugin.prefix);
-                        pool = new WALConnectionPool("com.mysql.jdbc.Driver", "jdbc:mysql://"+ dbHost +":"+ dbPort +"/"+ dbName, dbUser, dbPass);
+                        pool = new WALConnectionPool("com.mysql.jdbc.Driver", "jdbc:mysql://"+ dbHost +":"+ dbPort +"/"+ dbName + "?useSSL=false", dbUser, dbPass);
                 }catch(InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
                         Cdsc.logger.log(Level.WARNING, "{0} Exception getting mySQL WALConnection", plugin.prefix);
 			Cdsc.logger.warning(e.getMessage());
