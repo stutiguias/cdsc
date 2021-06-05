@@ -33,7 +33,8 @@ public class SetCoreCommand extends CommandHandler {
 
         Location location = player.getTargetBlock((Set<Material>)null,2).getLocation();
         
-        player.getWorld().getBlockAt(location).setTypeId(Cdsc.config.CoreBlockId);
+        Material material = Material.getMaterial(Cdsc.config.CoreBlock);
+        player.getWorld().getBlockAt(location).setType(material);
         
         int index = plugin.getAreaIndex(location);
         

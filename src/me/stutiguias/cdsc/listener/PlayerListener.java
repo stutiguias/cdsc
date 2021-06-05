@@ -7,7 +7,6 @@ package me.stutiguias.cdsc.listener;
 import java.util.HashMap;
 import me.stutiguias.cdsc.init.ActionHandler;
 import me.stutiguias.cdsc.init.Cdsc;
-import me.stutiguias.cdsc.init.CombatTag;
 import me.stutiguias.cdsc.model.Area;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -32,7 +31,6 @@ public class PlayerListener extends ListenerHandle {
     
     public HashMap<Player , ItemStack[]> items = new HashMap<>();
     public ActionHandler action;
-    public CombatTag CombatTag;
     
     public PlayerListener(Cdsc plugin) {
         super(plugin);
@@ -135,10 +133,6 @@ public class PlayerListener extends ListenerHandle {
 
             if (df.getHealth() - event.getDamage() <= 0) {
                 event.setCancelled(true);
-                if(plugin.getServer().getPluginManager().getPlugin("CombatTag") != null){
-                    CombatTag = new CombatTag(plugin);
-                }
-                if(CombatTag != null) CombatTag.Get().untagPlayer(df);
                 df.teleport(area.getExit());
                 df.setHealth(20);
             }

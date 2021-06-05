@@ -25,7 +25,7 @@ public class Config {
     public boolean Dontdieduringevent;
     
     public int CoreLife;
-    public int CoreBlockId;
+    public String CoreBlock;
     
     public String DataBaseType;
     public String Host;
@@ -41,7 +41,7 @@ public class Config {
             config.setupConfig();
             FileConfiguration fc = config.getConfig();   
                         
-            if(!fc.isSet("configversion") || fc.getInt("configversion") != 7){ 
+            if(!fc.isSet("configversion") || fc.getInt("configversion") != 8){ 
                 config.MakeOld();
                 config.setupConfig();
                 fc = config.getConfig();  
@@ -60,7 +60,7 @@ public class Config {
             Dontdieduringevent = fc.getBoolean("Dontdieduringevent");
             
             CoreLife = fc.getInt("CoreLife");
-            CoreBlockId = fc.getInt("CoreBlockId");
+            CoreBlock = fc.getString("CoreBlock");
             
         }catch(IOException ex){
             ex.printStackTrace();

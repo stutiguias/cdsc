@@ -60,7 +60,7 @@ public class SaveInfo {
     }
 
     /**
-     * @param block the block to set
+     * @param material
      */
     public void setBlock(Material material) {
         this.material = material;

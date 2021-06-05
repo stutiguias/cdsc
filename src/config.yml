@@ -1,5 +1,5 @@
 # don't change this
-configversion: 7
+configversion: 8
 #DataBase
 DataBase:
   # You need to choose if you will use SQLite or Mysql ( default is SQLite )
@@ -13,8 +13,9 @@ MySQL:
   Database: minecraft
 # How Many Life For Each Core
 CoreLife: 20
-# What id of block 
-CoreBlockId: 49
+# What Material is the core 
+# https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
+CoreBlock: 'OBSIDIAN'
 # Don't drop item on kill during event
 # The item will auto-save and 
 # add back after player re-spawn
