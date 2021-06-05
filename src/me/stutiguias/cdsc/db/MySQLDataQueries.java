@@ -7,7 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import me.stutiguias.cdsc.init.Cdsc;
-import static me.stutiguias.cdsc.init.Util.ToString;
 import me.stutiguias.cdsc.model.Area;
 
 public class MySQLDataQueries extends Queries {

@@ -6,7 +6,6 @@ package me.stutiguias.cdsc.model;
 
 import me.stutiguias.cdsc.init.Cdsc;
 import org.bukkit.Location;
-import org.bukkit.World;
 
 /**
  *
