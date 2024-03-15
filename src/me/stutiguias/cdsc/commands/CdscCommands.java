@@ -78,7 +78,7 @@ public class CdscCommands extends Util implements CommandExecutor {
         availableCommands.put("sf",       setFlagCommand);
         
         availableCommands.put("delflag",  delFlagCommand);
-        availableCommands.put("dlf",      delFlagCommand);
+        availableCommands.put("df",       delFlagCommand);
         
         availableCommands.put("spawn",    new SpawnCommand(plugin));
         

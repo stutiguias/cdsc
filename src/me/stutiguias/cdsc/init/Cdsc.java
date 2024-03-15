@@ -114,12 +114,8 @@ public class Cdsc extends JavaPlugin {
         return message;
     }
 
-    public boolean hasPermission(String PlayerName,UUID PlayerUUID,String Permission) {
-       return permission.has(getServer().getPlayer(PlayerUUID).getWorld(),PlayerName,Permission);
-    }
-    
     public boolean hasPermission(Player player, String Permission) {
-        return permission.has(player.getWorld(), player.getName(), Permission.toLowerCase());
+        return permission.has(player, Permission.toLowerCase());
     }        
     
     public long getCurrentMilli() {
