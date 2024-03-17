@@ -4,6 +4,7 @@
  */
 package me.stutiguias.cdsc.db.connection;
 
+import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
@@ -29,17 +30,21 @@ public class WALConnectionPool {
     private final String password;
     
     public WALConnectionPool(String driverName, String url, String username, String password) throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException {
-        Driver driver = (Driver) Class.forName(driverName).newInstance();
-        WALDriver jDriver = new WALDriver(driver);
-        DriverManager.registerDriver(jDriver);
-        ready = true;
-        this.url = url;
-        this.username = username;
-        this.password = password;
-        connections = new ArrayList<>(poolsize);
-        reaper = new ConnectionReaper();
-        StartReaper();
-        instance = this;
+        try {
+            Driver driver = (Driver) Class.forName(driverName).getDeclaredConstructor().newInstance();
+            WALDriver jDriver = new WALDriver(driver);
+            DriverManager.registerDriver(jDriver);
+            ready = true;
+            this.url = url;
+            this.username = username;
+            this.password = password;
+            connections = new ArrayList<>(poolsize);
+            reaper = new ConnectionReaper();
+            StartReaper();
+            instance = this;
+        } catch (InvocationTargetException | NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
     }
     
     public final void StartReaper() {

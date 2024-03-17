@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Queue;
-import java.util.UUID;
 import java.util.logging.Logger;
 import me.stutiguias.cdsc.commands.CdscCommands;
 import me.stutiguias.cdsc.configs.Config;
@@ -15,7 +14,7 @@ import me.stutiguias.cdsc.db.SqliteDataQueries;
 import me.stutiguias.cdsc.listener.PlayerListener;
 import me.stutiguias.cdsc.listener.SignListener;
 import me.stutiguias.cdsc.model.Area;
-import me.stutiguias.cdsc.model.CDSCPlayer;
+import me.stutiguias.cdsc.model.CastleDefencePlayer;
 import me.stutiguias.cdsc.model.SaveInfo;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
@@ -35,7 +34,7 @@ public class Cdsc extends JavaPlugin {
     private final SignListener SignListener = new SignListener(this);
 
     public static HashMap<Player,Area> AreaCreating;
-    public static HashMap<String,CDSCPlayer> PlayerProfiles;
+
     public static HashMap<Area,Queue<SaveInfo>> Store = new HashMap<>();
     
     public static List<Area> Areas;
@@ -59,7 +58,6 @@ public class Cdsc extends JavaPlugin {
         }
         
         AreaCreating = new HashMap<>();
-        PlayerProfiles = new HashMap<>();
         config = new Config(this);
         msg = new Translate(this);
         

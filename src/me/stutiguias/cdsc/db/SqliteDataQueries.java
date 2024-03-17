@@ -8,6 +8,7 @@ import me.stutiguias.cdsc.db.connection.WALDriver;
 import me.stutiguias.cdsc.db.connection.WALConnection;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.*;
 import java.util.logging.Level;
 import me.stutiguias.cdsc.init.Cdsc;
@@ -26,12 +27,13 @@ public class SqliteDataQueries extends Queries {
     @Override
     public WALConnection getConnection() {
             try {
-                    Driver driver = (Driver) Class.forName("org.sqlite.JDBC").newInstance();
+                    Driver driver = (Driver) Class.forName("org.sqlite.JDBC").getDeclaredConstructor().newInstance();
                     WALDriver jDriver = new WALDriver(driver);
                     DriverManager.registerDriver(jDriver);
                     connection = new WALConnection(DriverManager.getConnection("jdbc:sqlite:" + plugin.getDataFolder() + File.separator + "data.db"));
                     return connection;
-            } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | SQLException e) {
+            } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | SQLException |
+                     NoSuchMethodException | InvocationTargetException e) {
                     Cdsc.logger.log(Level.SEVERE, "{0} Exception getting SQLite WALConnection", plugin.prefix);
                     Cdsc.logger.warning(e.getMessage());
             }

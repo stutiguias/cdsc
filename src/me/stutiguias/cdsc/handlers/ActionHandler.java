@@ -3,9 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package me.stutiguias.cdsc.init;
+package me.stutiguias.cdsc.handlers;
 
 import java.util.HashMap;
+
+import me.stutiguias.cdsc.init.Cdsc;
+import me.stutiguias.cdsc.model.CastleDefencePlayer;
+import me.stutiguias.cdsc.model.SimpleClan;
+import me.stutiguias.cdsc.init.Util;
 import me.stutiguias.cdsc.model.Area;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import org.bukkit.Location;
@@ -19,14 +24,13 @@ import org.bukkit.entity.Player;
 public class ActionHandler extends Util {
 
     private Area area;
-    private ClanPlayer clanPlayer;
-    public SimpleClan simpleClan;
+    public CastleDefencePlayer castleDefencePlayer;
     public HashMap<Player, Location> RespawnInLocation = new HashMap<>();
     private final BlockHandler blockHandler;
     
     public ActionHandler(Cdsc plugin) {
         super(plugin);
-        simpleClan = new SimpleClan(plugin);
+        castleDefencePlayer = new CastleDefencePlayer(plugin);
         blockHandler = new BlockHandler(plugin);
     }
     
@@ -34,13 +38,9 @@ public class ActionHandler extends Util {
         return plugin.getArea(location);
     }
     
-    public ClanPlayer LoadClan(Player player) {
-        return simpleClan.Get().getClanManager().getClanPlayer(player);
-    }
-    
     public void LoadConfig(Player player,Location location) {
         area = LoadArea(location);
-        clanPlayer = LoadClan(player);
+        castleDefencePlayer.SetPlayer(player);
     }
     
     public boolean NeedCancelBlockBreak(Player player,Block block) {
@@ -48,7 +48,7 @@ public class ActionHandler extends Util {
         if(area == null) return false;
         
         if (area.getCoreLocation() != null && area.getCoreLocation().distance(block.getLocation()) == 0) {
-            return HitCore(block.getLocation(), clanPlayer, player);
+            return HitCore(block.getLocation(), player);
         }
 
         if (area.getFlags().contains("blockbreakduringevent") && Cdsc.EventEnable(area)) {
@@ -60,7 +60,7 @@ public class ActionHandler extends Util {
             return true;
         }
 
-        return !isValidClan(area.getClanTag(), clanPlayer);
+        return !isValidClan(area.getClanTag(), player);
     }
     
     public boolean NeedCancelBlockPlace(Player player,Block block) {
@@ -69,7 +69,7 @@ public class ActionHandler extends Util {
         
         if (area.getFlags().contains("blockplaceduringevent") && Cdsc.EventEnable(area)) return false;
         if (area.getFlags().contains("denyclanplace")) return true;
-        return !isValidClan(area.getClanTag(), clanPlayer);
+        return !isValidClan(area.getClanTag(), player);
     }
 
     public boolean NeedCancelDrop(Player player, Location location) {
@@ -77,7 +77,7 @@ public class ActionHandler extends Util {
         if(area == null) return false;
         
         if (Cdsc.EventEnable(area)) {
-            SetReSpawnLoc(area, clanPlayer, player);
+            SetReSpawnLoc(area, player);
             return true;
         }
         return false;
@@ -90,11 +90,11 @@ public class ActionHandler extends Util {
         if (Cdsc.EventEnable(area)) {
             return false;
         }
-        return !isValidClan(area.getClanTag(), clanPlayer);
+        return !isValidClan(area.getClanTag(), player);
     }
     
-    public void SetReSpawnLoc(Area area, ClanPlayer clanPlayer, Player player) {
-        if (isValidClan(area.getClanTag(), clanPlayer)) {
+    public void SetReSpawnLoc(Area area, Player player) {
+        if (isValidClan(area.getClanTag(), player)) {
             RespawnInLocation.put(player, area.getSpawn());
             return;
         }
@@ -102,20 +102,18 @@ public class ActionHandler extends Util {
         RespawnInLocation.put(player, area.getExit());
     }
 
-    public boolean isValidClan(String clanTag, ClanPlayer clanPlayer) {
-        if (clanPlayer == null || clanPlayer.getClan() == null) {
-            return false;
-        }
-        return clanTag.equalsIgnoreCase(clanPlayer.getClan().getTag()) != false;
+    public boolean isValidClan(String clanTag, Player player) {
+        if (!castleDefencePlayer.haveCla()) return false;
+        return clanTag.equalsIgnoreCase(castleDefencePlayer.getClaTag());
     }
   
-    public boolean HitCore(Location location,ClanPlayer clanPlayer,Player player) {
+    public boolean HitCore(Location location,Player player) {
         
-        if(clanPlayer == null || clanPlayer.getClan() == null) return true;
+        if(!castleDefencePlayer.haveCla()) return true;
         
         int index = plugin.getAreaIndex(location);
        
-        if(clanPlayer.getClan().getTag().equals(Cdsc.Areas.get(index).getClanTag())) { 
+        if(castleDefencePlayer.getClaTag().equals(Cdsc.Areas.get(index).getClanTag())) {
             SendMessage(player,Cdsc.msg.ClanOwn);
             return true;
         }
@@ -126,7 +124,7 @@ public class ActionHandler extends Util {
         if(coreLife == 0) {
             
             Area area = Cdsc.Areas.get(index);
-            area.setClanTag(clanPlayer.getClan().getTag());
+            area.setClanTag(castleDefencePlayer.getClaTag());
             area.setCoreLife(Cdsc.config.CoreLife);
             
             if(area.onEvent())
@@ -136,7 +134,7 @@ public class ActionHandler extends Util {
             
             Cdsc.db.UpdateArea(area);
             
-            BrcstMsg(Cdsc.msg.CoreBroke,new Object[] { area.getName() , clanPlayer.getClan().getTag() });
+            BrcstMsg(Cdsc.msg.CoreBroke,new Object[] { area.getName() , castleDefencePlayer.getClaTag() });
             
         }else{ 
             

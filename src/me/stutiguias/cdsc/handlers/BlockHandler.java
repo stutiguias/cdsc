@@ -3,13 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package me.stutiguias.cdsc.init;
+package me.stutiguias.cdsc.handlers;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.UUID;
+
+import me.stutiguias.cdsc.init.Cdsc;
+import me.stutiguias.cdsc.init.Util;
 import me.stutiguias.cdsc.model.Area;
 import me.stutiguias.cdsc.model.SaveInfo;
 import org.bukkit.Location;

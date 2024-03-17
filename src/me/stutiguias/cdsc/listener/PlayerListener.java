@@ -5,7 +5,7 @@
 package me.stutiguias.cdsc.listener;
 
 import java.util.HashMap;
-import me.stutiguias.cdsc.init.ActionHandler;
+import me.stutiguias.cdsc.handlers.ActionHandler;
 import me.stutiguias.cdsc.init.Cdsc;
 import me.stutiguias.cdsc.model.Area;
 import org.bukkit.Location;
