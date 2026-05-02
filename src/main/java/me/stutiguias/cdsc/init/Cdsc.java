@@ -82,7 +82,9 @@ public class Cdsc extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        getServer().getPluginManager().disablePlugin(this);
+        if (db != null) {
+            db.close();
+        }
     }
     
     public void OnReload() {

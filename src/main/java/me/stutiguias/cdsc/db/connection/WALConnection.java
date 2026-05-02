@@ -26,12 +26,9 @@ public class WALConnection implements Connection {
     public void close() {
         inuse = false;
         try {
-            if (!conn.getAutoCommit()) {
-                conn.setAutoCommit(true);
-            }
+            conn.close();
         } catch (final SQLException ex) {
             terminate();
-            WALConnectionPool.removeConn(conn);
         }
     }
 

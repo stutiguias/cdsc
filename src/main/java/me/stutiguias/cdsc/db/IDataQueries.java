@@ -26,5 +26,6 @@ public interface IDataQueries {
         boolean     SetSpawn(Area area);
         boolean     SetFlag(Area area);
         List<Area>  GetAreas();
+        void        close();
         
 }

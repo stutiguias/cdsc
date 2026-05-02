@@ -4,13 +4,14 @@
  */
 package me.stutiguias.cdsc.db;
 
-import me.stutiguias.cdsc.db.connection.WALDriver;
 import me.stutiguias.cdsc.db.connection.WALConnection;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.logging.Level;
+import javax.sql.DataSource;
 import me.stutiguias.cdsc.init.Cdsc;
 
 /**
@@ -27,19 +28,28 @@ public class SqliteDataQueries extends Queries {
     @Override
     public WALConnection getConnection() {
             try {
-                    Driver driver = (Driver) Class.forName("org.sqlite.JDBC").getDeclaredConstructor().newInstance();
-                    WALDriver jDriver = new WALDriver(driver);
-                    DriverManager.registerDriver(jDriver);
-                    connection = new WALConnection(DriverManager.getConnection("jdbc:sqlite:" + plugin.getDataFolder() + File.separator + "data.db"));
+                    DataSource dataSource = createSqliteDataSource();
+                    connection = new WALConnection(dataSource.getConnection());
                     return connection;
-            } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | SQLException |
-                     NoSuchMethodException | InvocationTargetException e) {
+            } catch (SQLException e) {
                     Cdsc.logger.log(Level.SEVERE, "{0} Exception getting SQLite WALConnection", plugin.prefix);
                     Cdsc.logger.warning(e.getMessage());
             }
             return null;
     }
-	
+
+    private DataSource createSqliteDataSource() {
+            try {
+                    Class<?> dataSourceClass = Class.forName("org.sqlite.SQLiteDataSource");
+                    Object sqliteDataSource = dataSourceClass.getDeclaredConstructor().newInstance();
+                    dataSourceClass.getMethod("setUrl", String.class)
+                            .invoke(sqliteDataSource, "jdbc:sqlite:" + plugin.getDataFolder() + File.separator + "data.db");
+                    return (DataSource) sqliteDataSource;
+            } catch (ReflectiveOperationException e) {
+                    throw new IllegalStateException("Could not initialize SQLite data source.", e);
+            }
+    }
+ 	
     private boolean tableExists(String tableName) {
         boolean exists = false;
         WALConnection conn = getConnection();

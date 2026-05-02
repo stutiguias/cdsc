@@ -1,40 +1,77 @@
 package me.stutiguias.cdsc.db;
 
-import me.stutiguias.cdsc.db.connection.WALConnectionPool;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import me.stutiguias.cdsc.db.connection.WALConnection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
+import javax.sql.DataSource;
 import me.stutiguias.cdsc.init.Cdsc;
 import me.stutiguias.cdsc.model.Area;
 
 public class MySQLDataQueries extends Queries {
 
-        private WALConnectionPool pool;
+        private final HikariDataSource dataSource;
         
 	public MySQLDataQueries(Cdsc plugin, String dbHost, String dbPort, String dbUser, String dbPass, String dbName) {
 		super(plugin);
+                HikariDataSource source = null;
                 try {
-                        Cdsc.logger.log(Level.INFO, "{0} Starting pool....", plugin.prefix);
-                        pool = new WALConnectionPool("com.mysql.jdbc.Driver", "jdbc:mysql://"+ dbHost +":"+ dbPort +"/"+ dbName + "?useSSL=false", dbUser, dbPass);
-                }catch(InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) {
-                        Cdsc.logger.log(Level.WARNING, "{0} Exception getting mySQL WALConnection", plugin.prefix);
+                        Cdsc.logger.log(Level.INFO, "{0} Starting HikariCP pool....", plugin.prefix);
+
+                        HikariConfig hikari = new HikariConfig();
+                        hikari.setDataSource(createMySqlDataSource(dbHost, dbPort, dbUser, dbPass, dbName));
+                        hikari.setPoolName("CDSC-HikariPool");
+                        hikari.setMaximumPoolSize(10);
+                        hikari.setMinimumIdle(1);
+                        hikari.setConnectionTimeout(10000);
+                        hikari.setValidationTimeout(5000);
+                        hikari.setIdleTimeout(300000);
+                        source = new HikariDataSource(hikari);
+                } catch (RuntimeException e) {
+                        Cdsc.logger.log(Level.WARNING, "{0} Exception starting HikariCP pool", plugin.prefix);
 			Cdsc.logger.warning(e.getMessage());
+                }
+                dataSource = source;
+                if (dataSource == null) {
+                        throw new IllegalStateException("Could not initialize HikariCP data source for MySQL.");
                 }
                 initTables();
 	}
 
+        private DataSource createMySqlDataSource(String dbHost, String dbPort, String dbUser, String dbPass, String dbName) {
+                try {
+                        Class<?> dataSourceClass = Class.forName("com.mysql.cj.jdbc.MysqlDataSource");
+                        Object mysqlDataSource = dataSourceClass.getDeclaredConstructor().newInstance();
+                        dataSourceClass.getMethod("setUrl", String.class)
+                                .invoke(mysqlDataSource, "jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbName + "?useSSL=false");
+                        dataSourceClass.getMethod("setUser", String.class).invoke(mysqlDataSource, dbUser);
+                        dataSourceClass.getMethod("setPassword", String.class).invoke(mysqlDataSource, dbPass);
+                        return (DataSource) mysqlDataSource;
+                } catch (ReflectiveOperationException e) {
+                        throw new IllegalStateException("Could not initialize MySQL data source.", e);
+                }
+        }
+
         @Override
 	public WALConnection getConnection() {
 		try {
-			return pool.getConnection();
+			return new WALConnection(dataSource.getConnection());
 		} catch (SQLException e) {
 			Cdsc.logger.log(Level.WARNING, "{0} Exception getting mySQL WALConnection", plugin.prefix);
 			Cdsc.logger.warning(e.getMessage());
 		}
 		return null;
 	}
+
+        @Override
+        public void close() {
+                if (dataSource != null && !dataSource.isClosed()) {
+                        dataSource.close();
+                }
+        }
         
 	public boolean tableExists(String tableName) {
 		boolean exists = false;

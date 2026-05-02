@@ -43,6 +43,10 @@ public class Queries extends Util implements IDataQueries {
     public WALConnection getConnection() {
         throw new UnsupportedOperationException("Implement On Children.");
     }
+
+    @Override
+    public void close() {
+    }
     
     public void closeResources(WALConnection conn, Statement st, ResultSet rs) {
         if (null != rs) {
