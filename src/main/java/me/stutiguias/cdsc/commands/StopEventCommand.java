@@ -30,6 +30,8 @@ public class StopEventCommand extends CommandHandler {
         this.sender =  sender;
         
         if(isInvalid(sender, args)) return true;
+
+        plugin.cancelAutoEventEndTask();
         
         if (args.length < 2) {
             

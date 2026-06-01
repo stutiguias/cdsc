@@ -36,6 +36,7 @@ public class CdscCommands extends Util implements CommandExecutor {
         InfoCommand infoCommand = new InfoCommand(plugin);
         StartEventCommand startEventCommand = new StartEventCommand(plugin);
         StopEventCommand stopEventCommand = new StopEventCommand(plugin);
+        SetAutoEventCommand setAutoEventCommand = new SetAutoEventCommand(plugin);
         SetFlagCommand setFlagCommand = new SetFlagCommand(plugin);
         DelFlagCommand delFlagCommand = new DelFlagCommand(plugin);
         
@@ -80,10 +81,18 @@ public class CdscCommands extends Util implements CommandExecutor {
         availableCommands.put("delflag",  delFlagCommand);
         availableCommands.put("df",       delFlagCommand);
         
+        availableCommands.put("setautoevent", setAutoEventCommand);
+        availableCommands.put("autoevent",    setAutoEventCommand);
+        availableCommands.put("sae",          setAutoEventCommand);
+
         availableCommands.put("spawn",    new SpawnCommand(plugin));
         
         availableConsoleCommands.put("start", startEventCommand);
+        availableConsoleCommands.put("end", stopEventCommand);
         availableConsoleCommands.put("stop", stopEventCommand);
+        availableConsoleCommands.put("setautoevent", setAutoEventCommand);
+        availableConsoleCommands.put("autoevent", setAutoEventCommand);
+        availableConsoleCommands.put("sae", setAutoEventCommand);
         
     }
 

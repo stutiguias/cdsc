@@ -11,6 +11,7 @@ import me.stutiguias.cdsc.configs.Translate;
 import me.stutiguias.cdsc.db.IDataQueries;
 import me.stutiguias.cdsc.db.MySQLDataQueries;
 import me.stutiguias.cdsc.db.SqliteDataQueries;
+import me.stutiguias.cdsc.handlers.BlockHandler;
 import me.stutiguias.cdsc.listener.PlayerListener;
 import me.stutiguias.cdsc.listener.SignListener;
 import me.stutiguias.cdsc.model.Area;
@@ -24,6 +25,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitTask;
 
 public class Cdsc extends JavaPlugin {
     
@@ -43,6 +45,8 @@ public class Cdsc extends JavaPlugin {
     
     public Permission permission = null;
     public Economy economy = null;
+    private BukkitTask autoEventTask;
+    private BukkitTask autoEventEndTask;
 
     public static Config config;
     public static Translate msg;
@@ -76,12 +80,14 @@ public class Cdsc extends JavaPlugin {
         }
 
         Areas = db.GetAreas();
+        startAutoEventScheduler();
              
         getCommand("cd").setExecutor(new CdscCommands(this));
     }
 
     @Override
     public void onDisable() {
+        stopAutoEventScheduler();
         if (db != null) {
             db.close();
         }
@@ -189,6 +195,77 @@ public class Cdsc extends JavaPlugin {
     public static boolean EventEnable(Area area) {
         if(EventOccurring) return true;
         return area.onEvent();
+    }
+
+    public void restartAutoEventScheduler() {
+        stopAutoEventScheduler();
+        startAutoEventScheduler();
+    }
+
+    public void cancelAutoEventEndTask() {
+        if(autoEventEndTask != null) {
+            autoEventEndTask.cancel();
+            autoEventEndTask = null;
+        }
+    }
+
+    private void startAutoEventScheduler() {
+        if(!config.AutoEventEnabled) return;
+        if(config.AutoEventIntervalMinutes <= 0 || config.AutoEventDurationMinutes <= 0) return;
+
+        long intervalTicks = minutesToTicks(config.AutoEventIntervalMinutes);
+        autoEventTask = getServer().getScheduler().runTaskTimer(this, new Runnable() {
+            @Override
+            public void run() {
+                runAutoEvent();
+            }
+        }, intervalTicks, intervalTicks);
+    }
+
+    private void stopAutoEventScheduler() {
+        if(autoEventTask != null) {
+            autoEventTask.cancel();
+            autoEventTask = null;
+        }
+        cancelAutoEventEndTask();
+    }
+
+    private void runAutoEvent() {
+        if(Areas == null || Areas.isEmpty()) return;
+        if(EventOccurring) return;
+
+        EventOccurring = true;
+        for(Area area:Areas) {
+            area.setCoreLife(config.CoreLife);
+        }
+        getServer().broadcastMessage(parseColor(msg.StartEventForAll));
+        getServer().broadcastMessage(parseColor(msg.ProtectWarning));
+
+        if(autoEventEndTask != null) {
+            autoEventEndTask.cancel();
+        }
+        autoEventEndTask = getServer().getScheduler().runTaskLater(this, new Runnable() {
+            @Override
+            public void run() {
+                endAutoEvent();
+            }
+        }, minutesToTicks(config.AutoEventDurationMinutes));
+    }
+
+    private void endAutoEvent() {
+        EventOccurring = false;
+        BlockHandler blockHandler = new BlockHandler(this);
+        for(Area area:Areas) {
+            area.setEvent(false);
+            blockHandler.ReBuild(area);
+        }
+        getServer().broadcastMessage(parseColor(msg.StopEventForAll));
+        getServer().broadcastMessage(parseColor(msg.ProtectOn));
+        autoEventEndTask = null;
+    }
+
+    private long minutesToTicks(int minutes) {
+        return minutes * 60L * 20L;
     }
     
 }

@@ -33,6 +33,9 @@ public class Config {
     public String Password;
     public String Port;
     public String Database;
+    public boolean AutoEventEnabled;
+    public int AutoEventIntervalMinutes;
+    public int AutoEventDurationMinutes;
     
     public Config(Cdsc plugin) {
  
@@ -41,7 +44,7 @@ public class Config {
             config.setupConfig();
             FileConfiguration fc = config.getConfig();   
                         
-            if(!fc.isSet("configversion") || fc.getInt("configversion") != 8){ 
+            if(!fc.isSet("configversion") || fc.getInt("configversion") != 9){
                 config.MakeOld();
                 config.setupConfig();
                 fc = config.getConfig();  
@@ -61,6 +64,9 @@ public class Config {
             
             CoreLife = fc.getInt("CoreLife");
             CoreBlock = fc.getString("CoreBlock");
+            AutoEventEnabled = fc.getBoolean("AutoEvent.Enabled");
+            AutoEventIntervalMinutes = fc.getInt("AutoEvent.IntervalMinutes");
+            AutoEventDurationMinutes = fc.getInt("AutoEvent.DurationMinutes");
             
         }catch(IOException ex){
             ex.printStackTrace();
@@ -78,5 +84,17 @@ public class Config {
     
     public boolean DieDuringEvent() {
         return Dontdieduringevent == false;
+    }
+
+    public void setAutoEvent(boolean enabled, int intervalMinutes, int durationMinutes) {
+        FileConfiguration fc = config.getConfig();
+        fc.set("AutoEvent.Enabled", enabled);
+        fc.set("AutoEvent.IntervalMinutes", intervalMinutes);
+        fc.set("AutoEvent.DurationMinutes", durationMinutes);
+        config.saveConfig();
+
+        AutoEventEnabled = enabled;
+        AutoEventIntervalMinutes = intervalMinutes;
+        AutoEventDurationMinutes = durationMinutes;
     }
 }

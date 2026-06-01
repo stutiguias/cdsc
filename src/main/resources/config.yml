@@ -1,5 +1,5 @@
 # don't change this
-configversion: 8
+configversion: 9
 #DataBase
 DataBase:
   # You need to choose if you will use SQLite or Mysql ( default is SQLite )
@@ -32,3 +32,9 @@ Dontdieduringevent: false
 DefaultFlags:
     ClanOwnerCanBreakArea: false
     ClanOwnerCanPlaceArea: false
+# Auto event starts the event for all castles every IntervalMinutes
+# and ends it automatically after DurationMinutes
+AutoEvent:
+  Enabled: false
+  IntervalMinutes: 60
+  DurationMinutes: 15
