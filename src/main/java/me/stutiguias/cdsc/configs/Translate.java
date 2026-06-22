@@ -38,9 +38,7 @@ public class Translate {
             config.setupConfig();
             FileConfiguration fc = config.getConfig();   
                         
-            if(!fc.isSet("configversion") || fc.getInt("configversion") != 1){ 
-                config.MakeOld();
-                config.setupConfig();
+            if(config.updateKeepingCompatibleValues("configversion")){ 
                 fc = config.getConfig();  
             }
             

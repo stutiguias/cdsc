@@ -110,6 +110,10 @@ public class SqliteDataQueries extends Queries {
                         executeRawSQL("ALTER TABLE CDSC_Areas ADD COLUMN world VARCHAR(255);");
                         executeRawSQL("UPDATE CDSC_DbVersion SET dbversion = 4 where id = 1");
                 }
+                if (!tableExists("CDSC_MiniGameSpawns")) {
+                        Cdsc.logger.log(Level.INFO, "{0} Creating table CDSC_MiniGameSpawns", plugin.prefix);
+                        executeRawSQL("CREATE TABLE CDSC_MiniGameSpawns (id INTEGER PRIMARY KEY, area VARCHAR(255), clan_tag VARCHAR(255), role VARCHAR(255), spawn VARCHAR(255));");
+                }
     }
     
 }

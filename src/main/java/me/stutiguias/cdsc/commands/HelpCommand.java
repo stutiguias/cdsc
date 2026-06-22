@@ -77,6 +77,18 @@ public class HelpCommand extends CommandHandler {
         if(plugin.hasPermission((Player)sender,"cdsc.setautoevent")){
             SendMessage("&6/cd <setautoevent or autoevent or sae> <on|off|status> [intervalMinutes] [durationMinutes] &e| &7Set auto-event");
         }
+
+        if(Cdsc.miniGame.isEnabled()) {
+            SendMessage("&6/cd join <areaName> &e| &7Join a mini-game event");
+            SendMessage("&6/cd leave &e| &7Leave the current mini-game event");
+            SendMessage("&6/cd class <className> &e| &7Choose your mini-game class");
+            SendMessage("&6/cd classes &e| &7List mini-game classes");
+
+            if(plugin.hasPermission((Player)sender,"cdsc.setgamespawn")){
+                SendMessage("&6/cd setgamespawn <defender|attacker> <areaName> &e| &7Set mini-game team spawn");
+                SendMessage("&6/cd setclanspawn <areaName> <clanTag> [defender|attacker] &e| &7Set mini-game clan spawn");
+            }
+        }
                 
         if(plugin.hasPermission((Player)sender,"cdsc.dlfflag")){
             SendMessage("&6/cd <delflag or dlf> <flag> <areaName> &e| &7Delete flag for this area");

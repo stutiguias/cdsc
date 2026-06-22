@@ -1,5 +1,5 @@
 # don't change this
-configversion: 9
+configversion: 10
 #DataBase
 DataBase:
   # You need to choose if you will use SQLite or Mysql ( default is SQLite )
@@ -38,3 +38,27 @@ AutoEvent:
   Enabled: false
   IntervalMinutes: 60
   DurationMinutes: 15
+MiniGame:
+  # Keep false to preserve the classic CDSC behavior.
+  Enabled: false
+  DefaultClass: warrior
+  Classes:
+    warrior:
+      Display: "&cWarrior"
+      Items:
+        - "IRON_SWORD:1"
+        - "SHIELD:1"
+      Effects: []
+    archer:
+      Display: "&aArcher"
+      Items:
+        - "BOW:1"
+        - "ARROW:32"
+      Effects: []
+    tank:
+      Display: "&9Tank"
+      Items:
+        - "IRON_SWORD:1"
+        - "IRON_CHESTPLATE:1"
+      Effects:
+        - "DAMAGE_RESISTANCE:1"

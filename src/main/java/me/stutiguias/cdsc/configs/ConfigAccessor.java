@@ -37,6 +37,8 @@ public class ConfigAccessor {
             configFile.createNewFile();
             copy(plugin.getResource(fileName), configFile);
         }
+
+        fileConfiguration = null;
     }
     
     private void copy(java.io.InputStream input, File file) {
@@ -96,6 +98,63 @@ public class ConfigAccessor {
         if (!configFile.exists()) {            
             this.plugin.saveResource(fileName, false);
         }
+    }
+
+    public boolean hasDifferentConfigVersion(String versionPath) {
+        FileConfiguration currentConfig = getConfig();
+        InputStream defConfigStream = plugin.getResource(fileName);
+
+        if (defConfigStream == null) {
+            return false;
+        }
+
+        try (Reader reader = new InputStreamReader(defConfigStream)) {
+            YamlConfiguration defaultConfig = YamlConfiguration.loadConfiguration(reader);
+
+            if (!defaultConfig.isSet(versionPath)) {
+                return false;
+            }
+
+            if (!currentConfig.contains(versionPath, true)) {
+                return true;
+            }
+
+            return currentConfig.getInt(versionPath) != defaultConfig.getInt(versionPath);
+        } catch (IOException ex) {
+            plugin.getLogger().log(Level.WARNING, "Could not check config version for " + fileName, ex);
+            return false;
+        }
+    }
+
+    public boolean updateKeepingCompatibleValues(String versionPath) throws IOException {
+        if (!hasDifferentConfigVersion(versionPath)) {
+            return false;
+        }
+
+        File oldFile = new File(plugin.getDataFolder(), fileName + "_old");
+
+        if (!MakeOld()) {
+            return false;
+        }
+
+        setupConfig();
+
+        FileConfiguration oldConfig = YamlConfiguration.loadConfiguration(oldFile);
+        FileConfiguration newConfig = getConfig();
+
+        for (String key:oldConfig.getKeys(true)) {
+            if (key.equalsIgnoreCase(versionPath) || oldConfig.isConfigurationSection(key)) {
+                continue;
+            }
+
+            if (newConfig.contains(key, true)) {
+                newConfig.set(key, oldConfig.get(key));
+            }
+        }
+
+        saveConfig();
+        reloadConfig();
+        return true;
     }
     
     public boolean MakeOld() {

@@ -57,6 +57,7 @@ public class StartEventCommand  extends CommandHandler {
 
         for(Area area:Cdsc.Areas) {
             area.setCoreLife(Cdsc.config.CoreLife);
+            Cdsc.miniGame.start(area);
         }
         BrcstMsg(Cdsc.msg.StartEventForAll);   
         return true;        
@@ -70,6 +71,7 @@ public class StartEventCommand  extends CommandHandler {
         }
         area.setEvent(true);
         area.setCoreLife(Cdsc.config.CoreLife);
+        Cdsc.miniGame.start(area);
         BrcstMsg(Cdsc.msg.StartEventForOne, new Object[]{ args[1] });
         return true;
     }

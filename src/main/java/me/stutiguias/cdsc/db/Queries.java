@@ -10,11 +10,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import me.stutiguias.cdsc.init.Cdsc;
 import me.stutiguias.cdsc.init.Util;
 import me.stutiguias.cdsc.model.Area;
+import org.bukkit.Location;
 
 /**
  *
@@ -283,6 +286,65 @@ public class Queries extends Util implements IDataQueries {
                 closeResources(conn, st, rs);
         }
         return true;
+    }
+
+    @Override
+    public boolean SetMiniGameSpawn(String areaName, String clanTag, String role, Location spawn) {
+        WALConnection conn = getConnection();
+        PreparedStatement delete = null;
+        PreparedStatement insert = null;
+        ResultSet rs = null;
+
+        try {
+                delete = conn.prepareStatement("DELETE FROM CDSC_MiniGameSpawns WHERE area = ? AND clan_tag = ? AND role = ?");
+                delete.setString(1, areaName);
+                delete.setString(2, clanTag);
+                delete.setString(3, role);
+                delete.executeUpdate();
+
+                insert = conn.prepareStatement("INSERT INTO CDSC_MiniGameSpawns (area, clan_tag, role, spawn) VALUES (?,?,?,?)");
+                insert.setString(1, areaName);
+                insert.setString(2, clanTag);
+                insert.setString(3, role);
+                insert.setString(4, ToString(spawn));
+                insert.executeUpdate();
+        } catch (SQLException e) {
+                Cdsc.logger.log(Level.WARNING, "{0} Unable to set mini-game spawn", plugin.prefix);
+                Cdsc.logger.warning(e.getMessage());
+                return false;
+        } finally {
+                closeResources(null, delete, null);
+                closeResources(conn, insert, rs);
+        }
+        return true;
+    }
+
+    @Override
+    public Map<String, Location> GetMiniGameSpawns(String areaName) {
+        Map<String, Location> spawns = new HashMap<>();
+        WALConnection conn = getConnection();
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
+        try {
+                st = conn.prepareStatement("SELECT * FROM CDSC_MiniGameSpawns WHERE area = ?");
+                st.setString(1, areaName);
+                rs = st.executeQuery();
+                while (rs.next()) {
+                        String key = miniGameSpawnKey(rs.getString("role"), rs.getString("clan_tag"));
+                        spawns.put(key, toLocation(rs.getString("spawn")));
+                }
+        } catch (SQLException e) {
+                Cdsc.logger.log(Level.WARNING, "{0} Unable to get mini-game spawns", plugin.prefix);
+                Cdsc.logger.warning(e.getMessage());
+        } finally {
+                closeResources(conn, st, rs);
+        }
+        return spawns;
+    }
+
+    protected String miniGameSpawnKey(String role, String clanTag) {
+        return role.toLowerCase() + ":" + clanTag.toLowerCase();
     }
     
 }

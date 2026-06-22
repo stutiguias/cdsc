@@ -94,6 +94,12 @@ public class ActionHandler extends Util {
     }
     
     public void SetReSpawnLoc(Area area, Player player) {
+        Location miniGameSpawn = Cdsc.miniGame.getRespawnLocation(player, area);
+        if(miniGameSpawn != null) {
+            RespawnInLocation.put(player, miniGameSpawn);
+            return;
+        }
+
         if (isValidClan(area.getClanTag(), player)) {
             RespawnInLocation.put(player, area.getSpawn());
             return;
@@ -133,6 +139,7 @@ public class ActionHandler extends Util {
                 Cdsc.EventOccurring = false;
             
             Cdsc.db.UpdateArea(area);
+            Cdsc.miniGame.end(area);
             
             BrcstMsg(Cdsc.msg.CoreBroke,new Object[] { area.getName() , castleDefencePlayer.getClaTag() });
             

@@ -61,6 +61,7 @@ public class StopEventCommand extends CommandHandler {
         BrcstMsg(Cdsc.msg.StopEventForAll); 
         for(Area area:Cdsc.Areas) {
             area.setEvent(false);
+            Cdsc.miniGame.end(area);
             blockHandler.ReBuild(area);
         }
         return true;
@@ -73,6 +74,7 @@ public class StopEventCommand extends CommandHandler {
             return false;
         }
         area.setEvent(false);
+        Cdsc.miniGame.end(area);
         blockHandler.ReBuild(area);
         BrcstMsg(Cdsc.msg.StopEventForOne, new Object[]{ args[1] });
         return true;

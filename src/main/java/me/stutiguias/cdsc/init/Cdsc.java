@@ -14,6 +14,7 @@ import me.stutiguias.cdsc.db.SqliteDataQueries;
 import me.stutiguias.cdsc.handlers.BlockHandler;
 import me.stutiguias.cdsc.listener.PlayerListener;
 import me.stutiguias.cdsc.listener.SignListener;
+import me.stutiguias.cdsc.minigame.MiniGameManager;
 import me.stutiguias.cdsc.model.Area;
 import me.stutiguias.cdsc.model.CastleDefencePlayer;
 import me.stutiguias.cdsc.model.SaveInfo;
@@ -50,6 +51,7 @@ public class Cdsc extends JavaPlugin {
 
     public static Config config;
     public static Translate msg;
+    public static MiniGameManager miniGame;
     
     public static IDataQueries db;
 
@@ -64,6 +66,7 @@ public class Cdsc extends JavaPlugin {
         AreaCreating = new HashMap<>();
         config = new Config(this);
         msg = new Translate(this);
+        miniGame = new MiniGameManager(this);
         
         PluginManager pm = getServer().getPluginManager();
         
@@ -87,6 +90,9 @@ public class Cdsc extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        if (miniGame != null) {
+            miniGame.endAll();
+        }
         stopAutoEventScheduler();
         if (db != null) {
             db.close();
@@ -237,6 +243,7 @@ public class Cdsc extends JavaPlugin {
         EventOccurring = true;
         for(Area area:Areas) {
             area.setCoreLife(config.CoreLife);
+            miniGame.start(area);
         }
         getServer().broadcastMessage(parseColor(msg.StartEventForAll));
         getServer().broadcastMessage(parseColor(msg.ProtectWarning));
@@ -257,6 +264,7 @@ public class Cdsc extends JavaPlugin {
         BlockHandler blockHandler = new BlockHandler(this);
         for(Area area:Areas) {
             area.setEvent(false);
+            miniGame.end(area);
             blockHandler.ReBuild(area);
         }
         getServer().broadcastMessage(parseColor(msg.StopEventForAll));

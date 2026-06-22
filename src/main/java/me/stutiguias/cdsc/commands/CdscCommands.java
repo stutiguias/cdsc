@@ -39,6 +39,10 @@ public class CdscCommands extends Util implements CommandExecutor {
         SetAutoEventCommand setAutoEventCommand = new SetAutoEventCommand(plugin);
         SetFlagCommand setFlagCommand = new SetFlagCommand(plugin);
         DelFlagCommand delFlagCommand = new DelFlagCommand(plugin);
+        MiniGameJoinCommand miniGameJoinCommand = new MiniGameJoinCommand(plugin);
+        MiniGameLeaveCommand miniGameLeaveCommand = new MiniGameLeaveCommand(plugin);
+        MiniGameClassCommand miniGameClassCommand = new MiniGameClassCommand(plugin);
+        MiniGameClassesCommand miniGameClassesCommand = new MiniGameClassesCommand(plugin);
         
         availableCommands.put("help",     helpCommand);
         availableCommands.put("?",        helpCommand);
@@ -86,6 +90,12 @@ public class CdscCommands extends Util implements CommandExecutor {
         availableCommands.put("sae",          setAutoEventCommand);
 
         availableCommands.put("spawn",    new SpawnCommand(plugin));
+        availableCommands.put("join",     miniGameJoinCommand);
+        availableCommands.put("leave",    miniGameLeaveCommand);
+        availableCommands.put("class",    miniGameClassCommand);
+        availableCommands.put("classes",  miniGameClassesCommand);
+        availableCommands.put("setgamespawn", new SetGameSpawnCommand(plugin));
+        availableCommands.put("setclanspawn", new SetClanSpawnCommand(plugin));
         
         availableConsoleCommands.put("start", startEventCommand);
         availableConsoleCommands.put("end", stopEventCommand);

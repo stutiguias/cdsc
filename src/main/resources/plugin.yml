@@ -63,6 +63,9 @@ permissions:
      cdsc.setspawn:
         description: Set spawn
         default: op  
+     cdsc.setgamespawn:
+        description: Set mini-game spawns
+        default: op
      cdsc.admin:
       description: Gives access to all TimeSpawner commands
       children:
@@ -81,3 +84,4 @@ permissions:
         cdsc.setspawn: true
         cdsc.setflag: true
         cdsc.setautoevent: true
+        cdsc.setgamespawn: true

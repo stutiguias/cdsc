@@ -158,6 +158,15 @@ public class PlayerListener extends ListenerHandle {
            SendMessage(player,Cdsc.msg.ItemsAppears);
            event.setRespawnLocation(this.action.RespawnInLocation.get(player));
            this.action.RespawnInLocation.remove(player);
+       } else if(Cdsc.miniGame.isPlaying(player)) {
+           Location respawnLocation = this.action.RespawnInLocation.containsKey(player)
+                   ? this.action.RespawnInLocation.get(player)
+                   : Cdsc.miniGame.getRespawnLocation(player, plugin.getArea(player.getLocation()));
+           if(respawnLocation != null) {
+               event.setRespawnLocation(respawnLocation);
+           }
+           this.action.RespawnInLocation.remove(player);
+           Cdsc.miniGame.respawn(player);
        }
     }
  
@@ -168,6 +177,16 @@ public class PlayerListener extends ListenerHandle {
         if(event.getEntityType() != EntityType.PLAYER) return;
 
         Player player = (Player)event.getEntity();
+
+        if(Cdsc.miniGame.isPlaying(player)) {
+            event.setDroppedExp(0);
+            event.getDrops().clear();
+            Location respawnLocation = Cdsc.miniGame.getRespawnLocation(player, plugin.getArea(player.getLocation()));
+            if(respawnLocation != null) {
+                this.action.RespawnInLocation.put(player, respawnLocation);
+            }
+            return;
+        }
         
         if(this.action.NeedCancelDrop(player, player.getLocation())) {
             event.setDroppedExp(0);

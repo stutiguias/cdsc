@@ -6,7 +6,9 @@ package me.stutiguias.cdsc.db;
 
 import me.stutiguias.cdsc.db.connection.WALConnection;
 import java.util.List;
+import java.util.Map;
 import me.stutiguias.cdsc.model.Area;
+import org.bukkit.Location;
 
 /**
  *
@@ -25,6 +27,8 @@ public interface IDataQueries {
         boolean     SetCore(Area area);
         boolean     SetSpawn(Area area);
         boolean     SetFlag(Area area);
+        boolean     SetMiniGameSpawn(String areaName, String clanTag, String role, Location spawn);
+        Map<String, Location> GetMiniGameSpawns(String areaName);
         List<Area>  GetAreas();
         void        close();
         
