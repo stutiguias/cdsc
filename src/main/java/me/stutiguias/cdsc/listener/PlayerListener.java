@@ -67,6 +67,9 @@ public class PlayerListener extends ListenerHandle {
         Player player = event.getPlayer();
         Location location = event.getTo();
 
+        if(location == null) return;
+        if(isSameBlock(event.getFrom(), location)) return;
+
         if(this.action.NeedCancelBlockMove(player, location)) {
             if(plugin.hasPermission(player,"cdsc.bypass")) return;
             Area area = plugin.getArea(location);
@@ -79,6 +82,13 @@ public class PlayerListener extends ListenerHandle {
             }
         }
     
+    }
+
+    private boolean isSameBlock(Location from, Location to) {
+        return from.getWorld().equals(to.getWorld())
+                && from.getBlockX() == to.getBlockX()
+                && from.getBlockY() == to.getBlockY()
+                && from.getBlockZ() == to.getBlockZ();
     }
     
     @EventHandler(priority = EventPriority.NORMAL)

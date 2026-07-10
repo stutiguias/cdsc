@@ -165,7 +165,7 @@ public class Cdsc extends JavaPlugin {
                z2 = sz;
             }
            
-            if(notSameWorld(area,location)) return -1;
+            if(notSameWorld(area,location)) continue;
             if(isInsideProtection(x, x2, z, z2, location)) return i;
         }
         return -1;

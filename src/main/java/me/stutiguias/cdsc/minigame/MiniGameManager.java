@@ -26,6 +26,7 @@ public class MiniGameManager {
     private final Map<String, MiniGameSession> sessions = new HashMap<>();
     private final Map<UUID, String> playerAreas = new HashMap<>();
     private final Map<UUID, String> selectedClasses = new HashMap<>();
+    private final Map<String, Map<String, Location>> spawnCache = new HashMap<>();
 
     public MiniGameManager(Cdsc plugin) {
         this.plugin = plugin;
@@ -38,6 +39,7 @@ public class MiniGameManager {
     public void start(Area area) {
         if(!isEnabled() || area == null) return;
         if(sessions.containsKey(area.getName().toLowerCase())) return;
+        loadSpawnCache(area);
         sessions.put(area.getName().toLowerCase(), new MiniGameSession(area));
     }
 
@@ -161,11 +163,24 @@ public class MiniGameManager {
 
     public boolean setSpawn(Area area, String clanTag, String role, Location spawn) {
         if(area == null || clanTag == null || role == null || spawn == null) return false;
-        return Cdsc.db.SetMiniGameSpawn(area.getName(), clanTag.toLowerCase(), role.toLowerCase(), spawn);
+        String normalizedClanTag = clanTag.toLowerCase();
+        String normalizedRole = role.toLowerCase();
+        if(!Cdsc.db.SetMiniGameSpawn(area.getName(), normalizedClanTag, normalizedRole, spawn)) return false;
+
+        Map<String, Location> spawns = spawnCache.get(areaKey(area));
+        if(spawns == null) {
+            spawns = new HashMap<>();
+            spawnCache.put(areaKey(area), spawns);
+        }
+        spawns.put(spawnKey(normalizedRole, normalizedClanTag), spawn);
+        return true;
     }
 
     private Location getSpawn(Area area, String clanTag, String role) {
-        Map<String, Location> spawns = Cdsc.db.GetMiniGameSpawns(area.getName());
+        Map<String, Location> spawns = spawnCache.get(areaKey(area));
+        if(spawns == null) {
+            spawns = new HashMap<>();
+        }
         Location clanSpawn = spawns.get(spawnKey(role, clanTag));
         if(clanSpawn != null) return clanSpawn;
 
@@ -227,6 +242,14 @@ public class MiniGameManager {
             return miniGameClass;
         }
         return null;
+    }
+
+    private void loadSpawnCache(Area area) {
+        spawnCache.put(areaKey(area), Cdsc.db.GetMiniGameSpawns(area.getName()));
+    }
+
+    private String areaKey(Area area) {
+        return area.getName().toLowerCase();
     }
 
     private String spawnKey(String role, String clanTag) {
